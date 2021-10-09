@@ -1,4 +1,4 @@
-@include('Layout.head')
+@include('layout.head')
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
     <div class="wrapper">
@@ -70,7 +70,7 @@
             {{-- <a href="edit-profile.html" class="d-block">{{Auth::user()->username}}</a> --}}
         </div>
 
-    @include('Layout.header')
+    @include('layout.header')
 
     <!-- container -->
 
@@ -135,6 +135,6 @@
 
 
 
-    @include('Layout.footer')
+    @include('layout.footer')
 
-    @include('Layout.footerScripts')
+    @include('layout.footerScripts')
