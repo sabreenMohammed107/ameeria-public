@@ -10,7 +10,7 @@ use App\Models\InvoiceType;
 use App\Models\Item;
 use App\Models\Setting;
 use App\Models\Unit;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Log;
 use Carbon\Carbon;
@@ -345,7 +345,7 @@ if($request->has('taxable')){
             $out = [];
 
             $items = Item::where('code', $select_value)->first();
-            \Log::info($items);
+
             echo json_encode(array($items->code, $items->name ?? '',$items->exchange->code ?? ''));
         }
     }
@@ -376,7 +376,7 @@ if($request->has('taxable')){
                 'tax' =>($invoiceData->subtotal - $obo->total) * $tax->value,
                 'total' =>  ($invoiceData->subtotal - $obo->total)+(($invoiceData->subtotal - $obo->total) * $tax->value),
             ];
-\Log::info("message Del");
+
             Invoice::where('id', $obo->invoice_id)->update($ss);
 
             InvoiceItem::where('id', $req->id)->delete();

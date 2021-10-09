@@ -97,7 +97,7 @@
 
                 </li>
                 <li class="nav-item has-treeview menu-open">
-                    <a href="postInvoice.html" class="nav-link ">
+                    <a href="{{route('relay.index')}}" class="nav-link ">
                         <i class="nav-icon fas fa-copy"></i>
                         <p>
                             ترحيل الفواتير

@@ -32,3 +32,4 @@ Route::get('addInvoiceRow/fetch', 'Admin\InvoiceController@addRow')->name('addIn
 Route::get('editSelectVal/fetch', 'Admin\InvoiceController@editSelectVal')->name('editSelectVal.fetch');
 Route::get('selectClient/fetch', 'Admin\InvoiceController@selectClient')->name('selectClient.fetch');
 Route::get('/invoice/Remove/Item', 'Admin\InvoiceController@DeleteOrderItem');
+Route::resource('relay', 'Admin\RelayInvoiceController');
