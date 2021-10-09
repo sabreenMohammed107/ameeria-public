@@ -21,7 +21,7 @@
     </div>
 </div>
 @endsection --}}
-@extends('Layout.web')
+@extends('layout.web')
 @section('content')
 
 @endsection
