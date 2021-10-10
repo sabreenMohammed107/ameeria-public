@@ -220,7 +220,7 @@
 
                                                 <div class="col-sm-12">
                                                     <div class="form-group">
-                                                        <label> اجمالى الصافى </label>
+                                                        <label> اجمالى العام </label>
                                                         <input readonly type="text" id="total_all" name="total"
                                                             class="form-control">
                                                     </div>
@@ -643,7 +643,7 @@ var select_value = $('#itemCode' + index).val();
                     // Find its index among other ths
                     var index = (target).index();
                     // For each tr, remove all th and td that match the index.
-                    $('table tr').find('th:eq(' + index + '),td:eq(' + index + ')').hide();
+                    $('table tr').find('th:eq(' + index + '),td:eq(' + index + ')').show();
 
                     var target2 = $('table').find('th[data-name=price]');
                     // Find its index among other ths
@@ -655,7 +655,7 @@ var select_value = $('#itemCode' + index).val();
                     var target = $('table').find('th[data-name=operation]');
                     // Find its index among other ths
                     var index = (target).index();
-                    $('table tr').find('th:eq(' + index + '),td:eq(' + index + ')').show();
+                    $('table tr').find('th:eq(' + index + '),td:eq(' + index + ')').hide();
                     var target2 = $('table').find('th[data-name=price]');
                     // Find its index among other ths
                     var index2 = (target2).index();
@@ -665,7 +665,7 @@ var select_value = $('#itemCode' + index).val();
                     var target = $('table').find('th[data-name=operation]');
                     // Find its index among other ths
                     var index = (target).index();
-                    $('table tr').find('th:eq(' + index + '),td:eq(' + index + ')').show();
+                    $('table tr').find('th:eq(' + index + '),td:eq(' + index + ')').hide();
                     var target2 = $('table').find('th[data-name=price]');
                     // Find its index among other ths
                     var index2 = (target2).index();

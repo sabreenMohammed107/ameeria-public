@@ -3,6 +3,9 @@
     <script src="{{ asset('webassets/plugins/jquery/jquery.min.js')}}"></script>
     <!-- Bootstrap -->
     <script src="{{ asset('webassets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+      <!-- DataTables -->
+      <script src="{{ asset('plugins/datatables/jquery.dataTables.js')}}"></script>
+      <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.js')}}"></script>
     <!-- overlayScrollbars -->
     <script src="{{ asset('webassets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
     <!-- AdminLTE App -->
@@ -22,6 +25,7 @@
 
     <!-- PAGE SCRIPTS -->
     <script src="{{ asset('webassets/dist/js/pages/dashboard2.js')}}"></script>
+
     @yield('scripts')
 </body>
 
