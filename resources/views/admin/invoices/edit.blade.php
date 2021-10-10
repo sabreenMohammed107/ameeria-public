@@ -44,7 +44,9 @@
                                                             {{ $type->name }}</option>
                                                     @endforeach
                                                 </select> --}}
-                                                <input type="text" value="{{$inv->type->name ?? ''}}" readonly name="invoice_type" readonly class="form-control">
+                                                <input type="hidden" value="{{$inv->type->id ?? ''}}" id="invoice_type"  readonly class="form-control">
+
+                                                <input type="text" value="{{$inv->type->name ?? ''}}"  readonly name="invoice_type" readonly class="form-control">
 
                                             </div>
                                         </div>
@@ -255,7 +257,7 @@
 
 
 
-
+                editSelectType();
 
                     $('input[type=checkbox][name=taxable]').change(function() {
                         $taxVal = $('#taxVal').val();
@@ -635,8 +637,10 @@
                 function editSelectType() {
                     debugger;
 
-                    var select_value = $('#invoice_type option:selected').val();
-                    var text = $('#invoice_type option:selected').text();
+                    // var select_value = $('#invoice_type option:selected').val();
+                    // var text = $('#invoice_type option:selected').text();
+
+                     var select_value = $('#invoice_type').val();
 
                     if (select_value == 1) {
 
