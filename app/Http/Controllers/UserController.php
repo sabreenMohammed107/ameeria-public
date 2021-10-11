@@ -3,37 +3,49 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
 use Spatie\Permission\Models\Role;
+use App\User;
 use DB;
 use Hash;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
 
+    // This is for General Class Variables.
+    protected $model;
+    protected $view = 'admin.users.';
+    protected $route = "users.";
+
     /**
-     * Display a listing of the resource.
+     * UserController Constructor.
+     *
+     * @return \Illuminate\Http\Response
      */
-    function __construct()
+    public function __construct(User $model)
     {
         $this->middleware('auth');
-        // $this->middleware('permission:role-list|role-create|role-edit|role-delete', ['only' => ['index','store']]);
-        // $this->middleware('permission:role-create', ['only' => ['create','store']]);
-        // $this->middleware('permission:role-edit', ['only' => ['edit','update']]);
-        // $this->middleware('permission:role-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:users-list|users-create|users-edit|users-delete', ['only' => ['index','show']]);
+        $this->middleware('permission:users-create', ['only' => ['create','store']]);
+        $this->middleware('permission:users-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:users-delete', ['only' => ['destroy']]);
+        $this->model = $model;
     }
+
+
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $data = User::orderBy('id','DESC')->get();
-        return view('admin.users.index',compact('data'))
-           ;
+        $data = $this->model::all();
+
+        return view($this->view.'index', compact('data'));
     }
 
     /**
@@ -44,7 +56,8 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::pluck('name','name')->all();
-        return view('users.create',compact('roles'));
+
+        return view($this->view.'create', compact('roles'));
     }
 
     /**
@@ -55,21 +68,31 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        // Validating fields
         $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|same:confirm-password',
-            'roles' => 'required'
+            'f_name' => 'required|string',
+            'l_name' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'phone' => 'required|unique:users',
+            'username' => 'required|string|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'roles' => 'required',
         ]);
 
-        $input = $request->all();
-        $input['password'] = Hash::make($input['password']);
+        try {
 
-        $user = User::create($input);
-        $user->assignRole($request->input('roles'));
+            $input = $request->all();
+            $input['password'] = \Hash::make($input['password']);
 
-        return redirect()->route('users.index')
-                        ->with('success','User created successfully');
+            $user = $this->model::create($input);
+            $user->assignRole($request->input('roles'));
+
+            // Display a successful message ...
+            return redirect()->route($this->route.'index')->with('flash_success','تم إنشاء المستخدم بنجاح');
+        
+        } catch (\Exception $e){
+            return redirect()->route($this->view.'index')->with('flash_danger','خطأ ... لا يمكن الحذف حتي لا تتأثر البيانات الأخري بعملية الحذف !!!');
+        }
     }
 
     /**
@@ -80,8 +103,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
-        return view('users.show',compact('user'));
+        $data = $this->model::findOrFail($id);
+
+        return view($this->view.'show', compact('data'));
     }
 
     /**
@@ -92,11 +116,12 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::find($id);
+        $data = $this->model::findOrFail($id);
+        $data->password = null;
         $roles = Role::pluck('name','name')->all();
-        $userRole = $user->roles->pluck('name','name')->all();
+        $userRole = $data->roles->pluck('name','name')->all();
 
-        return view('users.edit',compact('user','roles','userRole'));
+        return view($this->view.'edit', compact('data', 'roles', 'userRole'));
     }
 
     /**
@@ -108,30 +133,40 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // Validating fields
         $this->validate($request, [
-            'name' => 'required',
+            'f_name' => 'required|string',
+            'l_name' => 'required|string',
             'email' => 'required|email|unique:users,email,'.$id,
-            'password' => 'same:confirm-password',
-            'roles' => 'required'
+            'phone' => 'required|unique:users,phone,'.$id,
+            'username' => 'required|string|unique:users,username,'.$id,
+            'password' => 'nullable|string|min:8|confirmed',
+            'roles' => 'required',
         ]);
 
-        $input = $request->all();
-        if(!empty($input['password'])){
-            $input['password'] = Hash::make($input['password']);
-        }else{
-            $input = Arr::except($input,array('password'));
+        try {
+
+            $input = $request->all();
+            if($input['password'] != null)
+                $input['password'] = \Hash::make($input['password']);
+            else
+                unset($input['password']); 
+
+            $user = $this->model::findOrFail($id);
+            $user->update($input);
+            
+            \DB::table('model_has_roles')->where('model_id',$id)->delete();
+            $user->assignRole($request->input('roles'));
+
+            // Display a successful message ...
+            return redirect()->route($this->view.'index')->with('flash_success','تم تعديل بيانات المستخدم بنجاح');
+
+        } catch (\Exception $e){
+            return redirect()->route($this->view.'index')->with('flash_danger','خطأ ... لا يمكن الحذف حتي لا تتأثر البيانات الأخري بعملية الحذف !!!');
         }
-
-        $user = User::find($id);
-        $user->update($input);
-        DB::table('model_has_roles')->where('model_id',$id)->delete();
-
-        $user->assignRole($request->input('roles'));
-
-        return redirect()->route('users.index')
-                        ->with('success','User updated successfully');
     }
 
+ 
     /**
      * Remove the specified resource from storage.
      *
@@ -140,8 +175,54 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        User::find($id)->delete();
-        return redirect()->route('users.index')
-                        ->with('success','User deleted successfully');
+        try
+        {
+            $account = $this->model::findOrFail($id);
+            $account->delete();
+
+            // Display a successful message ...
+            return redirect()->route($this->view.'index')->with('flash_success','تم حذف بيانات المستخدم بنجاح');
+        }
+        catch (\Illuminate\Database\QueryException $e)
+        {
+            // Display a successful message ...
+            return redirect()->route($this->view.'index')->with('flash_danger','خطأ ... لا يمكن الحذف حتي لا تتأثر البيانات الأخري بعملية الحذف !!!');
+        }
     }
+
+    public function editProfile($id)
+    {
+        $row = $this->model::findOrFail($id);
+
+        return view('admin.users.userProfile', compact('row'));
+    }
+
+
+    public function updateProfile(Request $request){
+
+           $validator = Validator::make($request->all(), [
+            'f_name' => 'required',
+            'l_name' => 'required',
+            'username' => 'required',
+            'email' => 'required|email|unique:users,email,'.Auth::user()->id,
+            'phone' => 'required|unique:users,phone, '.Auth::user()->id,
+            'password' => 'required|min:8',
+        ]);
+
+        if($validator->fails()){
+            return redirect()->back()->with('flash_danger', $validator->messages());
+        }
+
+        try
+        {
+            $input =$request->except('_token','user_id');
+            $input['password'] = bcrypt($request->input('password'));
+            User::findOrFail($request->input('user_id'))->update($input);
+            return redirect()->back()->with('flash_success', 'تم حفظ البيانات');
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('flash_danger', $e->getMessage());
+        }
+    }
+    
 }

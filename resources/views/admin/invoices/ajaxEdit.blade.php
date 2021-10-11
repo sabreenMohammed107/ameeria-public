@@ -34,19 +34,19 @@ $counterrrr = 1;
             <input type="number"    id="opPermission{{$counter}}" value="{{$itemo->op_permission_no}}" name="upopPermission{{$counter}}" oninput="opPermission({{$counter}})"  class="form-control oppermission" placeholder="">
         </div>
     </td>
-    <td>
+    <td style='width: 150px;'>
         <div class="input-mark-inner mg-b-22">
             <input type="number"  class="form-control" value="{{$itemo->quantity}}" oninput="itemQty({{$counter}})" name="upqty{{$counter}}" id="qty{{$counter}}"  placeholder="">
         </div>
     </td>
 
-    <td>
+    <td style='width: 150px;'>
         <div class="input-mark-inner mg-b-22">
             <input type="number"  id="itemprice{{$counter}}" value="{{$itemo->price}}" name="upitemprice{{$counter}}" oninput="itemPrice({{$counter}})" class="form-control" placeholder="">
         </div>
     </td>
 
-    <td  class="total_item_price" style='width: 160px;'>
+    <td  class="total_item_price" style='width: 180px;'>
 
     <div class="input-mark-inner mg-b-22">
         <input type="number"  id="total{{$counter}}" value="{{$itemo->total}}"  name="uptotal{{$counter}}" oninput="totaly({{$counter}})" class="form-control" placeholder="">

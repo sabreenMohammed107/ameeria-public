@@ -1,17 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Item;
-use App\Models\Store;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
 
-class ItemsController extends Controller
+class UnitsController extends Controller
 {
-
-    function __construct(Item $object)
+    function __construct(Unit $object)
     {
         $this->middleware('auth');
         // $this->middleware('permission:role-list|role-create|role-edit|role-delete', ['only' => ['index','store']]);
@@ -19,8 +16,8 @@ class ItemsController extends Controller
         // $this->middleware('permission:role-edit', ['only' => ['edit','update']]);
         // $this->middleware('permission:role-delete', ['only' => ['destroy']]);
         $this->object = $object;
-        $this->viewName = 'admin.items.';
-        $this->routeName = 'items.';
+        $this->viewName = 'admin.units.';
+        $this->routeName = 'units.';
         $this->message = 'تم حفظ البيانات';
         $this->errormessage = 'راجع البيانات هناك خطأ';
     }
@@ -31,8 +28,8 @@ class ItemsController extends Controller
      */
     public function index()
     {
-        $data = Item::orderBy('id','DESC')->get();
-        return view('admin.items.index',compact('data'))
+        $data = Unit::orderBy('id','DESC')->get();
+        return view('admin.units.index',compact('data'))
            ;
     }
 
@@ -43,11 +40,7 @@ class ItemsController extends Controller
      */
     public function create()
     {
-        $stores = Store::orderBy('id','DESC')->get();
-        $storages=Unit::orderBy('id','DESC')->get();
-        $exchanges=Unit::orderBy('id','DESC')->get();
-        return view('admin.items.add',compact('stores','storages','exchanges'))
-           ;
+
     }
 
     /**
@@ -81,12 +74,7 @@ class ItemsController extends Controller
      */
     public function edit($id)
     {
-        $row=Item::where('id',$id)->first();
-        $stores = Store::orderBy('id','DESC')->get();
-        $storages=Unit::orderBy('id','DESC')->get();
-        $exchanges=Unit::orderBy('id','DESC')->get();
-        return view('admin.items.edit',compact('stores','storages','exchanges','row'))
-           ;
+        //
     }
 
     /**
@@ -100,7 +88,7 @@ class ItemsController extends Controller
     {
         $this->object::findOrFail($id)->update($request->except('_token'));
         return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
-     }
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -110,6 +98,18 @@ class ItemsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $row = Unit::where('id', $id)->first();
+        // Delete File ..
+
+
+        try {
+
+            $row->delete();
+            return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم الحذف بنجاح !');
+
+        } catch (QueryException $q) {
+
+            return redirect()->back()->with('flash_danger', 'هذه القيمه مربوطه بجدول اخر ..لا يمكن المسح');
+        }
     }
 }

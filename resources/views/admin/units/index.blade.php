@@ -19,7 +19,7 @@
                             <th>الكود</th>
                             <th>وحده القياس</th>
 
-                            <th>تعديل</th>
+                            <th>خيارات</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -31,7 +31,11 @@
                             <th>{{ $unit->name}}</th>
 
 
-                            <th><button class="btn btn-info" data-toggle="modal" data-target="#add{{$unit->id}}"><i class="fas fa-edit text-white"></i></button></th>
+                            <th>
+                                <button class="btn btn-info" data-toggle="modal" data-target="#add{{$unit->id}}"><i class="fas fa-edit text-white"></i></button>
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#del{{$unit->id}}"><i class="fas fa-trash-alt"></i></button>
+
+                            </th>
                         <!--Edit Customer-->
 <div class="modal" id="add{{$unit->id}}" tabindex="-1">
     <div class="modal-dialog dir-rtl">
@@ -82,6 +86,31 @@
 </div>
 </div>
 <!--/Edit Customer-->
+                         <!-- Delete Modal -->
+                         <div class="modal fade dir-rtl" id="del{{$unit->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <form action="{{ route('units.destroy', $unit->id) }}"  method="POST" >
+                                    @csrf
+                                    @method('DELETE')
+                                    <div class="modal-content">
+                                    <div class="modal-header bg-gradient-danger">
+                                        <h5 class="modal-title" id="exampleModalLabel">تأكيد الحذف</h5>
+                                        <button type="button" class="close m-0 p-0 text-white" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <h3><i class="fas fa-fire text-danger"></i></h3>
+                                        <h4 class="text-danger">حذف جميع البيانات ؟</h4>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
+                                        <button type="submit" class="btn btn-danger">تأكيد</button>
+                                    </div>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
                         </tr>
                         @endforeach
                     </tbody>

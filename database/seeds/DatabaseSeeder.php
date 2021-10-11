@@ -11,7 +11,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         $this->call(InvoiceTypeSeeder::class);
-         $this->call(SettingsSeeder::class);
+         $this->call(PermissionsSeeder::class);
+         $this->call(AdminSeeder::class);
+         // $this->call(SettingsSeeder::class);
+         // $this->call(InvoiceTypeSeeder::class);
     }
 }

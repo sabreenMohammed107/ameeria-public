@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+
 class SettingsSeeder extends Seeder
 {
     /**
@@ -13,7 +14,7 @@ class SettingsSeeder extends Seeder
     {
         DB::table('settings')->insert([
             'key' =>'tax_value',
-            'value' =>0.14,
+            'value' => 0.14,
 
         ]);
     }

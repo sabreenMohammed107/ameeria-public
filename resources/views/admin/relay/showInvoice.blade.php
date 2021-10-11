@@ -156,7 +156,7 @@
                             <button id="btntbl" type="button" class="btn btn-primary waves-effect waves-light mb-1">إضافة
                                 صنف</button>
 
-                            <table id="example1" class="table table-bordered table-striped">
+                            <table id="example5" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
 
@@ -303,8 +303,8 @@
 
                     var rowCount = 0;
 
-                    if ($('#example1 > tbody  > tr').attr('data-id')) {
-                        rowCount = $('#example1 > tbody  > tr:last').attr('data-id');
+                    if ($('#example5 > tbody  > tr').attr('data-id')) {
+                        rowCount = $('#example5 > tbody  > tr:last').attr('data-id');
 
                     }
 
@@ -349,8 +349,8 @@
                 function addRow(url) {
                     var rowCount = 0;
 
-                    if ($('#example1 > tbody  > tr').attr('data-id')) {
-                        rowCount = $('#example1 > tbody  > tr:last').attr('data-id');
+                    if ($('#example5 > tbody  > tr').attr('data-id')) {
+                        rowCount = $('#example5 > tbody  > tr:last').attr('data-id');
 
                     }
 
@@ -514,14 +514,14 @@
                 }
                 // headCalculations(index);
                 function headCalculations(index) {
-                    index = $('#example1 > tbody > tr').length;
+                    index = $('#example5 > tbody > tr').length;
                     $taxVal = $('#taxVal').val();
                     var tax = 0;
                     var total = 0;
 
 
 
-                    $('#example1 > tbody > tr').each(function() {
+                    $('#example5 > tbody > tr').each(function() {
                         var row_num = $(this).attr('data-id');
                         total += parseFloat($('#total' + row_num).val());
                         tax += parseFloat($('#total' + row_num).val() * $taxVal);

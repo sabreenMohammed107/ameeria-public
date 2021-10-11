@@ -20,14 +20,13 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'f_name',
-    'l_name',
-    'email',
-    'username',
-    'password',
-    'phone',
-    'status',
-    'avatar',
-
+        'l_name',
+        'email',
+        'username',
+        'password',
+        'phone',
+        'status',
+        'avatar',
     ];
 
     /**
@@ -48,9 +47,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function Roles(){
-        return $this->belongsToMany('Role','assigned_roles');
-    }
+
     /**
      * The attributes that should be handling in the activityLog.
      *

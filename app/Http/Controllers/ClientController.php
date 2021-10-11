@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Unit;
+use App\Models\City;
+use App\Models\Client;
 use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
 
-class UnitsController extends Controller
+class ClientController extends Controller
 {
-    function __construct(Unit $object)
+    function __construct(Client $object)
     {
         $this->middleware('auth');
         // $this->middleware('permission:role-list|role-create|role-edit|role-delete', ['only' => ['index','store']]);
@@ -16,8 +17,8 @@ class UnitsController extends Controller
         // $this->middleware('permission:role-edit', ['only' => ['edit','update']]);
         // $this->middleware('permission:role-delete', ['only' => ['destroy']]);
         $this->object = $object;
-        $this->viewName = 'admin.units.';
-        $this->routeName = 'units.';
+        $this->viewName = 'admin.clients.';
+        $this->routeName = 'clients.';
         $this->message = 'تم حفظ البيانات';
         $this->errormessage = 'راجع البيانات هناك خطأ';
     }
@@ -28,8 +29,8 @@ class UnitsController extends Controller
      */
     public function index()
     {
-        $data = Unit::orderBy('id','DESC')->get();
-        return view('admin.units.index',compact('data'))
+        $data = Client::orderBy('id','DESC')->paginate(200);
+        return view('admin.clients.index',compact('data'))
            ;
     }
 
@@ -40,7 +41,9 @@ class UnitsController extends Controller
      */
     public function create()
     {
+        $cities = City::orderBy('id','DESC')->get();
 
+        return view('admin.clients.add',compact('cities'));
     }
 
     /**
@@ -51,6 +54,7 @@ class UnitsController extends Controller
      */
     public function store(Request $request)
     {
+        //
         $this->object::create($request->except('_token'));
         return redirect()->route($this->routeName.'index')->with('flash_success', $this->message);
     }
@@ -74,7 +78,10 @@ class UnitsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $row=Client::where('id',$id)->first();
+        $cities = City::orderBy('id','DESC')->get();
+
+        return view('admin.clients.edit',compact('cities','row'));
     }
 
     /**
@@ -98,6 +105,18 @@ class UnitsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $row = Client::where('id', $id)->first();
+        // Delete File ..
+
+
+        try {
+
+            $row->delete();
+            return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم الحذف بنجاح !');
+
+        } catch (QueryException $q) {
+
+            return redirect()->back()->with('flash_danger', 'هذه القيمه مربوطه بجدول اخر ..لا يمكن المسح');
+        }
     }
 }

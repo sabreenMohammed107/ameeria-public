@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
@@ -15,6 +14,7 @@ use Illuminate\Http\Request;
 use Log;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
+
 class InvoiceController extends Controller
 {
 
@@ -382,4 +382,20 @@ if($request->has('taxable')){
             InvoiceItem::where('id', $req->id)->delete();
         }
     }
+
+    public function search(Request $request){
+        \Log::info([$request->input('from'),$request->input('to')]);
+
+        $invoice = Invoice::orderBy('id', 'DESC');
+        if (!empty($request->get("from"))) {
+            $invoice->where('date', '>=', Carbon::parse($request->get("from")));
+        }
+        if (!empty($request->get("to"))) {
+            $invoice->where('date', '<=', Carbon::parse($request->get("to")));
+        }
+        $data = $invoice->get();
+        \Log::info($data);
+        return view($this->viewName . 'preIndex',compact('data'))->render();
+    }
+
 }

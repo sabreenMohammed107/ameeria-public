@@ -13,23 +13,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('/');
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
+Auth::routes(['register' => false]);
 
 Route::resource('roles', 'RoleController');
 Route::resource('users', 'UserController');
-//Me
-Route::resource('units', 'Admin\UnitsController');
-Route::resource('settings', 'Admin\SettingsController');
-Route::resource('cities', 'Admin\CitiesController');
-Route::resource('items', 'Admin\ItemsController');
-Route::resource('clients', 'Admin\ClientController');
-Route::resource('invoices', 'Admin\InvoiceController');
-Route::get('addInvoiceRow/fetch', 'Admin\InvoiceController@addRow')->name('addInvoiceRow.fetch');
-Route::get('editSelectVal/fetch', 'Admin\InvoiceController@editSelectVal')->name('editSelectVal.fetch');
-Route::get('selectClient/fetch', 'Admin\InvoiceController@selectClient')->name('selectClient.fetch');
-Route::get('/invoice/Remove/Item', 'Admin\InvoiceController@DeleteOrderItem');
-Route::resource('relay', 'Admin\RelayInvoiceController');
+
+
+Route::resource('units', 'UnitsController');
+Route::resource('settings', 'SettingsController');
+Route::resource('cities', 'CitiesController');
+Route::resource('items', 'ItemsController');
+Route::resource('clients', 'ClientController');
+Route::resource('invoices', 'InvoiceController');
+Route::get('addInvoiceRow/fetch', 'InvoiceController@addRow')->name('addInvoiceRow.fetch');
+Route::get('editSelectVal/fetch', 'InvoiceController@editSelectVal')->name('editSelectVal.fetch');
+Route::get('selectClient/fetch', 'InvoiceController@selectClient')->name('selectClient.fetch');
+Route::get('/invoice/Remove/Item', 'InvoiceController@DeleteOrderItem');
+Route::resource('relay', 'RelayInvoiceController');
+Route::get('/edit-user-profile/{id}', 'UserController@editProfile');
+Route::post('/udate-profile', 'UserController@updateProfile')->name('udate-profile');
+Route::post('/invoices/search', 'InvoiceController@search')->name('invoices.search');

@@ -10,10 +10,9 @@
                     <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="index3.html" class="nav-link"> الرئيسية</a>
+                    <!-- <a href="{{ route('/') }}" class="nav-link"> الرئيسية</a> -->
                 </li>
             </ul>
-
             <ul class="navbar-nav ml-auto">
                 <!-- Notifications Dropdown Menu -->
                 <li class="nav-item dropdown">
@@ -22,53 +21,23 @@
                             <img src="{{ asset('webassets/dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" style="width: 30px" alt="User Image">
                         </div>
                     </a>
-
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-left">
- <span class="dropdown-item dropdown-header">{{Auth::user()->username}}</span>
+                        <span class="dropdown-item dropdown-header">{{Auth::user()->username}}</span>
                         <div class="dropdown-divider"></div>
-                        <a  href="{{ route('logout') }}"
-                        onclick="event.preventDefault();
-                                      document.getElementById('logout-form').submit();" class="dropdown-item">
+                        <a href="{{ url('edit-user-profile/'.Auth::user()->id) }}" class="dropdown-item">
+                            <i class="fas fa-user mr-2"></i>تعديل بينات المستخدم
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a  href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="dropdown-item">
                             <i class="fas fa-envelope mr-2"></i> تسجيل خروج
-
                         </a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-users mr-2"></i>تعديل بينات المستخدم
-
-                        </a>
-
-
-                </li>
-
-            </ul>
-
-        </nav>
-        <div class="info">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item dropdown">
-                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        {{ Auth::user()->username }} <span class="caret"></span>
-                    </a>
-
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{{ route('logout') }}"
-                           onclick="event.preventDefault();
-                                         document.getElementById('logout-form').submit();">
-                            {{ __('Logout') }}
-                        </a>
-
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
                     </div>
                 </li>
             </ul>
-            {{-- <a href="edit-profile.html" class="d-block">{{Auth::user()->username}}</a> --}}
-        </div>
+        </nav>
 
     @include('layout.header')
 
@@ -81,7 +50,7 @@
             <div class="container-fluid">
                 <div class="row mb-2 dir-rtl">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-dark">الرئيسية</h1>
+                        <h1 class="m-0 text-dark">@yield('title')</h1>
                     </div>
                     <!-- /.col -->
                     <div class="col-sm-6">
@@ -94,47 +63,23 @@
             <!-- /.container-fluid -->
         </div>
         <!-- /.content-header -->
-    @if(Session::has('flash_success'))
-                <div class="col-lg-12" style="direction: rtl;">
-                    <div class="alert alert-success">
-                        <strong><i class="fa fa-check-circle"></i> {!! session('flash_success') !!}</strong>
-                    </div>
-                </div>
-            @endif
-            @if(Session::has('flash_danger'))
-                <div class="col-lg-12" style="direction: rtl;">
-                    <div class="alert alert-danger">
-                        <strong><i class="fa fa-info-circle"></i> {!! session('flash_danger') !!}</strong>
-                    </div>
-                </div>
-            @endif
-            @if(Session::has('flash_delete'))
-                @section('script')
-                Swal.fire(
-                    'Deleted!',
-                    'Your file has been deleted.',
-                    'success'
-                )
-                @endsection
-            @endif
+           
+         <!-- Main content -->
+         <section class="content ">
+            <div class="container-fluid dir-rtl ">
+                @include('layout.messages')
 
-
- <!-- Main content -->
- <section class="content ">
-    <div class="container-fluid dir-rtl ">
-
-        @yield('content')
+                @yield('content')
+            </div>
+            <!--/. container-fluid -->
+        </section>
+        <!-- /.content -->
     </div>
-    <!--/. container-fluid -->
-</section>
-<!-- /.content -->
-</div>
 
-    @yield('modal')
+@yield('modal')
 
 
 
+@include('layout.footer')
 
-    @include('layout.footer')
-
-    @include('layout.footerScripts')
+@include('layout.footerScripts')

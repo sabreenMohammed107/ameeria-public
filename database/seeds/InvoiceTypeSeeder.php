@@ -14,15 +14,14 @@ class InvoiceTypeSeeder extends Seeder
         public function run()
         {
             $types = [
-                ['id' => 1, 'name' => 'طبع', 'notes' => 'لا يوجد لها سعر فى الاصناف'],
-                ['id' => 2, 'name' => 'نشر', 'notes' => 'لايوجد لها سعر فى الاصناف'],
-                ['id' => 3, 'name' => 'مطبوعات موحده', 'notes' => ''],
-                ['id' => 4, 'name' => 'حسابية', 'notes' => ''],
-                ['id' => 5, 'name' => 'ذات قيمه', 'notes' => ''],
-                        ];
-                        foreach($types as $type){
-                            InvoiceType::create($type);
-                        }
-
-}
+                ['name' => 'طبع', 'notes' => 'لا يوجد لها سعر فى الاصناف'],
+                ['name' => 'نشر', 'notes' => 'لايوجد لها سعر فى الاصناف'],
+                ['name' => 'مطبوعات موحده', 'notes' => ''],
+                ['name' => 'حسابية', 'notes' => ''],
+                ['name' => 'ذات قيمه', 'notes' => ''],
+            ];
+            foreach($types as $type){
+                InvoiceType::create($type);
+            }
+    }
 }

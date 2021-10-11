@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\City;
+use App\Models\Item;
+use App\Models\Store;
+use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
 
-class CitiesController extends Controller
+class ItemsController extends Controller
 {
 
-
-    function __construct(City $object)
+    function __construct(Item $object)
     {
         $this->middleware('auth');
         // $this->middleware('permission:role-list|role-create|role-edit|role-delete', ['only' => ['index','store']]);
@@ -18,12 +19,11 @@ class CitiesController extends Controller
         // $this->middleware('permission:role-edit', ['only' => ['edit','update']]);
         // $this->middleware('permission:role-delete', ['only' => ['destroy']]);
         $this->object = $object;
-        $this->viewName = 'admin.cities.';
-        $this->routeName = 'cities.';
+        $this->viewName = 'admin.items.';
+        $this->routeName = 'items.';
         $this->message = 'تم حفظ البيانات';
         $this->errormessage = 'راجع البيانات هناك خطأ';
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -31,8 +31,8 @@ class CitiesController extends Controller
      */
     public function index()
     {
-        $data = City::orderBy('id','DESC')->get();
-        return view('admin.cities.index',compact('data'))
+        $data = Item::orderBy('id','DESC')->paginate(200);
+        return view('admin.items.index',compact('data'))
            ;
     }
 
@@ -43,7 +43,11 @@ class CitiesController extends Controller
      */
     public function create()
     {
-        //
+        $stores = Store::orderBy('id','DESC')->get();
+        $storages=Unit::orderBy('id','DESC')->get();
+        $exchanges=Unit::orderBy('id','DESC')->get();
+        return view('admin.items.add',compact('stores','storages','exchanges'))
+           ;
     }
 
     /**
@@ -77,7 +81,12 @@ class CitiesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $row=Item::where('id',$id)->first();
+        $stores = Store::orderBy('id','DESC')->get();
+        $storages=Unit::orderBy('id','DESC')->get();
+        $exchanges=Unit::orderBy('id','DESC')->get();
+        return view('admin.items.edit',compact('stores','storages','exchanges','row'))
+           ;
     }
 
     /**
@@ -91,7 +100,7 @@ class CitiesController extends Controller
     {
         $this->object::findOrFail($id)->update($request->except('_token'));
         return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
-    }
+     }
 
     /**
      * Remove the specified resource from storage.
@@ -101,6 +110,18 @@ class CitiesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $row = Item::where('id', $id)->first();
+        // Delete File ..
+
+
+        try {
+
+            $row->delete();
+            return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم الحذف بنجاح !');
+
+        } catch (QueryException $q) {
+
+            return redirect()->back()->with('flash_danger', 'هذه القيمه مربوطه بجدول اخر ..لا يمكن المسح');
+        }
     }
 }

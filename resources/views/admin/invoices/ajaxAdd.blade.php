@@ -24,19 +24,19 @@
             <input type="number"    id="opPermission{{$rowCount}}"  name="opPermission{{$rowCount}}" oninput="opPermission({{$rowCount}})"  class="form-control oppermission" placeholder="">
         </div>
     </td>
-    <td>
+    <td style='width: 150px;'>
         <div class="input-mark-inner mg-b-22">
             <input type="number"  class="form-control" oninput="itemQty({{$rowCount}})" name="qty{{$rowCount}}" id="qty{{$rowCount}}"  placeholder="">
         </div>
     </td>
 
-    <td>
+    <td style='width: 150px;'>
         <div class="input-mark-inner mg-b-22">
             <input type="number"  id="itemprice{{$rowCount}}"  name="itemprice{{$rowCount}}" oninput="itemPrice({{$rowCount}})" class="form-control" placeholder="">
         </div>
     </td>
 
-    <td  class="total_item_price" style='width: 120px;'>
+    <td  class="total_item_price" style='width: 180px;'>
 
     <div class="input-mark-inner mg-b-22">
         <input type="number"  id="total{{$rowCount}}"  name="total{{$rowCount}}" oninput="totaly({{$rowCount}})" class="form-control" placeholder="">
