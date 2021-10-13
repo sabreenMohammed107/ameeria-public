@@ -22,11 +22,11 @@
 
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6">
-                                            <label for=""> حساب عام</label>
+                                            <label for=""> حساب عام<span style="color: red">*</span></label>
                                             <input type="text" name="general_account" value="{{$row->general_account}}" class="form-control">
                                         </div>
                                         <div class="col-md-6 col-sm-6">
-                                            <label for=""> حساب مساعد</label>
+                                            <label for=""> حساب مساعد<span style="color: red">*</span></label>
                                             <input type="text" name="help_account" value="{{$row->help_account}}" class="form-control">
                                         </div>
                                     </div>
@@ -35,7 +35,7 @@
                             <div class="col-sm-8"></div>
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label for="">اسم العميل</label>
+                                    <label for="">اسم العميل<span style="color: red">*</span></label>
                                     <input type="text" name="name" value="{{$row->name}}" class="form-control" id="">
                                 </div>
                             </div>

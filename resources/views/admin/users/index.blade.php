@@ -63,13 +63,39 @@
                                     </a>
                                     @endcan
                                     @can('users-delete')
-                                    <a data-target="#confirm-delete" href="javascript:;" data-href="{{ route('users.destroy', $row->id) }}"  class="btn btn-danger btn-sm" data-placement="top" title="حذف بيانات السجل" data-toggle="modal">
-                                        حذف
-                                    </a>
+
+                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#del{{$row->id}}" > حذف</button>
+
                                     @endcan
                                 </div>
                             </td>
                         </tr>
+                        <!--/Edit Customer-->
+                         <!-- Delete Modal -->
+                         <div class="modal fade dir-rtl" id="del{{$row->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <form action="{{ route('users.destroy', $row->id) }}"  method="POST" >
+                                    @csrf
+                                    @method('DELETE')
+                                    <div class="modal-content">
+                                    <div class="modal-header bg-gradient-danger">
+                                        <h5 class="modal-title" id="exampleModalLabel">تأكيد الحذف</h5>
+                                        <button type="button" class="close m-0 p-0 text-white" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <h3><i class="fas fa-fire text-danger"></i></h3>
+                                        <h4 class="text-danger">حذف جميع البيانات ؟</h4>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
+                                        <button type="submit" class="btn btn-danger">تأكيد</button>
+                                    </div>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
                         @endforeach
                     </tbody>
                 </table>

@@ -1,5 +1,5 @@
 @extends('layout.web')
-
+@section('title', 'الأصناف')
 
 @section('content')
 <div class="row dir-rtl">
@@ -23,7 +23,7 @@
                                     <select class="custom-select" name="store_id">
                                         <option value="">اختر</option>
                                         @foreach($stores as $data)
-                                        <option value="{{$data->id}}" {{ ( $data->id == $row->store_id) ? 'selected' : '' }}>{{$data->name}} </option>
+                                        <option value="{{$data->id}}" {{ ( $data->id == $row->store_id) ? 'selected' : '' }}>{{$data->code}} / {{$data->name}} </option>
 
                                         @endforeach
                                     </select>
@@ -31,13 +31,13 @@
                             </div>
                             <div class="col-sm-3">
                                 <div class="form-group">
-                                    <label for="">كود الصنف </label>
+                                    <label for="">كود الصنف <span style="color: red">*</span></label>
                                     <input name="code" value="{{$row->code}}" type="text" class="form-control" id="">
                                 </div>
                             </div>
                             <div class="col-sm-3">
                                 <div class="form-group">
-                                    <label for="">اسم الصنف</label>
+                                    <label for="">اسم الصنف<span style="color: red">*</span></label>
                                     <input name="name" value="{{$row->name}}" type="text" class="form-control" id="">
                                 </div>
                             </div>
@@ -46,11 +46,11 @@
 
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6">
-                                            <label for=""> حساب عام</label>
+                                            <label for=""> حساب عام<span style="color: red">*</span></label>
                                             <input name="general_account" value="{{$row->general_account}}" type="text" class="form-control">
                                         </div>
                                         <div class="col-md-6 col-sm-6">
-                                            <label for=""> حساب مساعد</label>
+                                            <label for=""> حساب مساعد<span style="color: red">*</span></label>
                                             <input name="help_account" value="{{$row->help_account}}" type="text" class="form-control">
                                         </div>
                                     </div>
@@ -61,10 +61,10 @@
                             <div class="col-sm-3">
                                 <div class="form-group">
                                     <label for=""> وحدة التخزين</label>
-                                    <select class="custom-select" name="storage_unit_id">
+                                    <select class="js-example-basic-single" style="width: 100%" id="storage_unit_id" name="storage_unit_id">
                                         <option value="">اختر</option>
                                         @foreach($storages as $data)
-                                        <option value="{{$data->id}}" {{ ( $data->id == $row->storage_unit_id) ? 'selected' : '' }}>{{$data->name}} </option>
+                                        <option value="{{$data->id}}" {{ ( $data->id == $row->storage_unit_id) ? 'selected' : '' }}>{{$data->code}} / {{$data->name}} </option>
 
                                         @endforeach
                                     </select>
@@ -72,11 +72,11 @@
                             </div>
                             <div class="col-sm-3">
                                 <div class="form-group">
-                                    <label for="">وحده الصرف</label>
-                                    <select class="custom-select" name="exchange_unit_id">
+                                    <label for="">وحده الصرف<span style="color: red">*</span></label>
+                                    <select class="w-100 js-example-basic-single" id="exchange_unit_id" name="exchange_unit_id">
                                         <option value="">اختر</option>
                                         @foreach($exchanges as $data)
-                                        <option value="{{$data->id}}" {{ ( $data->id == $row->exchange_unit_id) ? 'selected' : '' }}>{{$data->name}} </option>
+                                        <option value="{{$data->id}}" {{ ( $data->id == $row->exchange_unit_id) ? 'selected' : '' }}>{{$data->code}} / {{$data->name}} </option>
 
                                         @endforeach
                                     </select>
@@ -90,7 +90,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <div class="form-group">
-                                    <label for="">سعر البيع </label>
+                                    <label for="">سعر البيع <span style="color: red">*</span></label>
                                     <input name="selling_price" value="{{$row->selling_price}}" type="text" class="form-control" id="">
                                 </div>
                             </div>
@@ -173,4 +173,13 @@
         </div>
     </div>
     <!-- /.col -->
+@endsection
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('.js-example-basic-single').select2();
+});
+</script>
+
 @endsection

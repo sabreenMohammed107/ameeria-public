@@ -1,14 +1,16 @@
 @extends('layout.web')
 
-
+@section('title', 'الفواتير')
 @section('content')
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">الفواتير</h3>
+                    @can('invoices-create')
                     <h3 class="card-title float-sm-left"><a href="{{ route('invoices.create') }}"
                             class="btn btn-success">إضافة</a></h3>
+                            @endcan
                 </div>
                 <div class="card-body">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -45,6 +47,7 @@
                 <!-- /.card-header -->
                 <div class="card-body" id="preIndex">
                     @include('admin.invoices.preIndex')
+                    {{$data->render()}}
                 </div>
 
                 <!-- /.card-body -->
@@ -90,6 +93,11 @@
 
 
     });
+
+    $('#example1').DataTable( {
+    destroy: true,
+    paging: false
+} );
 
 </script>
 @endsection

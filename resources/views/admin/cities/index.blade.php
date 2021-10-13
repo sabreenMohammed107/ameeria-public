@@ -1,6 +1,6 @@
 @extends('layout.web')
 
-
+@section('title', 'المدن/المحافظات')
 @section('content')
 <div class="row">
     <div class="col-12">
@@ -8,8 +8,10 @@
             <div class="card-header">
                 <h3 class="card-title"> المدن</h3>
                 <h3 class="card-title float-sm-left">
+                    @can('cities-create')
                     <button class="btn btn-success" data-toggle="modal" data-target="#add">إضافة</button></h3>
-            </div>
+          @endcan
+                </div>
             <!-- /.card-header -->
             <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
@@ -31,9 +33,12 @@
                             <th>{{ $row->name}}</th>
 
                             <th>
+                                @can('cities-edit')
                                 <button class="btn btn-info" data-toggle="modal" data-target="#add{{$row->id}}"><i class="fas fa-edit text-white"></i></button>
+                              @endcan
+                                @can('cities-delete')
                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#del{{$row->id}}"><i class="fas fa-trash-alt"></i></button>
-
+@endcan
                             </th>
                          <!--Edit Customer-->
  <div class="modal" id="add{{$row->id}}" tabindex="-1">
@@ -59,11 +64,11 @@
 
                                     <div class="form-group">
                                         <label class=""> الكود</label>
-                                        <input name="code" value="{{$row->code}}" type="text" class="form-control" placeholder="الكود">
+                                        <input name="code" required value="{{$row->code}}" type="text" class="form-control" placeholder="الكود">
                                     </div>
                                     <div class="form-group">
                                         <label class="">اسم المدينة</label>
-                                        <input name="name" value="{{$row->name}}" type="text" class="form-control" placeholder="الاسم">
+                                        <input name="name" required value="{{$row->name}}" type="text" class="form-control" placeholder="الاسم">
                                     </div>
 
                                 </div>
@@ -148,11 +153,11 @@
 
                                     <div class="form-group">
                                         <label class=""> الكود</label>
-                                        <input name="code" type="text" class="form-control" placeholder="الكود">
+                                        <input name="code" type="text" required value="{{old('code') }}" class="form-control" placeholder="الكود">
                                     </div>
                                     <div class="form-group">
                                         <label class="">اسم المدينة</label>
-                                        <input name="name" type="text" class="form-control" placeholder="الاسم">
+                                        <input name="name" type="text" required value="{{old('name') }}" class="form-control" placeholder="الاسم">
                                     </div>
 
                                 </div>

@@ -9,13 +9,19 @@ use Illuminate\Database\QueryException;
 
 class ClientController extends Controller
 {
+
+    protected $object;
+    protected $viewName;
+    protected $routeName;
+    protected $message;
+    protected $errormessage;
     function __construct(Client $object)
     {
         $this->middleware('auth');
-        // $this->middleware('permission:role-list|role-create|role-edit|role-delete', ['only' => ['index','store']]);
-        // $this->middleware('permission:role-create', ['only' => ['create','store']]);
-        // $this->middleware('permission:role-edit', ['only' => ['edit','update']]);
-        // $this->middleware('permission:role-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:clients-list|clients-create|clients-edit|clients-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:clients-create', ['only' => ['create','store']]);
+        $this->middleware('permission:clients-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:clients-delete', ['only' => ['destroy']]);
         $this->object = $object;
         $this->viewName = 'admin.clients.';
         $this->routeName = 'clients.';
@@ -30,7 +36,7 @@ class ClientController extends Controller
     public function index()
     {
         $data = Client::orderBy('id','DESC')->paginate(200);
-        return view('admin.clients.index',compact('data'))
+        return view($this->viewName.'index',compact('data'))
            ;
     }
 
@@ -43,7 +49,7 @@ class ClientController extends Controller
     {
         $cities = City::orderBy('id','DESC')->get();
 
-        return view('admin.clients.add',compact('cities'));
+        return view($this->viewName.'add',compact('cities'));
     }
 
     /**
@@ -54,9 +60,28 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $this->object::create($request->except('_token'));
+        $this->validate($request, [
+
+            'name' => 'required',
+            'general_account'=>'required',
+            'help_account'=>'required',
+
+        ],[
+            'name.required' => 'حقل الاسم مطلوب',
+            'general_account.required' => 'حقل الحساب العام مطلوب',
+            'help_account.required' => 'حقل الحساب المساعد مطلوب',
+
+        ]);
+
+        try
+        {
+            $this->object::create($request->except('_token'));
         return redirect()->route($this->routeName.'index')->with('flash_success', $this->message);
+
+        } catch (\Exception $e){
+            return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ الرجاء معاودة المحاولة في وقت لاحق');
+        }
+
     }
 
     /**
@@ -81,7 +106,7 @@ class ClientController extends Controller
         $row=Client::where('id',$id)->first();
         $cities = City::orderBy('id','DESC')->get();
 
-        return view('admin.clients.edit',compact('cities','row'));
+        return view($this->viewName.'edit',compact('cities','row'));
     }
 
     /**
@@ -93,8 +118,28 @@ class ClientController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->object::findOrFail($id)->update($request->except('_token'));
-        return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
+        $this->validate($request, [
+
+            'name' => 'required',
+            'general_account'=>'required',
+            'help_account'=>'required',
+
+        ],[
+            'name.required' => 'حقل الاسم مطلوب',
+            'general_account.required' => 'حقل الحساب العام مطلوب',
+            'help_account.required' => 'حقل الحساب المساعد مطلوب',
+
+        ]);
+
+        try
+        {
+            $this->object::findOrFail($id)->update($request->except('_token'));
+            return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
+
+        } catch (\Exception $e){
+            return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ الرجاء معاودة المحاولة في وقت لاحق');
+        }
+
     }
 
     /**

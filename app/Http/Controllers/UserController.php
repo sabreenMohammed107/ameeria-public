@@ -57,7 +57,7 @@ class UserController extends Controller
     {
         $roles = Role::pluck('name','name')->all();
 
-        return view($this->view.'create', compact('roles'));
+        return view($this->view.'add', compact('roles'));
     }
 
     /**
@@ -70,13 +70,25 @@ class UserController extends Controller
     {
         // Validating fields
         $this->validate($request, [
-            'f_name' => 'required|string',
-            'l_name' => 'required|string',
+            'f_name' => 'required',
+            'l_name' => 'required',
             'email' => 'required|email|unique:users',
             'phone' => 'required|unique:users',
-            'username' => 'required|string|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'username' => 'required|unique:users',
+            'password' => 'required',
             'roles' => 'required',
+        ],
+        [
+            'f_name.required' => 'حقل الاسم الاول مطلوب',
+            'l_name.required' => 'حقل الاسم الاخير مطلوب',
+            'username.required' => 'حقل اسم المستخدم مطلوب',
+            'phone.required' => 'حقل التليفون مطلوب',
+            'email.required' => 'حقل البريد الالكترونى مطلوب',
+            'password.required' => 'حقل كلمه السر مطلوب',
+            'roles.required' => 'حقل الادوار مطلوب',
+            'email.unique' => 'البريد الالكترونى  موجود بالفعل',
+            'phone.unique' => 'التليفون موجود بالفعل',
+            'username.unique' => 'اسم المستخدم موجود بالفعل',
         ]);
 
         try {
@@ -89,7 +101,7 @@ class UserController extends Controller
 
             // Display a successful message ...
             return redirect()->route($this->route.'index')->with('flash_success','تم إنشاء المستخدم بنجاح');
-        
+
         } catch (\Exception $e){
             return redirect()->route($this->view.'index')->with('flash_danger','خطأ ... لا يمكن الحذف حتي لا تتأثر البيانات الأخري بعملية الحذف !!!');
         }
@@ -116,12 +128,12 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $data = $this->model::findOrFail($id);
-        $data->password = null;
+        $user = $this->model::findOrFail($id);
+        $user->password = null;
         $roles = Role::pluck('name','name')->all();
-        $userRole = $data->roles->pluck('name','name')->all();
+        $userRole = $user->roles->pluck('name','name')->all();
 
-        return view($this->view.'edit', compact('data', 'roles', 'userRole'));
+        return view($this->view.'edit', compact('user', 'roles', 'userRole'));
     }
 
     /**
@@ -133,40 +145,52 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         // Validating fields
         $this->validate($request, [
-            'f_name' => 'required|string',
-            'l_name' => 'required|string',
+            'f_name' => 'required',
+            'l_name' => 'required',
             'email' => 'required|email|unique:users,email,'.$id,
             'phone' => 'required|unique:users,phone,'.$id,
             'username' => 'required|string|unique:users,username,'.$id,
-            'password' => 'nullable|string|min:8|confirmed',
-            'roles' => 'required',
-        ]);
 
+            'roles' => 'required',
+        ],
+        [
+            'f_name.required' => 'حقل الاسم الاول مطلوب',
+            'l_name.required' => 'حقل الاسم الاخير مطلوب',
+            'username.required' => 'حقل اسم المستخدم مطلوب',
+            'phone.required' => 'حقل التليفون مطلوب',
+            'email.required' => 'حقل البريد الالكترونى مطلوب',
+
+            'roles.required' => 'حقل الادوار مطلوب',
+            'email.unique' => 'البريد الالكترونى  موجود بالفعل',
+            'phone.unique' => 'التليفون موجود بالفعل',
+            'username.unique' => 'اسم المستخدم موجود بالفعل',
+        ]);
         try {
 
             $input = $request->all();
             if($input['password'] != null)
                 $input['password'] = \Hash::make($input['password']);
             else
-                unset($input['password']); 
+                unset($input['password']);
 
             $user = $this->model::findOrFail($id);
             $user->update($input);
-            
+
             \DB::table('model_has_roles')->where('model_id',$id)->delete();
             $user->assignRole($request->input('roles'));
 
             // Display a successful message ...
-            return redirect()->route($this->view.'index')->with('flash_success','تم تعديل بيانات المستخدم بنجاح');
+            return redirect()->route($this->route.'index')->with('flash_success','تم تعديل بيانات المستخدم بنجاح');
 
         } catch (\Exception $e){
-            return redirect()->route($this->view.'index')->with('flash_danger','خطأ ... لا يمكن الحذف حتي لا تتأثر البيانات الأخري بعملية الحذف !!!');
+            return redirect()->route($this->route.'index')->with('flash_danger','خطأ ... لا يمكن الحذف حتي لا تتأثر البيانات الأخري بعملية الحذف !!!');
         }
     }
 
- 
+
     /**
      * Remove the specified resource from storage.
      *
@@ -181,12 +205,12 @@ class UserController extends Controller
             $account->delete();
 
             // Display a successful message ...
-            return redirect()->route($this->view.'index')->with('flash_success','تم حذف بيانات المستخدم بنجاح');
+            return redirect()->route($this->route.'index')->with('flash_success','تم حذف بيانات المستخدم بنجاح');
         }
         catch (\Illuminate\Database\QueryException $e)
         {
             // Display a successful message ...
-            return redirect()->route($this->view.'index')->with('flash_danger','خطأ ... لا يمكن الحذف حتي لا تتأثر البيانات الأخري بعملية الحذف !!!');
+            return redirect()->route($this->route.'index')->with('flash_danger','خطأ ... لا يمكن الحذف حتي لا تتأثر البيانات الأخري بعملية الحذف !!!');
         }
     }
 
@@ -216,13 +240,20 @@ class UserController extends Controller
         try
         {
             $input =$request->except('_token','user_id');
-            $input['password'] = bcrypt($request->input('password'));
-            User::findOrFail($request->input('user_id'))->update($input);
+            if($input['password'] != null)
+                $input['password'] = \Hash::make($input['password']);
+            else
+                unset($input['password']);
+
+            $user = $this->model::findOrFail($request->input('user_id'));
+            $user->update($input);
+
+
             return redirect()->back()->with('flash_success', 'تم حفظ البيانات');
 
         } catch (\Exception $e) {
             return redirect()->back()->with('flash_danger', $e->getMessage());
         }
     }
-    
+
 }

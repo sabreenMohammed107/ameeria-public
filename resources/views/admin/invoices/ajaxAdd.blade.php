@@ -13,33 +13,35 @@
         </select>
      </div> --}}
      <div class="input-mark-inner mg-b-22">
-        <input type="number"    id="itemCode{{$rowCount}}"  name="select{{$rowCount}}" onchange="editSelectVal({{$rowCount}})"  class="form-control " placeholder="">
+        <input type="text"    id="itemCode{{$rowCount}}"  value="{{old('select'.$rowCount) }}"  name="select{{$rowCount}}" onchange="editSelectVal({{$rowCount}})"  class="form-control " placeholder="">
     </div>
     </td>
     {{-- <td id="ar_name{{$rowCount}}" style='width: 200px;'></td> --}}
-    <td id="desc{{$rowCount}}" style='width: 200px;'></td>
+    <td    style='width: 250px;'>
+        <input type="text"    id="desc{{$rowCount}}"  value="{{old('desc'.$rowCount) }}"  name="desc{{$rowCount}}"   class="form-control " placeholder="">
+    </td>
 
     <td>
         <div class="input-mark-inner mg-b-22">
-            <input type="number"    id="opPermission{{$rowCount}}"  name="opPermission{{$rowCount}}" oninput="opPermission({{$rowCount}})"  class="form-control oppermission" placeholder="">
+            <input type="number"    id="opPermission{{$rowCount}}" value="{{old('opPermission'.$rowCount) }}"  name="opPermission{{$rowCount}}" oninput="opPermission({{$rowCount}})"  class="form-control oppermission" placeholder="">
         </div>
     </td>
     <td style='width: 150px;'>
         <div class="input-mark-inner mg-b-22">
-            <input type="number"  class="form-control" oninput="itemQty({{$rowCount}})" name="qty{{$rowCount}}" id="qty{{$rowCount}}"  placeholder="">
+            <input type="number"  class="form-control" oninput="itemQty({{$rowCount}})" value="{{old('qty'.$rowCount) }}" name="qty{{$rowCount}}" id="qty{{$rowCount}}"  placeholder="">
         </div>
     </td>
 
     <td style='width: 150px;'>
         <div class="input-mark-inner mg-b-22">
-            <input type="number"  id="itemprice{{$rowCount}}"  name="itemprice{{$rowCount}}" oninput="itemPrice({{$rowCount}})" class="form-control" placeholder="">
+            <input type="number"  id="itemprice{{$rowCount}}"  name="itemprice{{$rowCount}}" value="{{old('itemprice'.$rowCount) }}" oninput="itemPrice({{$rowCount}})" class="form-control" placeholder="">
         </div>
     </td>
 
     <td  class="total_item_price" style='width: 180px;'>
 
     <div class="input-mark-inner mg-b-22">
-        <input type="number"  id="total{{$rowCount}}"  name="total{{$rowCount}}" oninput="totaly({{$rowCount}})" class="form-control" placeholder="">
+        <input type="number"  id="total{{$rowCount}}" value="{{old('total'.$rowCount) }}"  name="total{{$rowCount}}" oninput="totaly({{$rowCount}})" class="form-control" placeholder="">
     </div>
     </td>
 

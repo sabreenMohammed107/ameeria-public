@@ -1,13 +1,15 @@
 @extends('layout.web')
 
-
+@section('title', 'الأصناف')
 @section('content')
 <div class="row">
     <div class="col-12">
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">سجل الأصناف</h3>
+                @can('items-create')
                 <h3 class="card-title float-sm-left"><a href="{{route('items.create')}}" class="btn btn-success">إضافة</a></h3>
+           @endcan
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -34,9 +36,12 @@
 
                             <th>{{ $row->cost_price}}</th>
                             <th>{{ $row->selling_price}}</th>
+                            @can('items-edit')
                             <th><a href="{{route('items.edit',$row->id)}}" class="btn btn-info"><i class="fas fa-edit text-white"></i></a>
+                              @endcan
+                                @can('items-delete')
                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#del{{$row->id}}"><i class="fas fa-trash-alt"></i></button>
-
+                                @endcan
                             </th>
                       <!-- Delete Modal -->
 <div class="modal fade dir-rtl" id="del{{$row->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -9,14 +9,18 @@ use Illuminate\Database\QueryException;
 class CitiesController extends Controller
 {
 
-
+    protected $object;
+    protected $viewName;
+    protected $routeName;
+    protected $message;
+    protected $errormessage;
     function __construct(City $object)
     {
         $this->middleware('auth');
-        // $this->middleware('permission:role-list|role-create|role-edit|role-delete', ['only' => ['index','store']]);
-        // $this->middleware('permission:role-create', ['only' => ['create','store']]);
-        // $this->middleware('permission:role-edit', ['only' => ['edit','update']]);
-        // $this->middleware('permission:role-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:cities-list|cities-create|cities-edit|cities-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:cities-create', ['only' => ['create','store']]);
+        $this->middleware('permission:cities-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:cities-delete', ['only' => ['destroy']]);
         $this->object = $object;
         $this->viewName = 'admin.cities.';
         $this->routeName = 'cities.';
@@ -32,7 +36,7 @@ class CitiesController extends Controller
     public function index()
     {
         $data = City::orderBy('id','DESC')->get();
-        return view('admin.cities.index',compact('data'))
+        return view($this->viewName.'index',compact('data'))
            ;
     }
 
@@ -54,8 +58,23 @@ class CitiesController extends Controller
      */
     public function store(Request $request)
     {
-        $this->object::create($request->except('_token'));
+        $this->validate($request, [
+            'code' => 'required',
+            'name' => 'required',
+        ],[
+            'name.required' => 'حقل الاسم مطلوب',
+
+            'code.required' => 'حقل الكود مطلوب',
+        ]);
+
+        try
+        {
+            $this->object::create($request->except('_token'));
         return redirect()->route($this->routeName.'index')->with('flash_success', $this->message);
+
+        } catch (\Exception $e){
+            return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ الرجاء معاودة المحاولة في وقت لاحق');
+        }
     }
 
     /**
@@ -89,8 +108,24 @@ class CitiesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->object::findOrFail($id)->update($request->except('_token'));
+        $this->validate($request, [
+            'code' => 'required',
+            'name' => 'required',
+        ],[
+            'name.required' => 'حقل الاسم مطلوب',
+
+            'code.required' => 'حقل الكود مطلوب',
+        ]);
+
+        try
+        {
+            $this->object::findOrFail($id)->update($request->except('_token'));
         return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
+
+        } catch (\Exception $e){
+            return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ الرجاء معاودة المحاولة في وقت لاحق');
+        }
+
     }
 
     /**

@@ -75,7 +75,7 @@ class RoleController extends Controller
             'permission.required' => 'حقل الصلاحيات مطلوب',
         ]);
 
-        try 
+        try
         {
             $role = $this->model::create(['name' => $request->input('name')]);
             $role->syncPermissions($request->input('permission'));
@@ -148,7 +148,7 @@ class RoleController extends Controller
             $role->syncPermissions($request->input('permission'));
 
             return redirect()->route($this->route.'index')->with('flash_success', 'تم تعديل الدور بنجاح!');
-            
+
         } catch (\Exception $e){
             return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ الرجاء معاودة المحاولة في وقت لاحق');
         }

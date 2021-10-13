@@ -20,12 +20,12 @@
 
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6">
-                                            <label for=""> حساب عام</label>
-                                            <input type="text" name="general_account" class="form-control">
+                                            <label for=""> حساب عام<span style="color: red">*</span></label>
+                                            <input type="text" value="{{old('general_account') }}" name="general_account" class="form-control">
                                         </div>
                                         <div class="col-md-6 col-sm-6">
-                                            <label for=""> حساب مساعد</label>
-                                            <input type="text" name="help_account" class="form-control">
+                                            <label for=""> حساب مساعد<span style="color: red">*</span></label>
+                                            <input type="text" value="{{old('help_account') }}" name="help_account" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -33,20 +33,20 @@
                             <div class="col-sm-8"></div>
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label for="">اسم العميل</label>
-                                    <input type="text" name="name" class="form-control" id="">
+                                    <label for="">اسم العميل<span style="color: red">*</span></label>
+                                    <input type="text" value="{{old('name') }}" name="name" class="form-control" id="">
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">السجل التجاري</label>
-                                    <input type="text" name="commercial_register" class="form-control" id="">
+                                    <input type="text" value="{{old('commercial_register') }}" name="commercial_register" class="form-control" id="">
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">البطاقة الضريبية</label>
-                                    <input type="text" name="tax_card_id" class="form-control" id="">
+                                    <input type="text" value="{{old('tax_card_id') }}" name="tax_card_id" class="form-control" id="">
                                 </div>
                             </div>
                             <div class="col-sm-4">
@@ -55,7 +55,7 @@
                                     <select class="custom-select" name="city_id">
                                         <option value="">اختر</option>
                                         @foreach($cities as $data)
-                                        <option value="{{$data->id}}">{{$data->name}} </option>
+                                        <option {{old('city_id') ==$data->id ? 'selected' : ""}} value="{{$data->id}}">{{$data->name}} </option>
 
                                         @endforeach
                                     </select>
@@ -64,19 +64,19 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for=""> العنوان</label>
-                                    <input type="text" name="address" class="form-control" id="">
+                                    <input type="text" value="{{old('address') }}" name="address" class="form-control" id="">
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">الموبايل </label>
-                                    <input type="text" name="phone" class="form-control" id="">
+                                    <input type="text" value="{{old('phone') }}" name="phone" class="form-control" id="">
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for=""> البريد الإلكترونى </label>
-                                    <input type="text" name="email" class="form-control" id="">
+                                    <input type="text" value="{{old('email') }}" name="email" class="form-control" id="">
                                 </div>
                             </div>
 
@@ -84,7 +84,7 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">  ملاحظات </label>
-                                    <input type="text" name="notes" class="form-control" id="">
+                                    <input type="text" value="{{old('notes') }}" name="notes" class="form-control" id="">
                                 </div>
                             </div>
 

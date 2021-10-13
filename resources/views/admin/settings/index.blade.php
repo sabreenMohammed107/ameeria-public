@@ -1,6 +1,6 @@
 @extends('layout.web')
 
-
+@section('title', 'إعدادات عامة')
 @section('content')
 <div class="row">
     <div class="col-12">
@@ -29,9 +29,10 @@
                             <th>{{ $vat->key}} </th>
                             <th>{{ $vat->value}} </th>
 
-
+                            @can('settings-edit')
                             <th><button class="btn btn-info" data-toggle="modal" data-target="#add{{$vat->id}}"><i class="fas fa-edit text-white"></i></button></th>
-                       <!--Add Customer-->
+                      @endcan
+                            <!--Add Customer-->
      <div class="modal" id="add{{$vat->id}}" tabindex="-1">
         <div class="modal-dialog dir-rtl">
             <div class="modal-content dir-rtl">
@@ -60,7 +61,7 @@
 
                                         <div class="form-group">
                                             <label class="">القيمه</label>
-                                            <input name="value" value="{{$vat->value}}" type="text" class="form-control" placeholder="القيمه">
+                                            <input name="value" value="{{$vat->value}}" required type="text" class="form-control" placeholder="القيمه">
                                         </div>
 
                                     </div>

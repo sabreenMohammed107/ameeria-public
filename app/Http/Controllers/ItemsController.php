@@ -10,14 +10,18 @@ use Illuminate\Database\QueryException;
 
 class ItemsController extends Controller
 {
-
+    protected $object;
+    protected $viewName;
+    protected $routeName;
+    protected $message;
+    protected $errormessage;
     function __construct(Item $object)
     {
         $this->middleware('auth');
-        // $this->middleware('permission:role-list|role-create|role-edit|role-delete', ['only' => ['index','store']]);
-        // $this->middleware('permission:role-create', ['only' => ['create','store']]);
-        // $this->middleware('permission:role-edit', ['only' => ['edit','update']]);
-        // $this->middleware('permission:role-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:items-list|items-create|items-edit|items-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:items-create', ['only' => ['create','store']]);
+        $this->middleware('permission:items-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:items-delete', ['only' => ['destroy']]);
         $this->object = $object;
         $this->viewName = 'admin.items.';
         $this->routeName = 'items.';
@@ -32,7 +36,7 @@ class ItemsController extends Controller
     public function index()
     {
         $data = Item::orderBy('id','DESC')->paginate(200);
-        return view('admin.items.index',compact('data'))
+        return view($this->viewName.'index',compact('data'))
            ;
     }
 
@@ -46,7 +50,7 @@ class ItemsController extends Controller
         $stores = Store::orderBy('id','DESC')->get();
         $storages=Unit::orderBy('id','DESC')->get();
         $exchanges=Unit::orderBy('id','DESC')->get();
-        return view('admin.items.add',compact('stores','storages','exchanges'))
+        return view($this->viewName.'add',compact('stores','storages','exchanges'))
            ;
     }
 
@@ -58,8 +62,34 @@ class ItemsController extends Controller
      */
     public function store(Request $request)
     {
-        $this->object::create($request->except('_token'));
+        $this->validate($request, [
+            'code' => 'required',
+            'name' => 'required',
+            'general_account'=>'required',
+            'help_account'=>'required',
+            'exchange_unit_id'=>'required',
+            'selling_price'=>'required',
+        ],[
+            'name.required' => 'حقل الاسم مطلوب',
+
+            'code.required' => 'حقل الكود مطلوب',
+            'general_account.required' => 'حقل الحساب العام مطلوب',
+
+            'help_account.required' => 'حقل الحساب المساعد مطلوب',
+            'exchange_unit_id.required' => 'حقل وحده الصرف مطلوب',
+
+            'selling_price.required' => 'حقل سعر البيع مطلوب',
+        ]);
+
+        try
+        {
+            $this->object::create($request->except('_token'));
         return redirect()->route($this->routeName.'index')->with('flash_success', $this->message);
+
+        } catch (\Exception $e){
+            return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ الرجاء معاودة المحاولة في وقت لاحق');
+        }
+
     }
 
     /**
@@ -85,7 +115,7 @@ class ItemsController extends Controller
         $stores = Store::orderBy('id','DESC')->get();
         $storages=Unit::orderBy('id','DESC')->get();
         $exchanges=Unit::orderBy('id','DESC')->get();
-        return view('admin.items.edit',compact('stores','storages','exchanges','row'))
+        return view($this->viewName.'edit',compact('stores','storages','exchanges','row'))
            ;
     }
 
@@ -97,9 +127,34 @@ class ItemsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
+    { $this->validate($request, [
+        'code' => 'required',
+        'name' => 'required',
+        'general_account'=>'required',
+        'help_account'=>'required',
+        'exchange_unit_id'=>'required',
+        'selling_price'=>'required',
+    ],[
+        'name.required' => 'حقل الاسم مطلوب',
+
+        'code.required' => 'حقل الكود مطلوب',
+        'general_account.required' => 'حقل الحساب العام مطلوب',
+
+        'help_account.required' => 'حقل الحساب المساعد مطلوب',
+        'exchange_unit_id.required' => 'حقل وحده الصرف مطلوب',
+
+        'selling_price.required' => 'حقل سعر البيع مطلوب',
+    ]);
+
+    try
     {
         $this->object::findOrFail($id)->update($request->except('_token'));
         return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
+
+    } catch (\Exception $e){
+        return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ الرجاء معاودة المحاولة في وقت لاحق');
+    }
+
      }
 
     /**

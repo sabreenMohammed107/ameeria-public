@@ -22,13 +22,13 @@
                                         <div class="col-sm-2">
                                             <div class="form-group">
                                                 <label> رقم الفاتورة</label>
-                                                <input type="number" name="invoice_no" class="form-control">
+                                                <input type="number" value="{{old('invoice_no') }}" name="invoice_no" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-sm-2">
                                             <div class="form-group">
                                                 <label>تاريخ الفاتورة</label>
-                                                <input type="date" name="date" class="form-control">
+                                                <input type="date" value="{{ old('date', date('Y-m-d')) }}" name="date" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-sm-2">
@@ -38,7 +38,7 @@
                                                     name="type_id">
                                                     <option value="">اختر</option>
                                                     @foreach ($invoiceType as $type)
-                                                        <option value="{{ $type->id }}">
+                                                        <option {{old('type_id') ==$type->id ? 'selected' : ""}} value="{{ $type->id }}">
                                                             {{ $type->name }}</option>
                                                     @endforeach
                                                 </select>
@@ -54,14 +54,15 @@
                                         <div class="col-sm-2">
                                             <div class="form-group">
                                                 <label> ملاحظات </label>
-                                                <input name="notes" type="text" class="form-control">
+                                                <input name="notes" value="{{old('notes') }}" type="text" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-sm-2">
 
                                             <div class="form-group mt-4">
                                                 <label> </label>
-                                                <input type="checkbox" class="" name="taxable" id=" taxable" checked="checked">
+                                                <input type="checkbox" class="" name="taxable" id=" taxable" checked {{ old('taxable') == 'on' ? 'checked' : '' }}
+                                            >
                                                 خاضع للضريبة
 
                                             </div>
@@ -71,9 +72,9 @@
                                         <div class="col-sm-2 ">
                                             <div class="form-group mt-4">
 
-                                                <input type="radio" name="tab" value="igotnone" checked
+                                                <input type="radio" name="tab" value="igotnone"  checked {{ old('tab') == "igotnone" ? 'checked' : '' }}
                                                     onclick="show1();" /> مؤسسة
-                                                <input type="radio" name="tab" value="igottwo" onclick="show2();" /> شخص
+                                                <input type="radio" name="tab" value="igottwo"{{ old('tab') == "igottwo" ? 'checked' : '' }} onclick="show2();" /> شخص
                                             </div>
                                         </div>
 
@@ -84,11 +85,11 @@
                                                         <label> حساب عام / مساعد</label>
                                                         <div class="row">
                                                             <div class="col-md-6 col-sm-6">
-                                                                <input type="text" id="general"  name=""
+                                                                <input type="text" id="general" value="{{old('general_account') }}"  name="general_account"
                                                                     class="form-control">
                                                             </div>
                                                             <div class="col-md-6 col-sm-6">
-                                                                <input type="text" id="help"  name=""
+                                                                <input type="text" id="help" value="{{old('help_account') }}" name="help_account"
                                                                     class="form-control">
                                                             </div>
                                                         </div>
@@ -97,25 +98,25 @@
                                                     </div>
 
                                                 </div>
-                                                <input type="hidden" name="client_id" id="client_id">
+                                                <input type="hidden" name="client_id" value="{{old('client_id')}}" id="client_id">
                                                 <div class="col-md-3 col-sm-6">
                                                     <div class="form-group">
                                                         <label>اسم العميل </label>
-                                                        <input readonly value=" " id="clientName" type="text"
+                                                        <input readonly value="{{old('clientName')}}" name="clientName" id="clientName" type="text"
                                                             class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 col-sm-6">
                                                     <div class="form-group">
                                                         <label>سجل تجاري </label>
-                                                        <input readonly value=" " id="clientcommerical" type="text"
+                                                        <input readonly value="{{old('clientcommerical')}}" name="clientcommerical" id="clientcommerical" type="text"
                                                             class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 col-sm-6">
                                                     <div class="form-group">
                                                         <label>العنوان </label>
-                                                        <input readonly value=" " id="clientAddress" type="text"
+                                                        <input readonly value="{{old('clientAddress')}}" name="clientAddress" id="clientAddress" type="text"
                                                             class="form-control">
                                                     </div>
                                                 </div>
@@ -132,13 +133,13 @@
                                                 <div class="col-md-5 col-sm-6">
                                                     <div class="form-group">
                                                         <label>اسم الشخص </label>
-                                                        <input type="text" name="person_name" class="form-control">
+                                                        <input type="text" value="{{old('person_name')}}" name="person_name" class="form-control">
                                                     </div>
                                                     </div>
                                                 <div class="col-md-5 col-sm-6">
                                             <div class="form-group">
                                                 <label>الرقم القومى </label>
-                                                <input type="text" name="person_nid" class="form-control">
+                                                <input type="text" value="{{old('person_nid')}}" name="person_nid" class="form-control">
                                             </div>
                                             </div>
                                             </div>
@@ -179,8 +180,9 @@
                                     </tr>
                                 </thead>
                                 <tbody id="rows">
-
-                                    {{-- @include('admin.invoices.ajaxAdd') --}}
+                                    @if (count($errors) > 0)
+                                    @include('admin.invoices.ajaxAdd')
+                                    @endif
                                 </tbody>
                             </table>
 
@@ -252,8 +254,13 @@
         $(document).ready(function() {
 
 
-
-
+            editSelectType();
+            var radio=$('input[name="tab"]:checked').val();
+            if(radio=="igotnone"){
+show1();
+            }else{
+show2();
+            }
 
                 $('input[type=checkbox][name=taxable]').change(function() {
                     $taxVal = $('#taxVal').val();
@@ -424,7 +431,7 @@ var select_value = $('#itemCode' + index).val();
                         var result = $.parseJSON(data);
 
                         $("#ar_name" + index + "").text(result[0]);
-                        $("#desc" + index + "").text(result[1]);
+                        $("#desc" + index + "").val(result[1]);
                         $("#ex_code" + index + "").val(result[2]);
 
                         var price = $("#itemprice" + index + "").val();
@@ -441,7 +448,7 @@ var select_value = $('#itemCode' + index).val();
                     },
                     error: function(request, status, error) {
 
-                        $("#desc" + index + "").text('لا يوجد اسم ');
+                        $("#desc" + index + "").val('لا يوجد اسم ');
                         $("#ar_name" + index + "").text(' ');
                         $("#ex_code" + index + "").val(' ');
 

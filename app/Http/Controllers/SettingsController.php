@@ -7,13 +7,18 @@ use Illuminate\Http\Request;
 
 class SettingsController extends Controller
 {
+    protected $object;
+    protected $viewName;
+    protected $routeName;
+    protected $message;
+    protected $errormessage;
     function __construct(Setting $object)
     {
         $this->middleware('auth');
-        // $this->middleware('permission:role-list|role-create|role-edit|role-delete', ['only' => ['index','store']]);
-        // $this->middleware('permission:role-create', ['only' => ['create','store']]);
-        // $this->middleware('permission:role-edit', ['only' => ['edit','update']]);
-        // $this->middleware('permission:role-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:settings-list|settings-create|settings-edit|settings-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:settings-create', ['only' => ['create','store']]);
+        $this->middleware('permission:settings-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:settings-delete', ['only' => ['destroy']]);
         $this->object = $object;
         $this->viewName = 'admin.settings.';
         $this->routeName = 'settings.';
@@ -28,7 +33,7 @@ class SettingsController extends Controller
     public function index()
     {
         $data = Setting::orderBy('id','DESC')->get();
-        return view('admin.settings.index',compact('data'))
+        return view($this->viewName.'index',compact('data'))
            ;
     }
 
@@ -84,8 +89,23 @@ class SettingsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->object::findOrFail($id)->update($request->except('_token'));
+        $this->validate($request, [
+            'value' => 'required',
+
+        ],[
+            'value.required' => 'حقل القيمة مطلوب',
+
+                    ]);
+
+        try
+        {
+            $this->object::findOrFail($id)->update($request->except('_token'));
         return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
+
+        } catch (\Exception $e){
+            return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ الرجاء معاودة المحاولة في وقت لاحق');
+        }
+
     }
 
     /**

@@ -8,13 +8,18 @@ use Illuminate\Database\QueryException;
 
 class UnitsController extends Controller
 {
+    protected $object;
+    protected $viewName;
+    protected $routeName;
+    protected $message;
+    protected $errormessage;
     function __construct(Unit $object)
     {
         $this->middleware('auth');
-        // $this->middleware('permission:role-list|role-create|role-edit|role-delete', ['only' => ['index','store']]);
-        // $this->middleware('permission:role-create', ['only' => ['create','store']]);
-        // $this->middleware('permission:role-edit', ['only' => ['edit','update']]);
-        // $this->middleware('permission:role-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:units-list|units-create|units-edit|units-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:units-create', ['only' => ['create','store']]);
+        $this->middleware('permission:units-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:units-delete', ['only' => ['destroy']]);
         $this->object = $object;
         $this->viewName = 'admin.units.';
         $this->routeName = 'units.';
@@ -29,7 +34,7 @@ class UnitsController extends Controller
     public function index()
     {
         $data = Unit::orderBy('id','DESC')->get();
-        return view('admin.units.index',compact('data'))
+        return view($this->viewName.'index',compact('data'))
            ;
     }
 
@@ -51,8 +56,24 @@ class UnitsController extends Controller
      */
     public function store(Request $request)
     {
-        $this->object::create($request->except('_token'));
+        $this->validate($request, [
+            'code' => 'required',
+            'name' => 'required',
+        ],[
+            'name.required' => 'حقل الاسم مطلوب',
+
+            'code.required' => 'حقل الكود مطلوب',
+        ]);
+
+        try
+        {
+            $this->object::create($request->except('_token'));
         return redirect()->route($this->routeName.'index')->with('flash_success', $this->message);
+
+        } catch (\Exception $e){
+            return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ الرجاء معاودة المحاولة في وقت لاحق');
+        }
+
     }
 
     /**
@@ -86,8 +107,25 @@ class UnitsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->object::findOrFail($id)->update($request->except('_token'));
+        $this->validate($request, [
+            'code' => 'required',
+            'name' => 'required',
+        ],[
+            'name.required' => 'حقل الاسم مطلوب',
+
+            'code.required' => 'حقل الكود مطلوب',
+        ]);
+
+        try
+        {
+            $this->object::findOrFail($id)->update($request->except('_token'));
         return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
+
+        } catch (\Exception $e){
+            return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ الرجاء معاودة المحاولة في وقت لاحق');
+        }
+
+
     }
 
     /**

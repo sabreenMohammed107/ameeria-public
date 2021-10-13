@@ -23,7 +23,7 @@ $counterrrr = 1;
      </div> --}}
      <div class="input-mark-inner mg-b-22">
         <input type="number" style="display: none;" value="{{$itemo->id}}" name="item_invoice_id{{$counter}}" id="item_invoice_id{{$counter}}" class="form-control " placeholder="">
-        <input type="number" id="itemCode{{$counter}}" readonly value="{{$itemo->item->code ?? 'vv'}}"  name="select{{$counter}}" onchange="editSelectVal({{$counter}})"  class="form-control " placeholder="">
+        <input type="text" id="itemCode{{$counter}}" readonly value="{{$itemo->item->code ?? ' '}}"  name="select{{$counter}}" onchange="editSelectVal({{$counter}})"  class="form-control " placeholder="">
     </div>
     </td>
     {{-- <td id="ar_name{{$counter}}" style='width: 200px;'></td> --}}

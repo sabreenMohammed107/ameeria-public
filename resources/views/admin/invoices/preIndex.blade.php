@@ -25,12 +25,16 @@
                 <th> {{ $row->client->name ?? '' }}</th>
                 <th>{{ $row->total }}</th>
                 <th>
+                    @can('invoices-edit')
                     <a href="{{ route('invoices.edit', $row->id) }}" class="btn btn-success"><i
                             class="fas fa-edit text-white"></i></a>
+                            @endcan
                 </th>
                 <th>
+                    @can('invoices-delete')
                     <button type="button" class="btn btn-danger" data-toggle="modal"
                         data-target="#del{{ $row->id }}"><i class="fas fa-trash-alt"></i></button>
+                        @endcan
                 </th>
             </tr>
             <!-- Delete Modal -->

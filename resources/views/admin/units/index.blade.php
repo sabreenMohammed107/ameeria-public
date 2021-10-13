@@ -1,6 +1,6 @@
 @extends('layout.web')
 
-
+@section('title', 'وحدات القياس')
 @section('content')
 <div class="row">
     <div class="col-12">
@@ -8,8 +8,10 @@
             <div class="card-header">
                 <h3 class="card-title">وحدات القياس</h3>
                 <h3 class="card-title float-sm-left">
+                    @can('units-create')
                     <button class="btn btn-success" data-toggle="modal" data-target="#add">إضافة</button></h3>
-            </div>
+          @endcan
+                </div>
             <!-- /.card-header -->
             <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
@@ -32,9 +34,12 @@
 
 
                             <th>
+                                @can('units-edit')
                                 <button class="btn btn-info" data-toggle="modal" data-target="#add{{$unit->id}}"><i class="fas fa-edit text-white"></i></button>
+                                @endcan
+                                @can('units-delete')
                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#del{{$unit->id}}"><i class="fas fa-trash-alt"></i></button>
-
+@endcan
                             </th>
                         <!--Edit Customer-->
 <div class="modal" id="add{{$unit->id}}" tabindex="-1">
@@ -60,11 +65,11 @@
 
                                     <div class="form-group">
                                         <label class=""> الكود</label>
-                                        <input name="code" type="text" value="{{$unit->code}}" class="form-control" placeholder="الكود">
+                                        <input name="code" type="text" required value="{{$unit->code}}" class="form-control" placeholder="الكود">
                                     </div>
                                     <div class="form-group">
                                         <label class="">اسم الوحده</label>
-                                        <input name="name" type="text" value="{{$unit->name}}" class="form-control" placeholder="الاسم">
+                                        <input name="name" type="text" required value="{{$unit->name}}" class="form-control" placeholder="الاسم">
                                     </div>
 
 
@@ -148,11 +153,11 @@
 
                                     <div class="form-group">
                                         <label class=""> الكود</label>
-                                        <input name="code" type="text" class="form-control" placeholder="الكود">
+                                        <input name="code" required type="text" value="{{old('code') }}" class="form-control" placeholder="الكود">
                                     </div>
                                     <div class="form-group">
                                         <label class="">اسم الوحده</label>
-                                        <input name="name" type="text" class="form-control" placeholder="الاسم">
+                                        <input name="name" required type="text" value="{{old('name') }}" class="form-control" placeholder="الاسم">
                                     </div>
 
 
@@ -174,4 +179,8 @@
 </div>
 </div>
 <!--/Add Customer-->
+
+
+
+
 @endsection

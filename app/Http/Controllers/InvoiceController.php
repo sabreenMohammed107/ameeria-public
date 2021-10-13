@@ -17,14 +17,18 @@ use Illuminate\Database\QueryException;
 
 class InvoiceController extends Controller
 {
-
+    protected $object;
+    protected $viewName;
+    protected $routeName;
+    protected $message;
+    protected $errormessage;
     public function __construct(Invoice $object)
     {
         $this->middleware('auth');
-        // $this->middleware('permission:role-list|role-create|role-edit|role-delete', ['only' => ['index','store']]);
-        // $this->middleware('permission:role-create', ['only' => ['create','store']]);
-        // $this->middleware('permission:role-edit', ['only' => ['edit','update']]);
-        // $this->middleware('permission:role-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:invoices-list|invoices-create|invoices-edit|invoices-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:invoices-create', ['only' => ['create','store']]);
+        $this->middleware('permission:invoices-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:invoices-delete', ['only' => ['destroy']]);
         $this->object = $object;
         $this->viewName = 'admin.invoices.';
         $this->routeName = 'invoices.';
@@ -38,8 +42,8 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        $data = Invoice::orderBy('id', 'DESC')->get();
-        return view('admin.invoices.index', compact('data'))
+        $data = Invoice::orderBy('id', 'DESC')->paginate(200);
+        return view($this->viewName . 'index', compact('data'))
         ;
     }
 
@@ -55,7 +59,7 @@ class InvoiceController extends Controller
         $items = Item::all();
         $exchanges = Unit::all();
         $tax=Setting::where('key','tax_value')->first();
-        return view('admin.invoices.add', compact('invoiceType','tax', 'rowCount', 'items', 'exchanges'));
+        return view($this->viewName . 'add', compact('invoiceType','tax', 'rowCount', 'items', 'exchanges'));
     }
 
     /**
@@ -124,6 +128,20 @@ class InvoiceController extends Controller
 if($request->has('taxable')){
     $data['taxable'] = 1;
 }
+
+$this->validate($request, [
+
+    'invoice_no' => 'required',
+    'date' => 'required',
+    'type_id' => 'required',
+
+
+],[
+    'invoice_no.required' => 'حقل رقم الفاتورة مطلوب',
+    'date.required' => 'حقل تاريخ الفاتورة مطلوب',
+    'type_id.required' => 'حقل نوع الفاتورة مطلوب',
+
+]);
         DB::beginTransaction();
         try {
             // Disable foreign key checks!
@@ -174,7 +192,7 @@ if($request->has('taxable')){
        $exchanges = Unit::all();
        $tax=Setting::where('key','tax_value')->first();
        $invItems=InvoiceItem::where('invoice_id','=',$id)->get();
-       return view('admin.invoices.edit', compact('invItems','inv','invoiceType','tax',  'items', 'exchanges'));
+       return view($this->viewName . 'edit', compact('invItems','inv','invoiceType','tax',  'items', 'exchanges'));
     }
 
     /**
@@ -261,6 +279,19 @@ if($request->has('taxable')){
 if($request->has('taxable')){
     $data['taxable'] = 1;
 }
+$this->validate($request, [
+
+    'invoice_no' => 'required',
+    'date' => 'required',
+
+
+
+],[
+    'invoice_no.required' => 'حقل رقم الفاتورة مطلوب',
+    'date.required' => 'حقل تاريخ الفاتورة مطلوب',
+
+
+]);
         DB::beginTransaction();
         try {
 
@@ -322,7 +353,7 @@ if($request->has('taxable')){
             $rowCount = $req->rowcount;
             $items = Item::all();
             $exchanges = Unit::all();
-            $ajaxComponent = view('admin.invoices.ajaxAdd', [
+            $ajaxComponent = view($this->viewName . 'ajaxAdd', [
                 'rowCount' => $rowCount,
                 'items' => $items,
                 'exchanges' =>$exchanges
@@ -384,7 +415,7 @@ if($request->has('taxable')){
     }
 
     public function search(Request $request){
-        \Log::info([$request->input('from'),$request->input('to')]);
+
 
         $invoice = Invoice::orderBy('id', 'DESC');
         if (!empty($request->get("from"))) {
@@ -394,7 +425,7 @@ if($request->has('taxable')){
             $invoice->where('date', '<=', Carbon::parse($request->get("to")));
         }
         $data = $invoice->get();
-        \Log::info($data);
+
         return view($this->viewName . 'preIndex',compact('data'))->render();
     }
 

@@ -12,13 +12,18 @@ use Illuminate\Http\Request;
 
 class RelayInvoiceController extends Controller
 {
+    protected $object;
+    protected $viewName;
+    protected $routeName;
+    protected $message;
+    protected $errormessage;
     function __construct(Invoice $object)
     {
         $this->middleware('auth');
-        // $this->middleware('permission:role-list|role-create|role-edit|role-delete', ['only' => ['index','store']]);
-        // $this->middleware('permission:role-create', ['only' => ['create','store']]);
-        // $this->middleware('permission:role-edit', ['only' => ['edit','update']]);
-        // $this->middleware('permission:role-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:invoices-list|invoices-create|invoices-edit|invoices-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:invoices-create', ['only' => ['create','store']]);
+        $this->middleware('permission:invoices-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:invoices-delete', ['only' => ['destroy']]);
         $this->object = $object;
         $this->viewName = 'admin.relay.';
         $this->routeName = 'relay.';
@@ -32,9 +37,9 @@ class RelayInvoiceController extends Controller
      */
     public function index()
     {
-        $data = Invoice::where('status','=',0)->orderBy('id', 'DESC')->get();
-        $relaydata= Invoice::where('status','=',1)->orderBy('id', 'DESC')->get();
-        return view('admin.relay.index', compact('data','relaydata'))
+        $data = Invoice::where('status','=',0)->orderBy('id', 'DESC')->paginate(200);
+        $relaydata= Invoice::where('status','=',1)->orderBy('id', 'DESC')->paginate(200);
+        return view($this->viewName .'index', compact('data','relaydata'))
         ;
     }
 
@@ -85,7 +90,7 @@ class RelayInvoiceController extends Controller
        $exchanges = Unit::all();
        $tax=Setting::where('key','tax_value')->first();
        $invItems=InvoiceItem::where('invoice_id','=',$id)->get();
-       return view('admin.relay.showInvoice', compact('invItems','inv','invoiceType','tax',  'items', 'exchanges'));
+       return view($this->viewName .'showInvoice', compact('invItems','inv','invoiceType','tax',  'items', 'exchanges'));
     }
 
     /**

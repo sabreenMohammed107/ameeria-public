@@ -80,6 +80,7 @@
 @endforeach
                                                 </tbody>
                                             </table>
+                                            {{$data->render()}}
                                         </div>
 
                                     </div>
@@ -153,6 +154,7 @@
 
                                                 </tbody>
                                             </table>
+                                            {{$relaydata->render()}}
                                         </div>
 
                                     </div>
@@ -182,12 +184,20 @@
     });
 
     $(function() {
-        $("#example1").DataTable();
-        $("#example3").DataTable();
+        $("#example1").DataTable({
+    destroy: true,
+    paging: false,
+    searching: true,
+} );
+        $("#example3").DataTable({
+    destroy: true,
+    paging: false,
+    searching: true,
+} );
         $('#example2').DataTable({
             "paging": true,
             "lengthChange": false,
-            "searching": false,
+            "searching": true,
             "ordering": true,
             "info": true,
             "autoWidth": false,

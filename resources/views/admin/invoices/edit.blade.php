@@ -185,6 +185,9 @@
                                 <tbody id="rows">
 
                                     @include('admin.invoices.ajaxEdit')
+                                    {{-- @if (count($errors) > 0)
+                                    @include('admin.invoices.ajaxAdd')
+                                    @endif --}}
                                 </tbody>
                             </table>
 
@@ -428,7 +431,7 @@
                             var result = $.parseJSON(data);
 
                             $("#ar_name" + index + "").text(result[0]);
-                            $("#desc" + index + "").text(result[1]);
+                            $("#desc" + index + "").val(result[1]);
                             $("#ex_code" + index + "").val(result[2]);
 
                             var price = $("#itemprice" + index + "").val();
@@ -445,7 +448,7 @@
                         },
                         error: function(request, status, error) {
 
-                            $("#desc" + index + "").text('لا يوجد اسم ');
+                            $("#desc" + index + "").val('لا يوجد اسم ');
                             $("#ar_name" + index + "").text(' ');
                             $("#ex_code" + index + "").val(' ');
 
