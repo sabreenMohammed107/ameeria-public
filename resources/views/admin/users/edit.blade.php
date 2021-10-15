@@ -16,8 +16,8 @@
 
 
 
-{!! Form::model($user, ['method' => 'PATCH','route' => ['users.update', $user->id]]) !!}<div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12">
+{!! Form::model($user, ['method' => 'PATCH','route' => ['users.update', $user->id]]) !!}<div class="row arabic">
+    <div class="col-xs-12 col-sm-12 col-md-12 arabic">
         <div class="form-group">
             <strong>الاسم الاول:</strong>
             {!! Form::text('f_name', null, array('class' => 'form-control')) !!}

@@ -157,7 +157,7 @@
                             <button id="btntbl" type="button" class="btn btn-primary waves-effect waves-light mb-1">إضافة
                                 صنف</button>
 
-                            <table id="example5" class="table table-bordered table-striped">
+                            <table id="example5" class="table table-bordered table-striped arabic">
                                 <thead>
                                     <tr>
 

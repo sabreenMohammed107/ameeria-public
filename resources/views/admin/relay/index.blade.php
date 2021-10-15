@@ -35,7 +35,7 @@
                                         <div class="card card-primary">
 
                                             <!-- form start -->
-                                            <table id="example1" class="table table-bordered table-striped">
+                                            <table id="example1" class="table table-bordered table-striped arabic">
                                                 <thead>
                                                     <tr>
                                                         <th class="active">
@@ -88,7 +88,7 @@
                                         <div class="card card-primary">
 
                                             <!-- form start -->
-                                            <table id="example3" class="table table-bordered table-striped">
+                                            <table id="example3" class="table table-bordered table-striped arabic">
                                                 <thead>
                                                     <tr>
                                                         <th class="active">

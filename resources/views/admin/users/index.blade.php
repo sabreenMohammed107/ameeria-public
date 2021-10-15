@@ -19,8 +19,8 @@
                 </h3>
             </div>
 
-            <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+            <div class="card-body arabic">
+                <table id="example1" class="table table-bordered table-striped arabic">
                     <thead>
                         <tr>
                             <th>#</th>

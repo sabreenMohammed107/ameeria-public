@@ -23,11 +23,11 @@
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6">
                                             <label for=""> حساب عام<span style="color: red">*</span></label>
-                                            <input type="text" name="general_account" value="{{$row->general_account}}" class="form-control">
+                                            <input type="text" name="general_account" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($row->general_account)}}" class="form-control">
                                         </div>
                                         <div class="col-md-6 col-sm-6">
                                             <label for=""> حساب مساعد<span style="color: red">*</span></label>
-                                            <input type="text" name="help_account" value="{{$row->help_account}}" class="form-control">
+                                            <input type="text" name="help_account" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($row->help_account)}}" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -36,19 +36,19 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">اسم العميل<span style="color: red">*</span></label>
-                                    <input type="text" name="name" value="{{$row->name}}" class="form-control" id="">
+                                    <input type="text" name="name" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($row->name)}}" class="form-control" id="">
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">السجل التجاري</label>
-                                    <input type="text" name="commercial_register" value="{{$row->commercial_register}}" class="form-control" id="">
+                                    <input type="text" name="commercial_register" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($row->commercial_register)}}" class="form-control" id="">
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">البطاقة الضريبية</label>
-                                    <input type="text" name="tax_card_id" value="{{$row->tax_card_id}}" class="form-control" id="">
+                                    <input type="text" name="tax_card_id" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($row->tax_card_id)}}" class="form-control" id="">
                                 </div>
                             </div>
                             <div class="col-sm-4">
@@ -66,19 +66,19 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for=""> العنوان</label>
-                                    <input type="text" name="address" value="{{$row->address}}" class="form-control" id="">
+                                    <input type="text" name="address" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($row->address)}}" class="form-control" id="">
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">الموبايل </label>
-                                    <input type="text" name="phone" value="{{$row->phone}}" class="form-control" id="">
+                                    <input type="text" name="phone" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($row->phone)}}" class="form-control" id="">
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for=""> البريد الإلكترونى </label>
-                                    <input type="text" name="email" value="{{$row->email}}" class="form-control" id="">
+                                    <input type="text" name="email" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($row->email)}}" class="form-control" id="">
                                 </div>
                             </div>
 
@@ -86,7 +86,7 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">  ملاحظات </label>
-                                    <input type="text" name="notes" value="{{$row->notes}}" class="form-control" id="">
+                                    <input type="text" name="notes" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($row->notes)}}" class="form-control" id="">
                                 </div>
                             </div>
 

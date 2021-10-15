@@ -17,7 +17,7 @@
 
 
 {!! Form::open(array('route' => 'users.store','method'=>'POST')) !!}
-<div class="row">
+<div class="row arabic">
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
             <strong>الاسم الاول:</strong>

@@ -12,8 +12,8 @@
            @endcan
             </div>
             <!-- /.card-header -->
-            <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+            <div class="card-body ">
+                <table id="example1" class="table table-bordered table-striped arabic">
                     <thead class="bg-info">
                         <tr>
                             <th>#</th>
@@ -26,11 +26,13 @@
                             <th>خيارات</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         @foreach ($data as $index=>$row)
                         <tr>
+                            {{-- Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($row->code) --}}
                             <th>{{ $index + 1 }}</th>
-                            <th>{{ $row->code}}</th>
+                            <th >{{ $row->code }}</th>
                             <th>{{ $row->name}}</th>
                             <th>{{ $row->exchange_unit_id}}</th>
 
@@ -86,8 +88,15 @@
 @endsection
 @section('scripts')
 <script>
+   $(document).ready(function() {
+    String.prototype.toArabicDigits = function(){
+var id = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+return this.replace(/[0-9]/g, function(w){
+  return id[+w];
+ });
+};
 
-
+ });
 $('#example1').DataTable( {
     destroy: true,
     paging: false

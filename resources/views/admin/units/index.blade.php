@@ -14,7 +14,7 @@
                 </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="example1" class="table table-bordered table-striped arabic">
                     <thead class="bg-info">
                         <tr>
                             <th>#</th>
@@ -57,7 +57,7 @@
                 <div class="message-content" style="text-align:right;">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                        <form action="{{route('units.update',$unit->id)}}" method="POST" class="dropzone dropzone-custom needsclick addcourse" id="demo1-upload">
+                        <form action="{{route('units.update',$unit->id)}}" method="POST" class="dropzone dropzone-custom needsclick addcourse arabic" id="demo1-upload">
                             @method('PUT')
                             @csrf
                             <div class="row">
@@ -65,11 +65,11 @@
 
                                     <div class="form-group">
                                         <label class=""> الكود</label>
-                                        <input name="code" type="text" required value="{{$unit->code}}" class="form-control" placeholder="الكود">
+                                        <input name="code" type="text" required value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($unit->code)}}" class="form-control" placeholder="الكود">
                                     </div>
                                     <div class="form-group">
                                         <label class="">اسم الوحده</label>
-                                        <input name="name" type="text" required value="{{$unit->name}}" class="form-control" placeholder="الاسم">
+                                        <input name="name" type="text" required value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($unit->name)}}" class="form-control" placeholder="الاسم">
                                     </div>
 
 
@@ -146,7 +146,7 @@
                 <div class="message-content" style="text-align:right;">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                        <form action="{{route('units.store')}}" method="post" class="dropzone dropzone-custom needsclick addcourse" id="demo1-upload">
+                        <form action="{{route('units.store')}}" method="post" class="dropzone dropzone-custom needsclick addcourse arabic" id="demo1-upload">
                           @csrf
                             <div class="row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="direction:rtl">

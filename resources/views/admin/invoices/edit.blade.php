@@ -24,7 +24,7 @@
                                         <div class="col-sm-2">
                                             <div class="form-group">
                                                 <label> رقم الفاتورة</label>
-                                                <input type="number" name="invoice_no" value="{{$inv->invoice_no}}" class="form-control">
+                                                <input type="text" name="invoice_no" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->invoice_no)}}" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-sm-2">
@@ -44,9 +44,9 @@
                                                             {{ $type->name }}</option>
                                                     @endforeach
                                                 </select> --}}
-                                                <input type="hidden" value="{{$inv->type->id ?? ''}}" id="invoice_type"  readonly class="form-control">
+                                                <input type="hidden" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->type->id ?? '')}}" id="invoice_type"  readonly class="form-control">
 
-                                                <input type="text" value="{{$inv->type->name ?? ''}}"  readonly name="invoice_type" readonly class="form-control">
+                                                <input type="text" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->type->name ?? '')}}"  readonly name="invoice_type" readonly class="form-control">
 
                                             </div>
                                         </div>
@@ -60,7 +60,7 @@
                                         <div class="col-sm-2">
                                             <div class="form-group">
                                                 <label> ملاحظات </label>
-                                                <input name="notes" value="{{$inv->notes}}" type="text" class="form-control">
+                                                <input name="notes" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->notes)}}" type="text" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-sm-2">
@@ -88,11 +88,11 @@
                                                         <label> حساب عام / مساعد</label>
                                                         <div class="row">
                                                             <div class="col-md-6 col-sm-6">
-                                                                <input type="text" id="general" readonly value="{{$inv->client->general_account ?? ''}}" name=""
+                                                                <input type="text" id="general" readonly value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->client->general_account ?? '')}}" name=""
                                                                     class="form-control">
                                                             </div>
                                                             <div class="col-md-6 col-sm-6">
-                                                                <input type="text" id="help"  readonly value="{{$inv->client->help_account ?? ''}}" name=""
+                                                                <input type="text" id="help"  readonly value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->client->help_account ?? '')}}" name=""
                                                                     class="form-control">
                                                             </div>
                                                         </div>
@@ -105,21 +105,21 @@
                                                 <div class="col-md-3 col-sm-6">
                                                     <div class="form-group">
                                                         <label>اسم العميل </label>
-                                                        <input readonly value="{{$inv->client->name ?? ''}}" id="clientName" type="text"
+                                                        <input readonly value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->client->name ?? '')}}" id="clientName" type="text"
                                                             class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 col-sm-6">
                                                     <div class="form-group">
                                                         <label>سجل تجاري </label>
-                                                        <input readonly value="{{$inv->client->commercial_register ?? ''}}" id="clientcommerical" type="text"
+                                                        <input readonly value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->client->commercial_register ?? '')}}" id="clientcommerical" type="text"
                                                             class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3 col-sm-6">
                                                     <div class="form-group">
                                                         <label>العنوان </label>
-                                                        <input readonly value="{{$inv->client->address ?? ''}}" id="clientAddress" type="text"
+                                                        <input readonly value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->client->address ?? '')}}" id="clientAddress" type="text"
                                                             class="form-control">
                                                     </div>
                                                 </div>
@@ -136,13 +136,13 @@
                                                 <div class="col-md-5 col-sm-6">
                                                     <div class="form-group">
                                                         <label>اسم الشخص </label>
-                                                        <input type="text" readonly value="{{$inv->person_name}}" name="person_name" class="form-control">
+                                                        <input type="text" readonly value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->person_name)}}" name="person_name" class="form-control">
                                                     </div>
                                                     </div>
                                                 <div class="col-md-5 col-sm-6">
                                             <div class="form-group">
                                                 <label>الرقم القومى </label>
-                                                <input type="text" readonly name="person_nid" {{$inv->person_nid}} class="form-control">
+                                                <input type="text" readonly name="person_nid" {{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->person_nid)}} class="form-control">
                                             </div>
                                             </div>
                                             </div>
@@ -160,7 +160,7 @@
                             <button id="btntbl" type="button" class="btn btn-primary waves-effect waves-light mb-1">إضافة
                                 صنف</button>
 
-                            <table id="example5" class="table table-bordered table-striped">
+                            <table id="example5" class="table table-bordered table-striped arabic">
                                 <thead>
                                     <tr>
 
@@ -209,7 +209,7 @@
                                                 <div class="col-sm-12">
                                                     <div class="form-group">
                                                         <label> اجمالى</label>
-                                                        <input readonly id="total_items_price" value="{{$inv->subtotal}}" name="subtotal" type="number"
+                                                        <input readonly id="total_items_price" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->subtotal)}}" name="subtotal" type="number"
                                                             class="form-control">
                                                     </div>
                                                 </div>
@@ -219,7 +219,7 @@
                                                 <div class="col-sm-12">
                                                     <div class="form-group">
                                                         <label> اجمالى ضريبه القيمه المضافه</label>
-                                                        <input readonly type="text" value="{{$inv->tax}}" id="total_tax" name="tax"
+                                                        <input readonly type="text" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->tax)}}" id="total_tax" name="tax"
                                                             class="form-control">
                                                     </div>
                                                 </div>
@@ -228,7 +228,7 @@
                                                 <div class="col-sm-12">
                                                     <div class="form-group">
                                                         <label> اجمالى العام </label>
-                                                        <input readonly type="text" value="{{$inv->total}}" id="total_all" name="total"
+                                                        <input readonly type="text" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->total)}}" id="total_all" name="total"
                                                             class="form-control">
                                                     </div>
                                                 </div>

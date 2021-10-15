@@ -40,14 +40,14 @@
                             </a>
                         </li>
                         @endcan
-                        {{-- @can('roles-list')
+                        @can('roles-list')
                         <li class="nav-item">
                             <a href="{{ route('roles.index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p> الأدوار </p>
                             </a>
                         </li>
-                        @endcan --}}
+                        @endcan
                         @can('units-list')
                         <li class="nav-item">
                             <a href="{{ route('units.index') }}" class="nav-link">
@@ -118,7 +118,7 @@
                     <ul class="nav nav-treeview">
 
                         <li class="nav-item">
-                            <a href="{{route('users.index')}}" class="nav-link">
+                            <a href="#" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p> تقرير الفواتير </p>
                             </a>

@@ -17,8 +17,8 @@
             <div class="card">
                 <div class="card-header">تعديل بيانات المستخدم</div>
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('udate-profile') }}" method="POST"  enctype="multipart/form-data">
+                <div class="card-body arabic">
+                    <form  action="{{ route('udate-profile') }}" method="POST"  enctype="multipart/form-data">
                         @csrf
 <input type="hidden" name="user_id" value="{{$row->id}}">
                         <div class="form-group row">

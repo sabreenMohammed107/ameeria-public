@@ -14,7 +14,7 @@
                 </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="example1" class="table table-bordered table-striped arabic">
                     <thead class="bg-info">
                         <tr>
                             <th>#</th>
@@ -64,11 +64,11 @@
 
                                     <div class="form-group">
                                         <label class=""> الكود</label>
-                                        <input name="code" required value="{{$row->code}}" type="text" class="form-control" placeholder="الكود">
+                                        <input name="code" required value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($row->code)}}" type="text" class="form-control" placeholder="الكود">
                                     </div>
                                     <div class="form-group">
                                         <label class="">اسم المدينة</label>
-                                        <input name="name" required value="{{$row->name}}" type="text" class="form-control" placeholder="الاسم">
+                                        <input name="name" required value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($row->name)}}" type="text" class="form-control" placeholder="الاسم">
                                     </div>
 
                                 </div>

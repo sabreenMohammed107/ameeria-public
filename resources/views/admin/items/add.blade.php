@@ -13,7 +13,7 @@
                 <!-- form start -->
                 <form role="form" action="{{route('items.store')}}" method="post">
                     @csrf
-                    <div class="card-body">
+                    <div class="card-body arabic">
                         <div class="row">
                             <div class="col-sm-3">
                                 <div class="form-group">

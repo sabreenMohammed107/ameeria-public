@@ -1,6 +1,6 @@
 @include('layout.head')
 
-<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed ">
     <div class="wrapper">
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light dir-rtl">
@@ -63,7 +63,7 @@
             <!-- /.container-fluid -->
         </div>
         <!-- /.content-header -->
-           
+
          <!-- Main content -->
          <section class="content ">
             <div class="container-fluid dir-rtl ">
