@@ -20,7 +20,7 @@
                             <div class="col-sm-3">
                                 <div class="form-group">
                                     <label for="">إختر المخزن</label>
-                                    <select class="custom-select" name="store_id">
+                                    <select class="custom-select" id="store_id" name="store_id">
                                         <option value="">اختر</option>
                                         @foreach($stores as $data)
                                         <option value="{{$data->id}}" {{ ( $data->id == $row->store_id) ? 'selected' : '' }}>{{$data->code}} / {{$data->name}} </option>
@@ -166,6 +166,7 @@
                     <!-- /.card-body -->
                     <div class="card-footer">
                         <button type="submit" class="btn btn-primary">حفظ</button>
+                        <a href="{{route('items.index')}}" class="btn btn-danger">إلغاء</a>
                     </div>
                 </form>
             </div>
@@ -178,7 +179,9 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
 $(document).ready(function() {
-    $('.js-example-basic-single').select2();
+    $('#store_id').select2();
+    $('#storage_unit_id').select2();
+    $('#exchange_unit_id').select2();
 });
 </script>
 

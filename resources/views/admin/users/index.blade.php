@@ -28,7 +28,7 @@
                             <th>اسم المستخدم</th>
                             <th>البريد الالكتروني </th>
                             <th>التليفون </th>
-                            <th>الحالة</th>
+                            {{-- <th>الحالة</th> --}}
                             <th>الدور</th>
                             <th>الاجراءات</th>
                         </tr>
@@ -48,13 +48,13 @@
                                     @endforeach
                                 @endif
                             </td>
-                            <td>
+                            {{-- <td>
                                 @if($row->status == 1)
                                 <span class="badge badge-success">نشط</span>
                                 @else
                                 <span class="badge badge-danger">غير نشظ</span>
                                 @endif
-                            </td>
+                            </td> --}}
                             <td>
                                 <div class="btn-group">
                                     @can('users-edit')

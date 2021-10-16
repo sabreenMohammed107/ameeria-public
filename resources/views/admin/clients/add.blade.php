@@ -52,7 +52,7 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for=""> المحافظة</label>
-                                    <select class="custom-select" name="city_id">
+                                    <select class="custom-select" id="city_id" name="city_id">
                                         <option value="">اختر</option>
                                         @foreach($cities as $data)
                                         <option {{old('city_id') ==$data->id ? 'selected' : ""}} value="{{$data->id}}">{{$data->name}} </option>

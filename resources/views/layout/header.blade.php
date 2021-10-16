@@ -23,6 +23,7 @@
                     </a>
 
                 </li>
+                @hasrole('مدير النظام')
                 <li class="nav-item has-treeview">
                     <a href="" class="nav-link">
                         <i class="nav-icon fas fa-cogs"></i>
@@ -40,14 +41,14 @@
                             </a>
                         </li>
                         @endcan
-                        @can('roles-list')
+                        {{-- @can('roles-list')
                         <li class="nav-item">
                             <a href="{{ route('roles.index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p> الأدوار </p>
                             </a>
                         </li>
-                        @endcan
+                        @endcan --}}
                         @can('units-list')
                         <li class="nav-item">
                             <a href="{{ route('units.index') }}" class="nav-link">
@@ -70,7 +71,7 @@
                         </li>
                     </ul>
                 </li>
-
+                @endhasrole
                 <li class="nav-item has-treeview menu-open">
                     <a href="{{ route('items.index') }}" class="nav-link ">
                         <i class="nav-icon fas fa-th"></i>

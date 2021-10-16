@@ -26,7 +26,7 @@
                         <tr>
                             <th>{{ $index + 1 }}</th>
 
-                            <th>{{ $vat->key}} </th>
+                            <th>@if($vat->key=='tax_value')ضريبة القيمة المضافة @endif </th>
                             <th>{{ $vat->value}} </th>
 
                             @can('settings-edit')
@@ -56,7 +56,7 @@
 
                                         <div class="form-group">
                                             <label class="">الاسم</label>
-                                            <input name="key" readonly value="{{$vat->key}}" type="text" class="form-control" placeholder="القيمه">
+                                            <input name="key" readonly value="@if($vat->key=='tax_value')ضريبة القيمة المضافة @endif " type="text" class="form-control" placeholder="القيمه">
                                         </div>
 
                                         <div class="form-group">

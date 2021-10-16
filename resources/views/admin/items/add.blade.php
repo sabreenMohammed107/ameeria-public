@@ -18,10 +18,10 @@
                             <div class="col-sm-3">
                                 <div class="form-group">
                                     <label for="">إختر المخزن</label>
-                                    <select class="custom-select" name="store_id">
+                                    <select class="custom-select" id="store_id" name="store_id">
                                         <option value="">اختر</option>
                                         @foreach($stores as $data)
-                                        <option {{old('store_id') ==$data->id ? 'selected' : ""}} value="{{$data->id}}">{{$data->code}} / {{$data->name}} </option>
+                                        <option {{old('store_id') ==$data->id ? 'selected' : ""}} value="{{$data->id}}">{{$data->code ?? $data->id}} / {{$data->name}} </option>
 
                                         @endforeach
                                     </select>
@@ -59,7 +59,7 @@
                             <div class="col-sm-3">
                                 <div class="form-group">
                                     <label for=""> وحدة التخزين</label>
-                                    <select class="js-example-basic-single" style="width: 100%" id="storage_unit_id" name="storage_unit_id">
+                                    <select class="js-example-basic-single" id="storage_unit_id" style="width: 100%"  name="storage_unit_id">
                                         <option value="">اختر</option>
                                         @foreach($storages as $data)
                                         <option {{old('storage_unit_id') ==$data->id ? 'selected' : ""}} value="{{$data->id}}">{{$data->code}} / {{$data->name}} </option>
@@ -164,6 +164,7 @@
                     <!-- /.card-body -->
                     <div class="card-footer">
                         <button type="submit" class="btn btn-primary">حفظ</button>
+                        <a href="{{route('items.index')}}" class="btn btn-danger">إلغاء</a>
                     </div>
                 </form>
             </div>
@@ -176,7 +177,10 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
 $(document).ready(function() {
-    $('.js-example-basic-single').select2();
+    $('#store_id').select2();
+    $('#storage_unit_id').select2();
+    $('#exchange_unit_id').select2();
+
 });
 </script>
 

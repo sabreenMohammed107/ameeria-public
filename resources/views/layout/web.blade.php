@@ -18,7 +18,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <div class="image">
-                            <img src="{{ asset('webassets/dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" style="width: 30px" alt="User Image">
+                            <img src="{{ asset('webassets/dist/img/default-user.gif')}}" class="img-circle elevation-2" style="width: 30px" alt="User Image">
                         </div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-left">

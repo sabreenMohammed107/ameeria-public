@@ -62,7 +62,7 @@
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
             <strong>الأدوار:</strong>
-            {!! Form::select('roles[]', $roles,$userRole, array('class' => 'form-control','multiple')) !!}
+            {!! Form::select('roles[]', $roles,$userRole, array('class' => 'form-control')) !!}
 
 
             {{-- {!! Form::select('roles[]', $roles,[], array('class' => 'form-control','multiple')) !!} --}}
@@ -70,6 +70,7 @@
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 text-center">
         <button type="submit" class="btn btn-primary">حفظ</button>
+        <a href="{{route('users.index')}}" class="btn btn-danger">إلغاء</a>
     </div>
 </div>
 {!! Form::close() !!}
