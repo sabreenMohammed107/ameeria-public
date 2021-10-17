@@ -28,6 +28,7 @@
                     @can('invoices-edit')
                     <a href="{{ route('invoices.edit', $row->id) }}" class="btn btn-success"><i
                             class="fas fa-edit text-white"></i></a>
+
                             @endcan
                 </th>
                 <th>

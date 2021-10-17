@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Log;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
-
+use PDF;
 class InvoiceController extends Controller
 {
     protected $object;
