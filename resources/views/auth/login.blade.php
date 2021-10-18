@@ -1,6 +1,8 @@
 @include('layout.head')
 <body class="hold-transition login-page dark-mode  dir-rtl">
-<div class="login-box">
+    <div class="container">
+
+<div class="login-box" style="margin: auto">
   <!-- /.login-logo -->
   <div class="card card-outline card-primary">
     <div class="card-header text-center">
@@ -56,5 +58,7 @@
   <!-- /.card -->
 </div>
 <!-- /.login-box -->
+
+</div>
 @include('layout.footerScripts')
 
