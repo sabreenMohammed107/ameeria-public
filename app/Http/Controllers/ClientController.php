@@ -74,16 +74,19 @@ class ClientController extends Controller
             'general_account.unique' => 'حقل الحساب العام موجود بالفعل',
 
         ]);
-
+$testUnique=Client::where('general_account','=',$request->get('general_account'))->where('help_account','=',$request->get('help_account'))->first();
+if($testUnique!=null){
+    return redirect()->back()->withInput()->with('flash_danger', 'حقل الحساب العام والمساعد موجود بالفعل');
+}
         try
         {
             $this->object::create($request->except('_token'));
         return redirect()->route($this->routeName.'index')->with('flash_success', $this->message);
 
         } catch (\Exception $e){
-            // return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ الرجاء معاودة المحاولة في وقت لاحق');
+            return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ الرجاء معاودة المحاولة في وقت لاحق');
 
-            return redirect()->back()->withInput()->with('flash_danger', $e->getMessage());
+            // return redirect()->back()->withInput()->with('flash_danger', $e->getMessage());
         }
 
     }
