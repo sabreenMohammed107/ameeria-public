@@ -63,13 +63,15 @@ class ClientController extends Controller
         $this->validate($request, [
 
             'name' => 'required',
-            'general_account'=>'required',
-            'help_account'=>'required',
+            'general_account' => 'required|unique:clients,help_account',
+            'help_account' => 'required|unique:clients,general_account',
 
         ],[
             'name.required' => 'حقل الاسم مطلوب',
             'general_account.required' => 'حقل الحساب العام مطلوب',
             'help_account.required' => 'حقل الحساب المساعد مطلوب',
+            'help_account.unique' => 'حقل الحساب المساعد موجود بالفعل',
+            'general_account.unique' => 'حقل الحساب العام موجود بالفعل',
 
         ]);
 
@@ -79,7 +81,9 @@ class ClientController extends Controller
         return redirect()->route($this->routeName.'index')->with('flash_success', $this->message);
 
         } catch (\Exception $e){
-            return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ الرجاء معاودة المحاولة في وقت لاحق');
+            // return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ الرجاء معاودة المحاولة في وقت لاحق');
+
+            return redirect()->back()->withInput()->with('flash_danger', $e->getMessage());
         }
 
     }
@@ -121,13 +125,15 @@ class ClientController extends Controller
         $this->validate($request, [
 
             'name' => 'required',
-            'general_account'=>'required',
-            'help_account'=>'required',
 
+            'general_account' => 'required|unique:clients,general_account,'.$id,
+            'help_account' => 'required|unique:clients,help_account,'.$id,
         ],[
             'name.required' => 'حقل الاسم مطلوب',
             'general_account.required' => 'حقل الحساب العام مطلوب',
             'help_account.required' => 'حقل الحساب المساعد مطلوب',
+            'general_account.unique' => 'حقل الحساب العام موجود بالفعل',
+            'help_account.unique' => 'حقل الحساب المساعد موجود بالفعل',
 
         ]);
 

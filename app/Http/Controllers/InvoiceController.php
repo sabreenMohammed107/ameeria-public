@@ -90,6 +90,11 @@ class InvoiceController extends Controller
 
 
             ];
+            if ( $request->get('opPermission' . $i)) {
+                $detail['op_permission_no'] = $request->get('opPermission' . $i);
+            }else{
+                $detail['op_permission_no'] =null;
+            }
             if ( $items) {
                 $detail['item_id'] = $items->id;
             }

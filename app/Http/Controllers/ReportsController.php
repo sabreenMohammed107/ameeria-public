@@ -7,6 +7,7 @@ use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Meneses\LaravelMpdf\Facades\LaravelMpdf as PDF;
 use Auth;
+use Carbon\Carbon;
 class ReportsController extends Controller
 {
 
@@ -19,10 +20,21 @@ class ReportsController extends Controller
         $this->viewName = 'admin.reports.';
 
     }
-
-    public function invoice()
+public function showinvoice(){
+    return view( 'admin.reports.createInvoice')
+    ;
+}
+    public function invoice(Request $request)
     {
-        $invoices = Invoice::orderBy('id', 'DESC')->get();
+        $invoice = Invoice::orderBy('id', 'DESC');
+        if (!empty($request->get("from"))) {
+            $invoice->where('date', '>=', Carbon::parse($request->get("from")));
+        }
+        if (!empty($request->get("to"))) {
+            $invoice->where('date', '<=', Carbon::parse($request->get("to")));
+        }
+        $invoices = $invoice->get();
+
         $data = [
             'Title' =>'كل الفواتير',
             'invoices' => $invoices,

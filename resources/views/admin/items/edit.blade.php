@@ -23,7 +23,7 @@
                                     <select class="custom-select" id="store_id" name="store_id">
                                         <option value="">اختر</option>
                                         @foreach($stores as $data)
-                                        <option value="{{$data->id}}" {{ ( $data->id == $row->store_id) ? 'selected' : '' }}>{{$data->code}} / {{$data->name}} </option>
+                                        <option value="{{$data->id}}" {{ ( $data->id == $row->store_id) ? 'selected' : '' }}>{{$data->name}} </option>
 
                                         @endforeach
                                     </select>
@@ -64,7 +64,7 @@
                                     <select class="js-example-basic-single" style="width: 100%" id="storage_unit_id" name="storage_unit_id">
                                         <option value="">اختر</option>
                                         @foreach($storages as $data)
-                                        <option value="{{$data->id}}" {{ ( $data->id == $row->storage_unit_id) ? 'selected' : '' }}>{{$data->code}} / {{$data->name}} </option>
+                                        <option value="{{$data->id}}" {{ ( $data->id == $row->storage_unit_id) ? 'selected' : '' }}>{{$data->name}} </option>
 
                                         @endforeach
                                     </select>
@@ -76,7 +76,7 @@
                                     <select class="w-100 js-example-basic-single" id="exchange_unit_id" name="exchange_unit_id">
                                         <option value="">اختر</option>
                                         @foreach($exchanges as $data)
-                                        <option value="{{$data->id}}" {{ ( $data->id == $row->exchange_unit_id) ? 'selected' : '' }}>{{$data->code}} / {{$data->name}} </option>
+                                        <option value="{{$data->id}}" {{ ( $data->id == $row->exchange_unit_id) ? 'selected' : '' }}>{{$data->name}} </option>
 
                                         @endforeach
                                     </select>
