@@ -431,7 +431,7 @@
                             var result = $.parseJSON(data);
 
                             $("#ar_name" + index + "").text(result[0]);
-                            $("#desc" + index + "").val(result[1]);
+                            $("#desc" + index + "").val(result[1]).css('color','#495057');
                             $("#ex_code" + index + "").val(result[2]);
 
                             var price = $("#itemprice" + index + "").val();
@@ -448,7 +448,7 @@
                         },
                         error: function(request, status, error) {
 
-                            $("#desc" + index + "").val('لا يوجد اسم ');
+                            $("#desc" + index + "").val('لا يوجد اسم ').css('color','red');
                             $("#ar_name" + index + "").text(' ');
                             $("#ex_code" + index + "").val(' ');
 

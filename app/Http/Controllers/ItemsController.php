@@ -90,7 +90,7 @@ class ItemsController extends Controller
         return redirect()->route($this->routeName.'index')->with('flash_success', $this->message);
 
         } catch (\Exception $e){
-            return redirect()->back()->withInput()->with('flash_danger', $e->getMessage());
+            return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ فى ادخال البيانات قم بمراجعتها مرة اخرى');
         }
 
     }

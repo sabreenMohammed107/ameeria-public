@@ -180,7 +180,8 @@
                                     </tr>
                                 </thead>
                                 <tbody id="rows">
-                                    @if (count($errors) > 0)
+
+                                    @if (count($errors) > 0 || Session::has('flash_danger'))
                                     @include('admin.invoices.ajaxAdd')
                                     @endif
                                 </tbody>
@@ -431,7 +432,7 @@ var select_value = $('#itemCode' + index).val();
                         var result = $.parseJSON(data);
 
                         $("#ar_name" + index + "").text(result[0]);
-                        $("#desc" + index + "").val(result[1]);
+                        $("#desc" + index + "").val(result[1]).css('color','#495057');
                         $("#ex_code" + index + "").val(result[2]);
 
                         var price = $("#itemprice" + index + "").val();
@@ -448,7 +449,7 @@ var select_value = $('#itemCode' + index).val();
                     },
                     error: function(request, status, error) {
 
-                        $("#desc" + index + "").val('لا يوجد اسم ');
+                        $("#desc" + index + "").val('ادخل الكود الصحيح').css('color','red');
                         $("#ar_name" + index + "").text(' ');
                         $("#ex_code" + index + "").val(' ');
 

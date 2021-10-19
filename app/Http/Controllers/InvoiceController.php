@@ -82,7 +82,7 @@ class InvoiceController extends Controller
             $detail = [
                 // 'exchange_unit_id' => $request->get('exchange_unit_id' . $i),
                 'quantity' => $request->get('qty' . $i),
-                'price' => $request->get('itemprice' . $i),
+                // 'price' => $request->get('itemprice' . $i),
                 'note' => $request->get('detNote' . $i),
                 // 'op_permission_no'=>$request->get('opPermission' . $i),
                 'total' => $request->get('total' . $i),
@@ -90,6 +90,11 @@ class InvoiceController extends Controller
 
 
             ];
+            if (!empty($request->get('itemprice' . $i))) {
+                $detail['price'] = $request->get('itemprice' . $i);
+            }else{
+                $detail['price'] =null;
+            }
             if (!empty($request->get('opPermission' . $i))) {
                 $detail['op_permission_no'] = $request->get('opPermission' . $i);
             }else{
@@ -167,7 +172,7 @@ $this->validate($request, [
             // throw $th;
             DB::rollback();
 
-            return redirect()->back()->withInput()->with('flash_danger', $e->getMessage());
+            return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ فى ادخال البيانات قم بمراجعتها مرة اخرى');
         }
     }
 
@@ -218,7 +223,7 @@ $this->validate($request, [
             $detail = [
                 // 'exchange_unit_id' => $request->get('exchange_unit_id' . $i),
                 'quantity' => $request->get('qty' . $i),
-                'price' => $request->get('itemprice' . $i),
+                // 'price' => $request->get('itemprice' . $i),
                 'note' => $request->get('detNote' . $i),
                 // 'op_permission_no'=>$request->get('opPermission' . $i),
                 'total' => $request->get('total' . $i),
@@ -229,6 +234,11 @@ $this->validate($request, [
                 $detail['op_permission_no'] = $request->get('opPermission' . $i);
             }else{
                 $detail['op_permission_no'] =null;
+            }
+            if (!empty($request->get('itemprice' . $i))) {
+                $detail['price'] = $request->get('itemprice' . $i);
+            }else{
+                $detail['price'] =null;
             }
             if ( $items) {
                 $detail['item_id'] = $items->id;
@@ -250,12 +260,17 @@ $this->validate($request, [
             $detailUpdate = [
                 'id' => $request->get('item_invoice_id' . $i),
                 'quantity' => $request->get('upqty' . $i),
-                'price' => $request->get('upitemprice' . $i),
+                // 'price' => $request->get('upitemprice' . $i),
                 'note' => $request->get('updetNote' . $i),
                 // 'op_permission_no'=>$request->get('upopPermission' . $i),
                 'total' => $request->get('uptotal' . $i),
                 'note' => $request->get('detNote'. $i),
             ];
+            if (!empty($request->get('upitemprice' . $i))) {
+                $detail['price'] = $request->get('upitemprice' . $i);
+            }else{
+                $detail['price'] =null;
+            }
             if (!empty($request->get('opPermission' . $i))) {
                 $detailUpdate['op_permission_no'] = $request->get('upopPermission' . $i);
             }else{
@@ -331,7 +346,7 @@ $this->validate($request, [
             // throw $th;
             DB::rollback();
 
-            return redirect()->back()->withInput()->with('flash_danger', $e->getMessage());
+            return redirect()->back()->withInput()->with('flash_danger','حدث خطأ فى ادخال البيانات قم بمراجعتها مرة اخرى');
         }
     }
 
@@ -354,7 +369,7 @@ $this->validate($request, [
 
         } catch (QueryException $q) {
 
-            return redirect()->back()->with('flash_danger', $q->getMessage());
+            return redirect()->back()->with('flash_danger', 'هذه القيمه مربوطه بجدول اخر ..لا يمكن المسح');
         }
     }
 
