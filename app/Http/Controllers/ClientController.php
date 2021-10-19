@@ -75,7 +75,6 @@ class ClientController extends Controller
 
         ]);
 $testUnique=Client::where([['general_account','=',$request->get('general_account')],['help_account','=',$request->get('help_account')]])->first();
-
 if($testUnique!=null){
     return redirect()->back()->withInput()->with('flash_danger', 'حقل الحساب العام والمساعد موجود بالفعل');
 }
@@ -85,9 +84,9 @@ if($testUnique!=null){
         return redirect()->route($this->routeName.'index')->with('flash_success', $this->message);
 
         } catch (\Exception $e){
-            return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ الرجاء معاودة المحاولة في وقت لاحق');
+            // return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ الرجاء معاودة المحاولة في وقت لاحق');
 
-            // return redirect()->back()->withInput()->with('flash_danger', $e->getMessage());
+            return redirect()->back()->withInput()->with('flash_danger', $e->getMessage());
         }
 
     }
@@ -130,21 +129,16 @@ if($testUnique!=null){
 
             'name' => 'required',
 
-            'general_account' => 'required|unique:clients,general_account,'.$id,
-            'help_account' => 'required|unique:clients,help_account,'.$id,
+            'general_account' => 'required|unique:clients,help_account,'.$id,
+            'help_account' => 'required|unique:clients,general_account,'.$id,
         ],[
             'name.required' => 'حقل الاسم مطلوب',
             'general_account.required' => 'حقل الحساب العام مطلوب',
             'help_account.required' => 'حقل الحساب المساعد مطلوب',
-            'help_account.unique' => 'حقل الحساب المساعد موجود بالفعل',
             'general_account.unique' => 'حقل الحساب العام موجود بالفعل',
+            'help_account.unique' => 'حقل الحساب المساعد موجود بالفعل',
 
         ]);
-$testUnique=Client::where([['general_account','=',$request->get('general_account')],['help_account','=',$request->get('help_account')]])->first();
-
-if($testUnique!=null){
-    return redirect()->back()->withInput()->with('flash_danger', 'حقل الحساب العام والمساعد موجود بالفعل');
-}
 
         try
         {
