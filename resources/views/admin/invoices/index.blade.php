@@ -98,6 +98,8 @@
     destroy: true,
     paging: false
 } );
-
+function report(){
+    form.submit();
+}
 </script>
 @endsection

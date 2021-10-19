@@ -84,13 +84,13 @@ class InvoiceController extends Controller
                 'quantity' => $request->get('qty' . $i),
                 'price' => $request->get('itemprice' . $i),
                 'note' => $request->get('detNote' . $i),
-                'op_permission_no'=>$request->get('opPermission' . $i),
+                // 'op_permission_no'=>$request->get('opPermission' . $i),
                 'total' => $request->get('total' . $i),
                 'note' => $request->get('notes'. $i),
 
 
             ];
-            if ( $request->get('opPermission' . $i)) {
+            if (!empty($request->get('opPermission' . $i))) {
                 $detail['op_permission_no'] = $request->get('opPermission' . $i);
             }else{
                 $detail['op_permission_no'] =null;
@@ -220,11 +220,16 @@ $this->validate($request, [
                 'quantity' => $request->get('qty' . $i),
                 'price' => $request->get('itemprice' . $i),
                 'note' => $request->get('detNote' . $i),
-                'op_permission_no'=>$request->get('opPermission' . $i),
+                // 'op_permission_no'=>$request->get('opPermission' . $i),
                 'total' => $request->get('total' . $i),
                 'note' => $request->get('notes'. $i),
 
             ];
+            if (!empty($request->get('opPermission' . $i))) {
+                $detail['op_permission_no'] = $request->get('opPermission' . $i);
+            }else{
+                $detail['op_permission_no'] =null;
+            }
             if ( $items) {
                 $detail['item_id'] = $items->id;
             }
@@ -247,10 +252,15 @@ $this->validate($request, [
                 'quantity' => $request->get('upqty' . $i),
                 'price' => $request->get('upitemprice' . $i),
                 'note' => $request->get('updetNote' . $i),
-                'op_permission_no'=>$request->get('upopPermission' . $i),
+                // 'op_permission_no'=>$request->get('upopPermission' . $i),
                 'total' => $request->get('uptotal' . $i),
                 'note' => $request->get('detNote'. $i),
             ];
+            if (!empty($request->get('opPermission' . $i))) {
+                $detailUpdate['op_permission_no'] = $request->get('upopPermission' . $i);
+            }else{
+                $detailUpdate['op_permission_no'] =null;
+            }
             array_push($detailsUpdate, $detailUpdate);
         }
         // Master

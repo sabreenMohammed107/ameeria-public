@@ -268,7 +268,7 @@ show2();
                     if (this.checked) {
 
 
-                        $('#total_tax').val(tax.toFixed(2));
+                        $('#total_tax').val(tax.toFixed(3));
                         $('#total_all').val(parseFloat($('#total_items_price').val()) + parseFloat(tax));
                     } else {
                         $('#total_tax').val(0.00);
@@ -437,10 +437,10 @@ var select_value = $('#itemCode' + index).val();
                         var price = $("#itemprice" + index + "").val();
                 var qty = $("#qty" + index + "").val();
                 if ($("#ex_code" + index + "").val() == 12) {
-                    $("#total" + index + "").attr('value', (((price * qty) / 1000).toFixed(2)));
+                    $("#total" + index + "").attr('value', (((price * qty) / 1000).toFixed(3)));
 
                 } else {
-                    $("#total" + index + "").attr('value', (((price * qty)).toFixed(2)));
+                    $("#total" + index + "").attr('value', (((price * qty)).toFixed(3)));
 
                 }
                 headCalculations(index);
@@ -465,10 +465,10 @@ var select_value = $('#itemCode' + index).val();
                 var price = $("#itemprice" + index + "").val();
                 var qty = $("#qty" + index + "").val();
                 if ($("#ex_code" + index + "").val() == 12) {
-                    $("#total" + index + "").attr('value', (((price * qty) / 1000).toFixed(2)));
+                    $("#total" + index + "").attr('value', (((price * qty) / 1000).toFixed(3)));
 
                 } else {
-                    $("#total" + index + "").attr('value', (((price * qty)).toFixed(2)));
+                    $("#total" + index + "").attr('value', (((price * qty)).toFixed(3)));
 
                 }
 
@@ -481,10 +481,10 @@ var select_value = $('#itemCode' + index).val();
                 var price = $("#itemprice" + index + "").val();
                 var qty = $("#qty" + index + "").val();
                 if ($("#ex_code" + index + "").val() == 12) {
-                    $("#total" + index + "").attr('value', (((price * qty) / 1000).toFixed(2)));
+                    $("#total" + index + "").attr('value', (((price * qty) / 1000).toFixed(3)));
 
                 } else {
-                    $("#total" + index + "").attr('value', (((price * qty)).toFixed(2)));
+                    $("#total" + index + "").attr('value', (((price * qty)).toFixed(3)));
 
                 }
 
@@ -538,16 +538,16 @@ var select_value = $('#itemCode' + index).val();
                 })
 
 
-                $('#total_items_price').val(total.toFixed(2));
+                $('#total_items_price').val(total.toFixed(3));
                 console.log(tax);
                 if ($('input[type=checkbox][name=taxable]').is(':checked')) {
                     console.log("checked");
-                    $('#total_tax').val(tax.toFixed(2));
-                    $('#total_all').val(parseFloat(total) + parseFloat(tax));
+                    $('#total_tax').val(tax.toFixed(3));
+                    $('#total_all').val((parseFloat(total) + parseFloat(tax)).toFixed(3));
                 } else {
                     console.log("unchecked");
                     $('#total_tax').val(0.00);
-                    $('#total_all').val(parseFloat(total));
+                    $('#total_all').val((parseFloat(total)).toFixed(3));
                 }
 
             }

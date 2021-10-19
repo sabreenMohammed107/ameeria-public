@@ -30,8 +30,9 @@
                             <div class="col-sm-3">
                                 <div class="form-group">
                                     <label for="">كود الصنف <span style="color: red">*</span></label>
-                                    <input name="code" type="text" value="{{old('code') }}" class="form-control" id="">
+                                    <input name="code" type="text" value="{{old('code') }}" class="form-control" id="codeItem">
                                 </div>
+                                <div style="color: red" id="dataMsg"></div>
                             </div>
                             <div class="col-sm-3">
                                 <div class="form-group">
@@ -181,6 +182,28 @@ $(document).ready(function() {
     $('#store_id').select2();
     $('#storage_unit_id').select2();
     $('#exchange_unit_id').select2();
+    $('#codeItem').on('blur', function() {
+
+var codeItem = $('#codeItem').val();
+
+    $.ajax({
+       url:"{{route('check.code')}}",
+      method: 'get',
+      data: {
+        code: codeItem
+      },
+      success: function(data) {
+
+        $('#dataMsg').html('');
+      },
+      error: function(response){
+
+        $('#dataMsg').html("الكود موجود مسبقا");
+      }
+});
+    });
+
+
 
 });
 </script>

@@ -80,7 +80,10 @@ class ItemsController extends Controller
 
             'selling_price.required' => 'حقل سعر البيع مطلوب',
         ]);
-
+        $testUnique=Item::where('code','=',$request->get('code'))->first();
+        if($testUnique!=null){
+            return redirect()->back()->withInput()->with('flash_danger', 'حقل الكود موجود بالفعل');
+        }
         try
         {
             $this->object::create($request->except('_token'));
@@ -146,6 +149,13 @@ class ItemsController extends Controller
         'selling_price.required' => 'حقل سعر البيع مطلوب',
     ]);
 
+    if($request->get('code')!== $this->object::findOrFail($id)->code){
+        $testUnique=Item::where('code','=',$request->get('code'))->first();
+        if($testUnique!=null){
+            return redirect()->back()->withInput()->with('flash_danger', 'حقل الكود موجود بالفعل');
+        }
+    }
+
     try
     {
         $this->object::findOrFail($id)->update($request->except('_token'));
@@ -178,5 +188,37 @@ class ItemsController extends Controller
 
             return redirect()->back()->with('flash_danger', 'هذه القيمه مربوطه بجدول اخر ..لا يمكن المسح');
         }
+
+
+    }
+    public function testValidte(Request $request){
+        $this->validate($request, [
+
+
+            'code' => 'required|unique:items,code',
+
+        ],[
+            'code.required' => 'حقل الكود مطلوب',
+
+             'code.unique' => 'حقل الكود  موجود بالفعل',
+
+        ]);
+        $message='';
+
+$testUnique=Item::where('code','=',$request->get('code'))->first();
+if($testUnique!=null){
+    // return redirect()->back()->withInput()->with('flash_danger', 'حقل الكود موجود بالفعل');
+    $message='حقل الكود موجود بالفعل';
+}
+
+try {
+
+    return $message;
+
+
+} catch (QueryException $q) {
+
+    return $message;
+}
     }
 }
