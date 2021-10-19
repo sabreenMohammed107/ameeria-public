@@ -139,6 +139,12 @@ if($testUnique!=null){
             'help_account.unique' => 'حقل الحساب المساعد موجود بالفعل',
 
         ]);
+        if($request->get('general_account') || $request->get('help_account')){
+            $testUnique=Client::where([['general_account','=',$request->get('general_account')],['help_account','=',$request->get('help_account')]])->first();
+            if($testUnique!=null){
+                return redirect()->back()->withInput()->with('flash_danger', 'حقل الحساب العام والمساعد موجود بالفعل');
+            }
+        }
 
         try
         {
