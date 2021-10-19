@@ -74,7 +74,8 @@ class ClientController extends Controller
             'general_account.unique' => 'حقل الحساب العام موجود بالفعل',
 
         ]);
-$testUnique=Client::where('general_account','=',$request->get('general_account'))->where('help_account','=',$request->get('help_account'))->first();
+$testUnique=Client::where([['general_account','=',$request->get('general_account')],['help_account','=',$request->get('help_account')]])->first();
+
 if($testUnique!=null){
     return redirect()->back()->withInput()->with('flash_danger', 'حقل الحساب العام والمساعد موجود بالفعل');
 }
@@ -135,10 +136,15 @@ if($testUnique!=null){
             'name.required' => 'حقل الاسم مطلوب',
             'general_account.required' => 'حقل الحساب العام مطلوب',
             'help_account.required' => 'حقل الحساب المساعد مطلوب',
-            'general_account.unique' => 'حقل الحساب العام موجود بالفعل',
             'help_account.unique' => 'حقل الحساب المساعد موجود بالفعل',
+            'general_account.unique' => 'حقل الحساب العام موجود بالفعل',
 
         ]);
+$testUnique=Client::where([['general_account','=',$request->get('general_account')],['help_account','=',$request->get('help_account')]])->first();
+
+if($testUnique!=null){
+    return redirect()->back()->withInput()->with('flash_danger', 'حقل الحساب العام والمساعد موجود بالفعل');
+}
 
         try
         {
