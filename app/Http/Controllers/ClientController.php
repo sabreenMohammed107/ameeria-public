@@ -65,8 +65,10 @@ class ClientController extends Controller
             'name' => 'required',
             'general_account' => 'required|unique:clients,help_account',
             'help_account' => 'required|unique:clients,general_account',
+            'city_id' => 'required',
 
         ],[
+            'city_id.required' => 'حقل المحافظه مطلوب',
             'name.required' => 'حقل الاسم مطلوب',
             'general_account.required' => 'حقل الحساب العام مطلوب',
             'help_account.required' => 'حقل الحساب المساعد مطلوب',
@@ -129,14 +131,16 @@ if($testUnique!=null){
 
             'name' => 'required',
 
-            'general_account' => 'required|unique:clients,help_account,'.$id,
-            'help_account' => 'required|unique:clients,general_account,'.$id,
+            'general_account' => 'required',
+            'help_account' => 'required',
+            'city_id' => 'required',
         ],[
+            'city_id.required' => 'حقل المحافظه مطلوب',
             'name.required' => 'حقل الاسم مطلوب',
             'general_account.required' => 'حقل الحساب العام مطلوب',
             'help_account.required' => 'حقل الحساب المساعد مطلوب',
-            'general_account.unique' => 'حقل الحساب العام موجود بالفعل',
-            'help_account.unique' => 'حقل الحساب المساعد موجود بالفعل',
+            // 'general_account.unique' => 'حقل الحساب العام موجود بالفعل',
+            // 'help_account.unique' => 'حقل الحساب المساعد موجود بالفعل',
 
         ]);
         if($request->get('general_account')!== $this->object::findOrFail($id)->general_account && $request->get('help_account')!== $this->object::findOrFail($id)->help_account){

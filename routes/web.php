@@ -39,4 +39,5 @@ Route::post('/invoices/search', 'InvoiceController@search')->name('invoices.sear
 
 Route::post('/invoice-report', 'ReportsController@invoice')->name('invoice-report');
 Route::get('/show-invoice-report', 'ReportsController@showinvoice')->name('show-invoice-report');
+Route::get('/invoicesReport/search', 'ReportsController@search')->name('invoicesReport.search');
 Route::get('check/code', 'ItemsController@testValidte')->name('check.code');

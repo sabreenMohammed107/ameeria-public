@@ -19,19 +19,32 @@
                             id="send_data">
                             <input type="hidden" value="{{csrf_token()}}" id="subCatToken"/>
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group ">
                                         <label class=""> التاريخ من</label>
                                         <input name="from" id="from" value="" type="date" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group ">
                                         <label class=""> التاريخ الى</label>
                                         <input name="to" id="to" value="" type="date" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>نوع الفاتورة</label>
+                                        <select class="custom-select"  id="invoice_type"
+                                            name="type_id">
+                                            <option value="">اختر</option>
+                                            @foreach ($invoiceType as $type)
+                                                <option {{old('type_id') ==$type->id ? 'selected' : ""}} value="{{ $type->id }}">
+                                                    {{ $type->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
                                     <div class="form-group mt-4">
                                         <button id="send_form" type="submit" class="btn btn-primary">بحث</button>
 
@@ -69,6 +82,7 @@
         var token = $("#subCatToken").val();
         let from = $('#from').val();
         let to = $('#to').val();
+        let type =  $('#invoice_type option:selected').val();
      $.ajax({
                 url:"{{route('invoices.search')}}",
                 method: "POST",
@@ -77,6 +91,7 @@
 		_token:token,
         from:from,
             to:to,
+            type:type,
     },
                 success: function(result) {
                     // $('#example1').DataTable('destroy');

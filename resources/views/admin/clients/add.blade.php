@@ -51,7 +51,7 @@
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label for=""> المحافظة</label>
+                                    <label for=""> المحافظة <span style="color: red">*</span></label>
                                     <select class="custom-select" id="city_id" name="city_id">
                                         <option value="">اختر</option>
                                         @foreach($cities as $data)

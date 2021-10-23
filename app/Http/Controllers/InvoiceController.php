@@ -43,7 +43,8 @@ class InvoiceController extends Controller
     public function index()
     {
         $data = Invoice::orderBy('id', 'DESC')->paginate(200);
-        return view($this->viewName . 'index', compact('data'))
+        $invoiceType = InvoiceType::all();
+        return view($this->viewName . 'index', compact('data','invoiceType'))
         ;
     }
 
@@ -453,6 +454,9 @@ $this->validate($request, [
         }
         if (!empty($request->get("to"))) {
             $invoice->where('date', '<=', Carbon::parse($request->get("to")));
+        }
+        if (!empty($request->get("type"))) {
+            $invoice->where('type_id', '=', $request->get("type"));
         }
         $data = $invoice->get();
 
