@@ -25,7 +25,11 @@ Route::resource('units', 'UnitsController');
 Route::resource('settings', 'SettingsController');
 Route::resource('cities', 'CitiesController');
 Route::resource('items', 'ItemsController');
+Route::get('searchItem/fetch', 'ItemsController@search')->name('searchItem.fetch');
+
 Route::resource('clients', 'ClientController');
+Route::get('searchClient/fetch', 'ClientController@search')->name('searchClient.fetch');
+
 Route::resource('invoices', 'InvoiceController');
 Route::get('addInvoiceRow/fetch', 'InvoiceController@addRow')->name('addInvoiceRow.fetch');
 Route::get('editSelectVal/fetch', 'InvoiceController@editSelectVal')->name('editSelectVal.fetch');

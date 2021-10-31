@@ -2,106 +2,75 @@
 
 @section('title', 'الأصناف')
 @section('content')
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">سجل الأصناف</h3>
-                @can('items-create')
-                <h3 class="card-title float-sm-left"><a href="{{route('items.create')}}" class="btn btn-success">إضافة</a></h3>
-           @endcan
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body ">
-                <table id="example1" class="table table-bordered table-striped arabic">
-                    <thead class="bg-info">
-                        <tr>
-                            <th>#</th>
-                            <th>كود الصنف</th>
-                            <th>اسم الصنف </th>
-                            <th>وحده الصرف </th>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">سجل الأصناف</h3>
+                    @can('items-create')
+                        <h3 class="card-title float-sm-left"><a href="{{ route('items.create') }}"
+                                class="btn btn-success">إضافة</a></h3>
+                    @endcan
+                </div>
+                <!-- /.card-header -->
+                <div id="preIndex" class="card-body ">
+                    @include('admin.items.preIndex')
 
-                            <th>سعر التكلفة </th>
-                            <th>سعر البيع </th>
-                            <th>خيارات</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @foreach ($data as $index=>$row)
-                        <tr>
-                            {{-- Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($row->code) --}}
-                            <th>{{ $index + 1 }}</th>
-                            <th >{{ $row->code }}</th>
-                            <th>{{ $row->name}}</th>
-                            <th>{{ $row->exchange_unit_id}}</th>
-
-                            <th>{{ $row->cost_price}}</th>
-                            <th>{{ $row->selling_price}}</th>
-                            @can('items-edit')
-                            <th><a href="{{route('items.edit',$row->id)}}" class="btn btn-info"><i class="fas fa-edit text-white"></i></a>
-                              @endcan
-                                @can('items-delete')
-                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#del{{$row->id}}"><i class="fas fa-trash-alt"></i></button>
-                                @endcan
-                            </th>
-                      <!-- Delete Modal -->
-<div class="modal fade dir-rtl" id="del{{$row->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <form action="{{ route('items.destroy', $row->id) }}"  method="POST" >
-            @csrf
-            @method('DELETE')
-            <div class="modal-content">
-            <div class="modal-header bg-gradient-danger">
-                <h5 class="modal-title" id="exampleModalLabel">تأكيد الحذف</h5>
-                <button type="button" class="close m-0 p-0 text-white" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+                </div>
+                <!-- /.card-body -->
             </div>
-            <div class="modal-body text-center">
-                <h3><i class="fas fa-fire text-danger"></i></h3>
-                <h4 class="text-danger">حذف جميع البيانات ؟</h4>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
-                <button type="submit" class="btn btn-danger">تأكيد</button>
-            </div>
+            <!-- /.card -->
         </div>
-        </form>
+        <!-- /.col -->
     </div>
-</div>
-
-
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                {{$data->render()}}
-            </div>
-            <!-- /.card-body -->
-        </div>
-        <!-- /.card -->
-    </div>
-    <!-- /.col -->
-</div>
-<!-- /.row -->
+    <!-- /.row -->
 @endsection
 @section('scripts')
-<script>
-   $(document).ready(function() {
-    String.prototype.toArabicDigits = function(){
-var id = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
-return this.replace(/[0-9]/g, function(w){
-  return id[+w];
- });
-};
+    <script>
+        $(document).ready(function() {
+            String.prototype.toArabicDigits = function() {
+                var id = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+                return this.replace(/[0-9]/g, function(w) {
+                    return id[+w];
+                });
+            };
 
- });
-$('#example1').DataTable( {
-    destroy: true,
-    paging: false
-} );
+        });
+        $('#example1').DataTable({
+            destroy: true,
+            paging: false,
+            search: false,
+        });
 
-</script>
+
+        function search() {
+
+            var search = $('#search_name').val();
+            $.ajax({
+                type: 'GET',
+                data: {
+
+                    search_name: search,
+
+                },
+                url: "{{ route('searchItem.fetch') }}",
+
+                success: function(data) {
+
+                    $('#preIndex').html(data);
+                    $("#search_name").val(search);
+                    $('body').persianNum();
+
+                },
+                error: function(request, status, error) {
+
+                    $("#search_name").val(search);
+
+
+
+                }
+            });
+            $('body').persianNum();
+        }
+    </script>
 @endsection
-

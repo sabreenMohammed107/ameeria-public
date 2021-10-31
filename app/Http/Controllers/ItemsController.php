@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 use App\Models\Store;
 use App\Models\Unit;
-use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
 
 class ItemsController extends Controller
 {
@@ -15,12 +15,12 @@ class ItemsController extends Controller
     protected $routeName;
     protected $message;
     protected $errormessage;
-    function __construct(Item $object)
+    public function __construct(Item $object)
     {
         $this->middleware('auth');
-        $this->middleware('permission:items-list|items-create|items-edit|items-delete', ['only' => ['index','store']]);
-        $this->middleware('permission:items-create', ['only' => ['create','store']]);
-        $this->middleware('permission:items-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:items-list|items-create|items-edit|items-delete', ['only' => ['index', 'store']]);
+        $this->middleware('permission:items-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:items-edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:items-delete', ['only' => ['destroy']]);
         $this->object = $object;
         $this->viewName = 'admin.items.';
@@ -35,9 +35,9 @@ class ItemsController extends Controller
      */
     public function index()
     {
-        $data = Item::orderBy('id','DESC')->paginate(200);
-        return view($this->viewName.'index',compact('data'))
-           ;
+        $data = Item::orderBy('id', 'DESC')->paginate(200);
+        return view($this->viewName . 'index', compact('data'))
+        ;
     }
 
     /**
@@ -47,11 +47,11 @@ class ItemsController extends Controller
      */
     public function create()
     {
-        $stores = Store::orderBy('id','DESC')->get();
-        $storages=Unit::orderBy('id','DESC')->get();
-        $exchanges=Unit::orderBy('id','DESC')->get();
-        return view($this->viewName.'add',compact('stores','storages','exchanges'))
-           ;
+        $stores = Store::orderBy('id', 'DESC')->get();
+        $storages = Unit::orderBy('id', 'DESC')->get();
+        $exchanges = Unit::orderBy('id', 'DESC')->get();
+        return view($this->viewName . 'add', compact('stores', 'storages', 'exchanges'))
+        ;
     }
 
     /**
@@ -65,11 +65,11 @@ class ItemsController extends Controller
         $this->validate($request, [
             'code' => 'required',
             'name' => 'required',
-            'general_account'=>'required',
-            'help_account'=>'required',
-            'exchange_unit_id'=>'required',
-            'selling_price'=>'required',
-        ],[
+            'general_account' => 'required',
+            'help_account' => 'required',
+            'exchange_unit_id' => 'required',
+            'selling_price' => 'required',
+        ], [
             'name.required' => 'حقل الاسم مطلوب',
 
             'code.required' => 'حقل الكود مطلوب',
@@ -80,16 +80,16 @@ class ItemsController extends Controller
 
             'selling_price.required' => 'حقل سعر البيع مطلوب',
         ]);
-        $testUnique=Item::where('code','=',$request->get('code'))->first();
-        if($testUnique!=null){
+        $testUnique = Item::where('code', '=', $request->get('code'))->first();
+        if ($testUnique != null) {
             return redirect()->back()->withInput()->with('flash_danger', 'حقل الكود موجود بالفعل');
         }
         try
         {
             $this->object::create($request->except('_token'));
-        return redirect()->route($this->routeName.'index')->with('flash_success', $this->message);
+            return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
 
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ فى ادخال البيانات قم بمراجعتها مرة اخرى');
         }
 
@@ -114,12 +114,12 @@ class ItemsController extends Controller
      */
     public function edit($id)
     {
-        $row=Item::where('id',$id)->first();
-        $stores = Store::orderBy('id','DESC')->get();
-        $storages=Unit::orderBy('id','DESC')->get();
-        $exchanges=Unit::orderBy('id','DESC')->get();
-        return view($this->viewName.'edit',compact('stores','storages','exchanges','row'))
-           ;
+        $row = Item::where('id', $id)->first();
+        $stores = Store::orderBy('id', 'DESC')->get();
+        $storages = Unit::orderBy('id', 'DESC')->get();
+        $exchanges = Unit::orderBy('id', 'DESC')->get();
+        return view($this->viewName . 'edit', compact('stores', 'storages', 'exchanges', 'row'))
+        ;
     }
 
     /**
@@ -130,14 +130,14 @@ class ItemsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    { $this->validate($request, [
+    {$this->validate($request, [
         'code' => 'required',
         'name' => 'required',
-        'general_account'=>'required',
-        'help_account'=>'required',
-        'exchange_unit_id'=>'required',
-        'selling_price'=>'required',
-    ],[
+        'general_account' => 'required',
+        'help_account' => 'required',
+        'exchange_unit_id' => 'required',
+        'selling_price' => 'required',
+    ], [
         'name.required' => 'حقل الاسم مطلوب',
 
         'code.required' => 'حقل الكود مطلوب',
@@ -149,23 +149,23 @@ class ItemsController extends Controller
         'selling_price.required' => 'حقل سعر البيع مطلوب',
     ]);
 
-    if($request->get('code')!== $this->object::findOrFail($id)->code){
-        $testUnique=Item::where('code','=',$request->get('code'))->first();
-        if($testUnique!=null){
-            return redirect()->back()->withInput()->with('flash_danger', 'حقل الكود موجود بالفعل');
+        if ($request->get('code') !== $this->object::findOrFail($id)->code) {
+            $testUnique = Item::where('code', '=', $request->get('code'))->first();
+            if ($testUnique != null) {
+                return redirect()->back()->withInput()->with('flash_danger', 'حقل الكود موجود بالفعل');
+            }
         }
+
+        try
+        {
+            $this->object::findOrFail($id)->update($request->except('_token'));
+            return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
+
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ الرجاء معاودة المحاولة في وقت لاحق');
+        }
+
     }
-
-    try
-    {
-        $this->object::findOrFail($id)->update($request->except('_token'));
-        return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
-
-    } catch (\Exception $e){
-        return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ الرجاء معاودة المحاولة في وقت لاحق');
-    }
-
-     }
 
     /**
      * Remove the specified resource from storage.
@@ -178,7 +178,6 @@ class ItemsController extends Controller
         $row = Item::where('id', $id)->first();
         // Delete File ..
 
-
         try {
 
             $row->delete();
@@ -189,36 +188,54 @@ class ItemsController extends Controller
             return redirect()->back()->with('flash_danger', 'هذه القيمه مربوطه بجدول اخر ..لا يمكن المسح');
         }
 
-
     }
-    public function testValidte(Request $request){
+    public function testValidte(Request $request)
+    {
         $this->validate($request, [
-
 
             'code' => 'required|unique:items,code',
 
-        ],[
+        ], [
             'code.required' => 'حقل الكود مطلوب',
 
-             'code.unique' => 'حقل الكود  موجود بالفعل',
+            'code.unique' => 'حقل الكود  موجود بالفعل',
 
         ]);
-        $message='';
+        $message = '';
 
-$testUnique=Item::where('code','=',$request->get('code'))->first();
-if($testUnique!=null){
-    // return redirect()->back()->withInput()->with('flash_danger', 'حقل الكود موجود بالفعل');
-    $message='حقل الكود موجود بالفعل';
-}
+        $testUnique = Item::where('code', '=', $request->get('code'))->first();
+        if ($testUnique != null) {
+            // return redirect()->back()->withInput()->with('flash_danger', 'حقل الكود موجود بالفعل');
+            $message = 'حقل الكود موجود بالفعل';
+        }
 
-try {
+        try {
 
-    return $message;
+            return $message;
 
+        } catch (QueryException $q) {
 
-} catch (QueryException $q) {
-
-    return $message;
-}
+            return $message;
+        }
     }
+
+
+    public function search(Request $request){
+
+ if(!empty($request->get('search_name'))) {
+        $search = $request->get('search_name');
+        $data=Item::where('name','LIKE',"%$search%")->orWhere('code','LIKE',"%$search%")
+        ->orwhereHas('exchange', function ($query) use ($search){
+            $query->where('name','LIKE',"%$search%");
+        })->paginate(200);
+
+
+
+    }else{
+        $data = Item::orderBy('id', 'DESC')->paginate(200);
+    }
+
+        return view($this->viewName . 'preIndex',compact('data'))->render();
+    }
+
 }

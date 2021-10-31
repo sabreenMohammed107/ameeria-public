@@ -183,4 +183,26 @@ if($testUnique!=null){
             return redirect()->back()->with('flash_danger', 'هذه القيمه مربوطه بجدول اخر ..لا يمكن المسح');
         }
     }
+
+    public function search(Request $request){
+
+        if(!empty($request->get('search_name'))) {
+               $search = $request->get('search_name');
+               $data=Client::where('name','LIKE',"%$search%")
+               ->orWhere('general_account','LIKE',"%$search%")
+              ->orWhere('help_account','LIKE',"%$search%")
+              ->orWhere('commercial_register','LIKE',"%$search%")
+              ->orWhere('tax_card_id','LIKE',"%$search%")
+              ->orWhere('phone','LIKE',"%$search%")
+              ->paginate(200);
+
+
+
+           }else{
+               $data = Client::orderBy('id', 'DESC')->paginate(200);
+           }
+
+               return view($this->viewName . 'preIndex',compact('data'))->render();
+           }
+
 }
