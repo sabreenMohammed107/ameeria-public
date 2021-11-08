@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "161d4149-ff51-4e81-a9c9-223dbe4e5235": {
+      "ProjectGuid": "161d4149-ff51-4e81-a9c9-223dbe4e5235",
+      "DisplayName": "ApiTokenSigner",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

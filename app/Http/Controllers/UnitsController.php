@@ -34,8 +34,7 @@ class UnitsController extends Controller
     public function index()
     {
         $data = Unit::orderBy('id','DESC')->get();
-        return view($this->viewName.'index',compact('data'))
-           ;
+        return view($this->viewName.'index',compact('data'));
     }
 
     /**
@@ -59,10 +58,11 @@ class UnitsController extends Controller
         $this->validate($request, [
             'code' => 'required',
             'name' => 'required',
+            'standard_code' => 'required',
         ],[
             'name.required' => 'حقل الاسم مطلوب',
-
             'code.required' => 'حقل الكود مطلوب',
+            'standard_code.required' => 'حقل الكود العالمي مطلوب',
         ]);
 
         try
@@ -110,10 +110,11 @@ class UnitsController extends Controller
         $this->validate($request, [
             'code' => 'required',
             'name' => 'required',
+            'standard_code' => 'required',
         ],[
             'name.required' => 'حقل الاسم مطلوب',
-
             'code.required' => 'حقل الكود مطلوب',
+            'standard_code.required' => 'حقل الكود العالمي مطلوب',
         ]);
 
         try

@@ -29,66 +29,58 @@
                                 <div class="tab-content" id="custom-tabs-one-tabContent">
 
                                     <div class="tab-pane fade show active" id="custom-tabs-one-1" role="tabpanel" aria-labelledby="custom-tabs-one-1-tab">
-                                        <div class="card-footer">
-                                            <button type="submit" class="btn btn-primary" style="float: left;">ترحيل الى مصلحة الضرائب</button>
-                                        </div>
-                                        <div class="card card-primary">
-
-                                            <!-- form start -->
-                                            <table id="example1" class="table table-bordered table-striped arabic">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="active">
-                                                            <input type="checkbox" class="select-all checkbox" id="selectAll" name="select-all" />
-                                                        </th>
-                                                        <th>#</th>
-                                                        <th>رقم الفاتورة </th>
-                                                        <th>التاريخ </th>
-                                                        <th>نوع الفاتورة</th>
-                                                        <th>الحالة</th>
-
-                                                        <th>اسم العميل</th>
-                                                        <th>إجمالى صافى </th>
-                                                        <th>عرض</th>
-
-
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach ($data as $index=>$row)
-                                                    <tr>
-
-
-                                                        <td class="active">
-                                                            <input type="checkbox" class="select-item checkbox" name="select-item" value="1000" />
-                                                        </td>
-                                                        <th>{{ $index + 1 }}</th>
-                                                        <th>1001</th>
-                                                        <th>{{ $row->invoice_no}}</th>
-                                                        <th>{{date('Y-m-d', strtotime($row->date))}} </th>
-                                                        <th>{{ $row->type->name ?? ''}}</th>
-                                                        <th>@if($row->status==1) تم الترحيل @else لم يتم الترحيل @endif</th>
-
-
-                                                        <th> {{ $row->client->name ?? ''}}</th>
-                                                        <th>{{ $row->total}}</th>
-                                                        <th>
-                                                            <a href="{{route('relay.edit',$row->id)}}" class="btn btn-success"><i class="fas fa-edit text-white"></i></a>
-                                                        </th>
-                                                    </tr>
-
-@endforeach
-                                                </tbody>
-                                            </table>
-                                            {{$data->render()}}
-                                        </div>
-
+                                        <form action="{{ route('relay.store') }}" method="POST">
+                                            @csrf
+                                            <!-- <div class="card-body">
+                                                <button type="submit" class="btn btn-primary" style="float: left;">ترحيل الى مصلحة الضرائب</button>
+                                            </div> -->
+                                            <div class="card card-primary">
+                                                <table id="example1" class="table table-bordered table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="active">
+                                                                <input type="checkbox" class="select-all checkbox" id="selectAll" name="" />
+                                                            </th>
+                                                            <th>#</th>
+                                                            <th>رقم الفاتورة </th>
+                                                            <th>التاريخ </th>
+                                                            <th>نوع الفاتورة</th>
+                                                            <th>الحالة</th>
+                                                            <th>اسم العميل</th>
+                                                            <th>إجمالى صافى </th>
+                                                            <th>عرض</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($data as $index=>$row)
+                                                        <tr>
+                                                            <td class="active">
+                                                                <input type="checkbox" class="select-item checkbox" name="invoices[]" value="{{ $row->id }}" />
+                                                            </td>
+                                                            <td>{{ $index + 1 }}</td>
+                                                            <td>{{ $row->invoice_no}}</td>
+                                                            <td>{{date('Y-m-d', strtotime($row->date))}} </td>
+                                                            <td>{{ $row->type->name ?? ''}}</td>
+                                                            <td>@if($row->status==1) تم الترحيل @else لم يتم الترحيل @endif</td>
+                                                            <td> {{ $row->client->name ?? ''}}</td>
+                                                            <td>{{ $row->total}}</td>
+                                                            <td>
+                                                                <a href="{{route('relay.show',$row->id)}}" title="عرض الفاتورة" class="btn btn-success  btn-sm"><i class="fas fa-eye text-white"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="card-footer">
+                                                {{$data->render()}}
+                                            </div>
+                                        </form>
                                     </div>
                                     <div class="tab-pane fade" id="custom-tabs-one-2" role="tabpanel" aria-labelledby="custom-tabs-one-2-tab">
                                         <div class="card card-primary">
+                                            <table id="example3" class="table table-bordered table-striped">
 
-                                            <!-- form start -->
-                                            <table id="example3" class="table table-bordered table-striped arabic">
                                                 <thead>
                                                     <tr>
                                                         <th class="active">
@@ -99,12 +91,9 @@
                                                         <th>التاريخ </th>
                                                         <th>نوع الفاتورة</th>
                                                         <th>الحالة</th>
-
                                                         <th>اسم العميل</th>
                                                         <th>إجمالى صافى </th>
                                                         <th>خيارات</th>
-
-
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -114,43 +103,45 @@
                                                             <input type="checkbox" class="select-item checkbox" name="select-item" value="1000" />
                                                         </td>
                                                         <th>{{ $index + 1 }}</th>
-                                                        <th>1001</th>
                                                         <th>{{ $row->invoice_no}}</th>
                                                         <th>{{date('Y-m-d', strtotime($row->date))}} </th>
                                                         <th>{{ $row->type->name ?? ''}}</th>
                                                         <th>@if($row->status==1) تم الترحيل @else لم يتم الترحيل @endif</th>
-
-
                                                         <th> {{ $row->client->name ?? ''}}</th>
                                                         <th>{{ $row->total}}</th>
-
                                                         <th>
-                                                            <a href="invoices-edit.html" title="عرض" class="btn btn-success"><i class="fas fa-edit text-white"></i></a>
-                                                            <button type="button" title="الغاء" class="btn btn-danger" data-toggle="modal" data-target="#del"><i class="fas fa-trash-alt"></i></button>
+                                                            <a href="{{route('relay.show',$row->id)}}" title="عرض الفاتورة" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
+
+                                                            <a href="https://invoicing.eta.gov.eg/documents/{{$row->invoice_document_id}}/share/{{$row->invoice_long_id}}" target="_blank" title="الفاتورة الخارجية" class="btn btn-info btn-sm"><i class="fas fa-share"></i></a>
+                                                            
+                                                            <button type="button" class="btn btn-danger btn-sm" title="الغاء الفاتورة" data-toggle="modal" data-target="#cancelation_{{$row->id}}"><i class="fas fa-times"></i></button>
                                                         </th>
-                                                         <!-- Delete Modal -->
-    <div class="modal fade dir-rtl" id="del" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-gradient-danger">
-                    <h5 class="modal-title" id="exampleModalLabel">تأكيد الإلغاء</h5>
-                    <button type="button" class="close m-0 p-0 text-white" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-                </div>
-                <div class="modal-body text-center">
-                    <h3><i class="fas fa-fire text-danger"></i></h3>
-                    <h4 class="text-danger">الغاء ترحيل جميع البيانات ؟</h4>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
-                    <button type="button" class="btn btn-danger">تأكيد</button>
-                </div>
-            </div>
-        </div>
-    </div>
                                                     </tr>
-@endforeach
+                                                    <div class="modal fade dir-rtl" id="cancelation_{{$row->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <form action="{{ route('relay.destroy', $row->id) }}"  method="POST" >
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <div class="modal-content">
+                                                                <div class="modal-header bg-gradient-danger">
+                                                                    <h5 class="modal-title" id="exampleModalLabel">تأكيد الإلغاء</h5>
+                                                                    <button type="button" class="close m-0 p-0 text-white" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body text-center">
+                                                                    <h3><i class="fas fa-fire text-danger"></i></h3>
+                                                                    <h4 class="text-danger">الغاء الفاتورة من المصلحة؟</h4>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
+                                                                    <button type="submit" class="btn btn-danger">تأكيد</button>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                    @endforeach
 
                                                 </tbody>
                                             </table>

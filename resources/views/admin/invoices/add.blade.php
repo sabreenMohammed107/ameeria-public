@@ -22,7 +22,7 @@
                                         <div class="col-sm-2">
                                             <div class="form-group">
                                                 <label> رقم الفاتورة</label>
-                                                <input type="number" value="{{old('invoice_no') }}" name="invoice_no" class="form-control">
+                                                <input type="text" value="{{old('invoice_no') }}" name="invoice_no" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-sm-2">
@@ -234,7 +234,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <input type="hidden" id="taxVal" value="{{ $tax->value }}" style="">
+                            <input type="hidden" id="taxVal" value="{{ $tax->value_name }}" style="">
                             <!-- End -->
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-primary">حفظ</button>

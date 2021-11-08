@@ -8,7 +8,7 @@
             <div class="card card-primary card-outline">
                 <div class="card-header">
                     <h3 class="card-title">
-                        <i class="fas fa-edit"></i> إضافه فاتورة
+                        <i class="fas fa-eye"></i> عرض الفاتورة
                     </h3>
                 </div>
                 <div class="card card-primary">
@@ -153,8 +153,6 @@
 
 
                         <div class="card-body">
-                            <button id="btntbl" type="button" class="btn btn-primary waves-effect waves-light mb-1">إضافة
-                                صنف</button>
 
                             <table id="example5" class="table table-bordered table-striped arabic">
                                 <thead>
@@ -231,7 +229,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <input type="hidden" id="taxVal" value="{{ $tax->value }}" style="">
+                            <input type="hidden" id="taxVal" value="{{ $tax->value_name }}" style="">
                             <!-- End -->
                             <div class="card-footer">
                                 {{-- <button type="submit" class="btn btn-primary">حفظ</button> --}}

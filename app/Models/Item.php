@@ -16,23 +16,23 @@ class Item extends Model
      */
     protected $fillable = [
         'store_id',
-    'code',
-    'name',
-    'general_account',
-    'help_account',
-    'exchange_unit_id',
-    'storage_unit_id',
-    'cost_price',
-    'selling_price',
-    'request_limit',
-    'minimum',
-    'maximum',
-    'files_count',
-    'balance_start_date',
-    'balance_start_qty',
-    'balance_start_value',
-    'balance_qty',
-    'balance_value'
+        'code',
+        'name',
+        'general_account',
+        'help_account',
+        'exchange_unit_id',
+        'storage_unit_id',
+        'cost_price',
+        'selling_price',
+        'request_limit',
+        'minimum',
+        'maximum',
+        'files_count',
+        'balance_start_date',
+        'balance_start_qty',
+        'balance_start_value',
+        'balance_qty',
+        'balance_value'
     ];
 
     public function exchange()

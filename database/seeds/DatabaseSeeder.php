@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
     {
          $this->call(PermissionsSeeder::class);
          $this->call(AdminSeeder::class);
-         // $this->call(SettingsSeeder::class);
-         // $this->call(InvoiceTypeSeeder::class);
+         $this->call(InvoiceTypeSeeder::class);
+         $this->call(SettingsSeeder::class);
     }
 }

@@ -209,7 +209,7 @@
                                                 <div class="col-sm-12">
                                                     <div class="form-group">
                                                         <label> اجمالى</label>
-                                                        <input readonly id="total_items_price" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->subtotal)}}" name="subtotal" type="number"
+                                                        <input readonly id="total_items_price" value="{{$inv->subtotal}}" name="subtotal" type="number"
                                                             class="form-control">
                                                     </div>
                                                 </div>
@@ -219,7 +219,7 @@
                                                 <div class="col-sm-12">
                                                     <div class="form-group">
                                                         <label> اجمالى ضريبه القيمه المضافه</label>
-                                                        <input readonly type="text" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->tax)}}" id="total_tax" name="tax"
+                                                        <input readonly type="number" value="{{$inv->tax}}" id="total_tax" name="tax"
                                                             class="form-control">
                                                     </div>
                                                 </div>
@@ -228,7 +228,7 @@
                                                 <div class="col-sm-12">
                                                     <div class="form-group">
                                                         <label> اجمالى العام </label>
-                                                        <input readonly type="text" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->total)}}" id="total_all" name="total"
+                                                        <input readonly type="number" value="{{$inv->total}}" id="total_all" name="total"
                                                             class="form-control">
                                                     </div>
                                                 </div>
@@ -238,7 +238,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <input type="hidden" id="taxVal" value="{{ $tax->value }}" style="">
+                            <input type="hidden" id="taxVal" value="{{ $tax->value_name }}" style="">
                             <!-- End -->
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-primary">حفظ</button>
@@ -530,8 +530,9 @@
 
                     $('#example5 > tbody > tr').each(function() {
                         var row_num = $(this).attr('data-id');
+console.log(row_num)
                         total += parseFloat($('#total' + row_num).val());
-                        tax += parseFloat($('#total' + row_num).val() * $taxVal);
+                        tax += parseFloat(($('#total' + row_num).val()) * $taxVal);
 
 
                         --index;
@@ -539,7 +540,7 @@
 
 
                     $('#total_items_price').val(total.toFixed(2));
-                    console.log(tax);
+                    console.log(total);
                     if ($('input[type=checkbox][name=taxable]').is(':checked')) {
                         console.log("checked");
                         $('#total_tax').val(tax.toFixed(2));

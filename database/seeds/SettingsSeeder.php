@@ -15,7 +15,6 @@ class SettingsSeeder extends Seeder
         DB::table('settings')->insert([
             'key' =>'tax_value',
             'value' => 0.14,
-
         ]);
     }
 }

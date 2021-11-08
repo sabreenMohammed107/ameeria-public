@@ -6,11 +6,12 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">وحدات القياس</h3>
+                <h3 class="card-title">وحدات القياس (<a href="https://sdk.invoicing.eta.gov.eg/codes/unit-types/" target="_blank">للإطلاع على الكود العالمي</a>)</h3>
+
                 <h3 class="card-title float-sm-left">
                     @can('units-create')
                     <button class="btn btn-success" data-toggle="modal" data-target="#add">إضافة</button></h3>
-          @endcan
+                     @endcan
                 </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -20,7 +21,7 @@
                             <th>#</th>
                             <th>الكود</th>
                             <th>وحده القياس</th>
-
+                            <th>الكود العالمي</th>
                             <th>خيارات</th>
                         </tr>
                     </thead>
@@ -31,6 +32,7 @@
 
                             <th>{{ $unit->code}} </th>
                             <th>{{ $unit->name}}</th>
+                            <th>{{ $unit->standard_code}}</th>
 
 
                             <th>
@@ -71,7 +73,10 @@
                                         <label class="">اسم الوحده</label>
                                         <input name="name" type="text" required value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($unit->name)}}" class="form-control" placeholder="الاسم">
                                     </div>
-
+                                    <div class="form-group">
+                                        <label class="">الكود العالمي</label>
+                                        <input name="standard_code" type="text" required value="{{$unit->standard_code}}" class="form-control" placeholder="الكود العالمي">
+                                    </div>
 
                                 </div>
                             </div>
@@ -141,8 +146,7 @@
               </button>
             </div>
             <div class="modal-body">
-
-
+                <p><a href="https://sdk.invoicing.eta.gov.eg/codes/unit-types/" target="_blank">للإطلاع على الكود العالمي</a></p>
                 <div class="message-content" style="text-align:right;">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
@@ -159,7 +163,10 @@
                                         <label class="">اسم الوحده</label>
                                         <input name="name" required type="text" value="{{old('name') }}" class="form-control" placeholder="الاسم">
                                     </div>
-
+                                    <div class="form-group">
+                                        <label class="">الكود العالمي</label>
+                                        <input name="standard_code" type="text" required value="{{ old('standard_code') }}" class="form-control" placeholder="الكود العالمي">
+                                    </div>
 
                                 </div>
                             </div>

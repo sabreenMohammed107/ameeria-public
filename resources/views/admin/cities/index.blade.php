@@ -6,12 +6,13 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title"> المدن</h3>
+                <h3 class="card-title"> المدن (<a href="https://sdk.invoicing.eta.gov.eg/codes/countries/" target="_blank">للإطلاع على الكود العالمي</a>)</h3>
                 <h3 class="card-title float-sm-left">
                     @can('cities-create')
                     <button class="btn btn-success" data-toggle="modal" data-target="#add">إضافة</button></h3>
           @endcan
                 </div>
+
             <!-- /.card-header -->
             <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped arabic">
@@ -20,7 +21,7 @@
                             <th>#</th>
                             <th>الكود</th>
                             <th> الاسم</th>
-
+                            <th>الكود العالمي</th>
                             <th>خيارات</th>
                         </tr>
                     </thead>
@@ -31,6 +32,7 @@
 
                             <th>{{ $row->code}} </th>
                             <th>{{ $row->name}}</th>
+                            <th>{{ $row->standard_code}}</th>
 
                             <th>
                                 @can('cities-edit')
@@ -69,6 +71,10 @@
                                     <div class="form-group">
                                         <label class="">اسم المدينة</label>
                                         <input name="name" required value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($row->name)}}" type="text" class="form-control" placeholder="الاسم">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="">الكود العالمي</label>
+                                        <input name="standard_code" type="text" required value="{{$row->standard_code}}" class="form-control" placeholder="الكود العالمي">
                                     </div>
 
                                 </div>
@@ -141,7 +147,7 @@
               </button>
             </div>
             <div class="modal-body">
-
+                <p><a href="https://sdk.invoicing.eta.gov.eg/codes/countries/" target="_blank">للإطلاع على الكود العالمي</a></p>
 
                 <div class="message-content" style="text-align:right;">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -158,6 +164,10 @@
                                     <div class="form-group">
                                         <label class="">اسم المدينة</label>
                                         <input name="name" type="text" required value="{{old('name') }}" class="form-control" placeholder="الاسم">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="">الكود العالمي</label>
+                                        <input name="standard_code" type="text" required value="{{ old('standard_code') }}" class="form-control" placeholder="الكود العالمي">
                                     </div>
 
                                 </div>

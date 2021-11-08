@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\LogsActivity;
+
 class Setting extends Model
 {
     use SoftDeletes, LogsActivity;
@@ -15,7 +16,7 @@ class Setting extends Model
      * @var array
      */
     protected $fillable = [
-        'key', 'value'
+        'key_name', 'value_name'
     ];
 
     /**

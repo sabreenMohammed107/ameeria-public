@@ -59,7 +59,7 @@ class InvoiceController extends Controller
         $rowCount = 1;
         $items = Item::all();
         $exchanges = Unit::all();
-        $tax=Setting::where('key','tax_value')->first();
+        $tax=Setting::where('key_name','tax_value')->first();
         return view($this->viewName . 'add', compact('invoiceType','tax', 'rowCount', 'items', 'exchanges'));
     }
 
@@ -201,7 +201,7 @@ $this->validate($request, [
 
        $items = Item::all();
        $exchanges = Unit::all();
-       $tax=Setting::where('key','tax_value')->first();
+       $tax=Setting::where('key_name','tax_value')->first();
        $invItems=InvoiceItem::where('invoice_id','=',$id)->get();
        return view($this->viewName . 'edit', compact('invItems','inv','invoiceType','tax',  'items', 'exchanges'));
     }
@@ -364,7 +364,7 @@ $this->validate($request, [
 
 
         try {
-            $row->item()->delete();
+            $row->items()->delete();
             $row->delete();
             return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم الحذف بنجاح !');
 
@@ -432,7 +432,7 @@ $this->validate($request, [
             $obo = InvoiceItem::where('id', $req->id)->first();
 
             $invoiceData = Invoice::where('id', $obo->invoice_id)->first();
-            $tax=Setting::where('key','tax_value')->first();
+            $tax=Setting::where('key_name','tax_value')->first();
             $ss = [
                 'subtotal' => $invoiceData->subtotal - $obo->total,
                 'tax' =>($invoiceData->subtotal - $obo->total) * $tax->value,

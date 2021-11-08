@@ -61,10 +61,11 @@ class CitiesController extends Controller
         $this->validate($request, [
             'code' => 'required',
             'name' => 'required',
+            'standard_code' => 'required',
         ],[
             'name.required' => 'حقل الاسم مطلوب',
-
             'code.required' => 'حقل الكود مطلوب',
+            'standard_code.required' => 'حقل الكود العالمي مطلوب',
         ]);
 
         try
@@ -111,10 +112,11 @@ class CitiesController extends Controller
         $this->validate($request, [
             'code' => 'required',
             'name' => 'required',
+            'standard_code' => 'required',
         ],[
             'name.required' => 'حقل الاسم مطلوب',
-
             'code.required' => 'حقل الكود مطلوب',
+            'standard_code.required' => 'حقل الكود العالمي مطلوب',
         ]);
 
         try

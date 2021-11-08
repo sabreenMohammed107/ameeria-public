@@ -1,6 +1,6 @@
 
 <div class="form-group">
-    <input type="text" class="form-control" oninput="search()" name="search-name" id="search_name"
+    <input type="text" class="form-control" onchange="search()" name="search-name" id="search_name"
         placeholder="ابحث هنا">
 </div>
 
