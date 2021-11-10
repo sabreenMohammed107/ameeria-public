@@ -26,8 +26,8 @@
                         <tr>
                             <th>{{ $index + 1 }}</th>
 
-                            <th>@if($vat->key=='tax_value')ضريبة القيمة المضافة @endif </th>
-                            <th>{{ $vat->value}} </th>
+                            <th>@if($vat->key_name=='tax_value') ضريبة القيمة المضافة @endif </th>
+                            <th>{{ $vat->value_name}} </th>
 
                             @can('settings-edit')
                             <th><button class="btn btn-info" data-toggle="modal" data-target="#add{{$vat->id}}"><i class="fas fa-edit text-white"></i></button></th>
