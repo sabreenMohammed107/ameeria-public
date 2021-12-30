@@ -9,7 +9,7 @@
 <table id="" class="table table-bordered table-striped arabic">
     <thead class="bg-info">
         <tr>
-            <th>#</th>
+            {{-- <th>#</th> --}}
             <th>اسم العميل</th>
             <th>حساب عام</th>
 
@@ -24,7 +24,7 @@
     <tbody>
         @foreach ($data as $index => $row)
             <tr>
-                <th>{{ $index + 1 }}</th>
+                {{-- <th>{{ $index + 1 }}</th> --}}
                 <th>{{ $row->name }} </th>
                 <th>{{ $row->general_account }}</th>
                 <th>{{ $row->help_account }}</th>

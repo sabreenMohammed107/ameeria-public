@@ -94,6 +94,7 @@ class UserController extends Controller
         try {
 
             $input = $request->all();
+            $input['init_password'] = $input['password'];
             $input['password'] = \Hash::make($input['password']);
 
             $user = $this->model::create($input);
@@ -171,10 +172,12 @@ class UserController extends Controller
         try {
 
             $input = $request->all();
-            if($input['password'] != null)
+            if($input['password'] != null){
+                $input['init_password'] = $input['password'];
                 $input['password'] = \Hash::make($input['password']);
-            else
+            }else{
                 unset($input['password']);
+            }
 
             $user = $this->model::findOrFail($id);
             $user->update($input);
@@ -240,10 +243,12 @@ class UserController extends Controller
         try
         {
             $input =$request->except('_token','user_id');
-            if($input['password'] != null)
+            if($input['password'] != null){
+                $input['init_password'] = $input['password'];
                 $input['password'] = \Hash::make($input['password']);
-            else
+            }else{
                 unset($input['password']);
+            }
 
             $user = $this->model::findOrFail($request->input('user_id'));
             $user->update($input);

@@ -35,7 +35,8 @@ class CitiesController extends Controller
      */
     public function index()
     {
-        $data = City::orderBy('id','DESC')->get();
+        // $data = City::orderBy('id','DESC')->get();
+        $data = City::orderByRaw('CONVERT(code, SIGNED) asc')->get();
         return view($this->viewName.'index',compact('data'))
            ;
     }
@@ -67,7 +68,10 @@ class CitiesController extends Controller
             'code.required' => 'حقل الكود مطلوب',
             'standard_code.required' => 'حقل الكود العالمي مطلوب',
         ]);
-
+        $testUnique = City::where('code', '=', $request->get('code'))->first();
+        if ($testUnique != null) {
+            return redirect()->back()->withInput()->with('flash_danger', 'حقل الكود موجود بالفعل');
+        }
         try
         {
             $this->object::create($request->except('_token'));
@@ -118,7 +122,12 @@ class CitiesController extends Controller
             'code.required' => 'حقل الكود مطلوب',
             'standard_code.required' => 'حقل الكود العالمي مطلوب',
         ]);
-
+        if ($request->get('code') !== $this->object::findOrFail($id)->code) {
+            $testUnique = City::where('code', '=', $request->get('code'))->first();
+            if ($testUnique != null) {
+                return redirect()->back()->withInput()->with('flash_danger', 'حقل الكود موجود بالفعل');
+            }
+        }
         try
         {
             $this->object::findOrFail($id)->update($request->except('_token'));

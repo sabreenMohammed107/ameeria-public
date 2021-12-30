@@ -18,7 +18,9 @@ class Invoice extends Model
     protected $cascadeDeletes = ['items'];
     protected $fillable = [
         'invoice_no',
+        'e_invoice_type',
         'date',
+        'relay_date',
         'client_id',
         'type_id',
         'user_type',

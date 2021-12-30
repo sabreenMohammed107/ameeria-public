@@ -26,7 +26,7 @@
                         <tr>
                             <th>{{ $index + 1 }}</th>
 
-                            <th>@if($vat->key_name=='tax_value') ضريبة القيمة المضافة @endif </th>
+                            <th>@if($vat->key_name=='tax_value')ضريبة القيمة المضافة @endif </th>
                             <th>{{ $vat->value_name}} </th>
 
                             @can('settings-edit')
@@ -56,12 +56,12 @@
 
                                         <div class="form-group">
                                             <label class="">الاسم</label>
-                                            <input name="key" readonly value="@if($vat->key=='tax_value')ضريبة القيمة المضافة @endif " type="text" class="form-control" placeholder="القيمه">
+                                            <input name="key_name" readonly value="@if($vat->key_name=='tax_value')ضريبة القيمة المضافة @endif " type="text" class="form-control" placeholder="القيمه">
                                         </div>
 
                                         <div class="form-group">
                                             <label class="">القيمه</label>
-                                            <input name="value" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($vat->value)}}" required type="text" class="form-control" placeholder="القيمه">
+                                            <input name="value_name" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($vat->value_name)}}" required type="text" class="form-control" placeholder="القيمه">
                                         </div>
 
                                     </div>

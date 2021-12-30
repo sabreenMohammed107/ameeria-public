@@ -33,7 +33,8 @@ class UnitsController extends Controller
      */
     public function index()
     {
-        $data = Unit::orderBy('id','DESC')->get();
+        // $data = Unit::orderBy('id','DESC')->get();
+        $data = Unit::orderByRaw('CONVERT(code, SIGNED) asc')->get();
         return view($this->viewName.'index',compact('data'));
     }
 
@@ -64,7 +65,10 @@ class UnitsController extends Controller
             'code.required' => 'حقل الكود مطلوب',
             'standard_code.required' => 'حقل الكود العالمي مطلوب',
         ]);
-
+        $testUnique = Unit::where('code', '=', $request->get('code'))->first();
+        if ($testUnique != null) {
+            return redirect()->back()->withInput()->with('flash_danger', 'حقل الكود موجود بالفعل');
+        }
         try
         {
             $this->object::create($request->except('_token'));
@@ -116,7 +120,12 @@ class UnitsController extends Controller
             'code.required' => 'حقل الكود مطلوب',
             'standard_code.required' => 'حقل الكود العالمي مطلوب',
         ]);
-
+        if ($request->get('code') !== $this->object::findOrFail($id)->code) {
+            $testUnique = Unit::where('code', '=', $request->get('code'))->first();
+            if ($testUnique != null) {
+                return redirect()->back()->withInput()->with('flash_danger', 'حقل الكود موجود بالفعل');
+            }
+        }
         try
         {
             $this->object::findOrFail($id)->update($request->except('_token'));

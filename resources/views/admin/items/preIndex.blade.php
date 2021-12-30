@@ -7,7 +7,7 @@
 <table id="" class="table table-bordered table-striped arabic">
     <thead class="bg-info">
         <tr>
-            <th>#</th>
+            {{-- <th>#</th> --}}
             <th>كود الصنف</th>
             <th>اسم الصنف </th>
             <th>وحده الصرف </th>
@@ -22,7 +22,7 @@
         @foreach ($data as $index => $row)
             <tr>
                 {{-- Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($row->code) --}}
-                <th>{{ $index + 1 }}</th>
+                {{-- <th>{{ $index + 1 }}</th> --}}
                 <th>{{ $row->code }}</th>
                 <th>{{ $row->name }}</th>
                 <th>{{ $row->exchange->name ?? '' }}</th>

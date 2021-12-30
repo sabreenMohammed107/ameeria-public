@@ -35,7 +35,8 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $data = Client::orderBy('id','DESC')->paginate(200);
+        // $data = Client::orderBy('id','DESC')->paginate(200);
+        $data = Client::orderByRaw('CONVERT(general_account, SIGNED) asc')->paginate(200);
         return view($this->viewName.'index',compact('data'))
            ;
     }
@@ -47,7 +48,7 @@ class ClientController extends Controller
      */
     public function create()
     {
-        $cities = City::orderBy('id','DESC')->get();
+        $cities = City::orderBy('code','asc')->get();
 
         return view($this->viewName.'add',compact('cities'));
     }
@@ -121,7 +122,7 @@ if($testUnique!=null){
     public function edit($id)
     {
         $row=Client::where('id',$id)->first();
-        $cities = City::orderBy('id','DESC')->get();
+        $cities = City::orderBy('code','asc')->get();
 
         return view($this->viewName.'edit',compact('cities','row'));
     }

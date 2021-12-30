@@ -13,8 +13,8 @@ class SettingsSeeder extends Seeder
     public function run()
     {
         DB::table('settings')->insert([
-            'key' =>'tax_value',
-            'value' => 0.14,
+            'key_name' =>'tax_value',
+            'value_name' => 0.14,
         ]);
     }
 }

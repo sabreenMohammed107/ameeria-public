@@ -18,7 +18,7 @@
                 <table id="example1" class="table table-bordered table-striped arabic">
                     <thead class="bg-info">
                         <tr>
-                            <th>#</th>
+                            {{-- <th>#</th> --}}
                             <th>الكود</th>
                             <th>وحده القياس</th>
                             <th>الكود العالمي</th>
@@ -28,7 +28,7 @@
                     <tbody>
                         @foreach ($data as $index=>$unit)
                         <tr>
-                            <th>{{ $index + 1 }}</th>
+                            {{-- <th>{{ $index + 1 }}</th> --}}
 
                             <th>{{ $unit->code}} </th>
                             <th>{{ $unit->name}}</th>

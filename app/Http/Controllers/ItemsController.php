@@ -35,7 +35,9 @@ class ItemsController extends Controller
      */
     public function index()
     {
-        $data = Item::orderBy('id', 'DESC')->paginate(200);
+        // $data = Item::orderBy('id', 'DESC')->paginate(200);
+        $data = Item::orderByRaw('CONVERT(code, SIGNED) asc')->paginate(200);
+        // orderByRaw('CONVERT(code, SIGNED) desc')->get();
         return view($this->viewName . 'index', compact('data'))
         ;
     }
@@ -90,7 +92,9 @@ class ItemsController extends Controller
             return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
 
         } catch (\Exception $e) {
-            return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ فى ادخال البيانات قم بمراجعتها مرة اخرى');
+            return redirect()->back()->withInput()->with('flash_danger', $e->getMessage());
+
+            // return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ فى ادخال البيانات قم بمراجعتها مرة اخرى');
         }
 
     }

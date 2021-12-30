@@ -58,10 +58,10 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for=""> المحافظة<span style="color: red">*</span> </label>
-                                    <select class="custom-select" id="city_id" name="city_id">
+                                    <select class="js-example-basic-single" id="city_id" name="city_id" style="width: 100%" >
                                         <option value="">اختر</option>
                                         @foreach($cities as $data)
-                                        <option value="{{$data->id}}" {{ ( $data->id == $row->city_id) ? 'selected' : '' }}>{{$data->name}} </option>
+                                        <option value="{{$data->id}}" {{ ( $data->id == $row->city_id) ? 'selected' : '' }}>{{$data->code}} / {{$data->name}} </option>
 
                                         @endforeach
                                     </select>
@@ -118,6 +118,7 @@
                     <!-- /.card-body -->
                     <div class="card-footer">
                         <button type="submit" class="btn btn-primary">حفظ</button>
+                        <a href="{{route('clients.index')}}" class="btn btn-danger">إلغاء</a>
                     </div>
                 </form>
             </div>
@@ -125,4 +126,17 @@
         </div>
     </div>
     <!-- /.col -->
+@endsection
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#city_id').select2();
+
+
+
+
+});
+</script>
+
 @endsection

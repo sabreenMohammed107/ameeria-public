@@ -19,6 +19,18 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 shadow mg-b-15">
                                 <div class="card-body">
                                     <div class="row">
+                                   <div class="col-sm-12">
+                                   <div class="form-group">
+     <label >
+                        <input type="radio" id="smt-fld-1-2" name="e_invoice_type" checked value="I"  class="mx-2">جديد</label>
+                    <label >
+                        <input type="radio" id="smt-fld-1-3" name="e_invoice_type" value="C" class="mx-2">دائن</label>
+                         <label >
+                        <input type="radio" id="smt-fld-1-2" name="e_invoice_type"  value="D" class="mx-2">مدين</label>
+  </div>
+                                   </div>
+
+
                                         <div class="col-sm-2">
                                             <div class="form-group">
                                                 <label> رقم الفاتورة</label>
@@ -106,7 +118,14 @@
                                                             class="form-control">
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3 col-sm-6">
+                                                <div class="col-md-2 col-sm-6">
+                                                    <div class="form-group">
+                                                        <label>رقم التسجيل </label>
+                                                        <input readonly value="{{old('commericalRegister')}}" name="commericalRegister" id="commericalRegister" type="text"
+                                                            class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 col-sm-6">
                                                     <div class="form-group">
                                                         <label>سجل تجاري </label>
                                                         <input readonly value="{{old('clientcommerical')}}" name="clientcommerical" id="clientcommerical" type="text"
@@ -238,7 +257,7 @@
                             <!-- End -->
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-primary">حفظ</button>
-                                <a href="" class="btn btn-secondary">رجوع</a>
+                                <a href="{{route('invoices.index')}}" class="btn btn-danger">إلغاء</a>
                             </div>
                     </form>
                 </div>
@@ -434,11 +453,18 @@ var select_value = $('#itemCode' + index).val();
                         $("#ar_name" + index + "").text(result[0]);
                         $("#desc" + index + "").val(result[1]).css('color','#495057');
                         $("#ex_code" + index + "").val(result[2]);
+                        $("#itemprice" + index + "").val(result[3]);
+                        var select_type = $('#invoice_type option:selected').val();
+                        var price=0;
+                        if(select_type ==1 || select_type==2){
+                            price=0;
+                        }else{
+                            price = $("#itemprice" + index + "").val();
+                        }
 
-                        var price = $("#itemprice" + index + "").val();
                 var qty = $("#qty" + index + "").val();
                 if ($("#ex_code" + index + "").val() == 12) {
-                    $("#total" + index + "").attr('value', (((price * qty) / 1000).toFixed(3)));
+                    $("#total" + index + "").attr('value', (((price * qty) ).toFixed(3)));
 
                 } else {
                     $("#total" + index + "").attr('value', (((price * qty)).toFixed(3)));
@@ -452,6 +478,7 @@ var select_value = $('#itemCode' + index).val();
                         $("#desc" + index + "").val('ادخل الكود الصحيح').css('color','red');
                         $("#ar_name" + index + "").text(' ');
                         $("#ex_code" + index + "").val(' ');
+                        $("#itemprice" + index + "").val(' ');
 
                     }
                 });
@@ -463,10 +490,17 @@ var select_value = $('#itemCode' + index).val();
             }
 
             function itemPrice(index) {
-                var price = $("#itemprice" + index + "").val();
+                var select_type = $('#invoice_type option:selected').val();
+                        var price=0;
+                        if(select_type ==1 || select_type==2){
+                            price=0;
+                        }else{
+                            price = $("#itemprice" + index + "").val();
+                        }
+
                 var qty = $("#qty" + index + "").val();
                 if ($("#ex_code" + index + "").val() == 12) {
-                    $("#total" + index + "").attr('value', (((price * qty) / 1000).toFixed(3)));
+                    $("#total" + index + "").attr('value', (((price * qty)).toFixed(3)));
 
                 } else {
                     $("#total" + index + "").attr('value', (((price * qty)).toFixed(3)));
@@ -479,10 +513,17 @@ var select_value = $('#itemCode' + index).val();
 
             function itemQty(index) {
 
-                var price = $("#itemprice" + index + "").val();
+                var select_type = $('#invoice_type option:selected').val();
+                        var price=0;
+                        if(select_type ==1 || select_type==2){
+                            price=0;
+                        }else{
+                            price = $("#itemprice" + index + "").val();
+                        }
+
                 var qty = $("#qty" + index + "").val();
                 if ($("#ex_code" + index + "").val() == 12) {
-                    $("#total" + index + "").attr('value', (((price * qty) / 1000).toFixed(3)));
+                    $("#total" + index + "").attr('value', (((price * qty) ).toFixed(3)));
 
                 } else {
                     $("#total" + index + "").attr('value', (((price * qty)).toFixed(3)));
@@ -585,6 +626,7 @@ var select_value = $('#itemCode' + index).val();
                         $("#clientName").val(result[0]);
                         $("#clientcommerical").val(result[1]);
                         $("#clientAddress").val(result[2]);
+                        $("#commericalRegister").val(result[4]);
 
 
                     },
@@ -592,6 +634,7 @@ var select_value = $('#itemCode' + index).val();
                         $("#clientName").val(' ');
                         $("#clientcommerical").val(' ');
                         $("#clientAddress").val(' ');
+                        $("#commericalRegister").val(' ');
 
                     }
                 });
@@ -622,6 +665,7 @@ var select_value = $('#itemCode' + index).val();
                         $("#clientcommerical").val(result[1]);
                         $("#clientAddress").val(result[2]);
                         $("#client_id").val(result[3]);
+                        $("#commericalRegister").val(result[4]);
 
 
                     },
@@ -629,6 +673,7 @@ var select_value = $('#itemCode' + index).val();
                         $("#clientName").val(' ');
                         $("#clientcommerical").val(' ');
                         $("#clientAddress").val(' ');
+                        $("#commericalRegister").val(' ');
 
 
                     }

@@ -14,7 +14,8 @@ use Illuminate\Http\Request;
 use Log;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
-use PDF;
+use Meneses\LaravelMpdf\Facades\LaravelMpdf as PDF;
+use Auth;
 class InvoiceController extends Controller
 {
     protected $object;
@@ -91,10 +92,20 @@ class InvoiceController extends Controller
 
 
             ];
-            if (!empty($request->get('itemprice' . $i))) {
-                $detail['price'] = $request->get('itemprice' . $i);
-            }else{
-                $detail['price'] =null;
+
+            if($request->get('type_id') ==1 || $request->get('type_id')==2){
+                $detail['price'] =$request->get('total' . $i) / $request->get('qty' . $i);
+
+            }
+            else{
+                if (!empty($request->get('itemprice' . $i)) ) {
+                    // if (!empty($request->get('itemprice' . $i))) {
+                        $detail['price'] = $request->get('itemprice' . $i);
+
+                    }else{
+                        $detail['price'] =0;
+
+                    }
             }
             if (!empty($request->get('opPermission' . $i))) {
                 $detail['op_permission_no'] = $request->get('opPermission' . $i);
@@ -112,6 +123,7 @@ class InvoiceController extends Controller
         //master
         $data = [
             'invoice_no' =>  $request->get('invoice_no'),
+            'e_invoice_type'=> $request->get('e_invoice_type'),
             'date' =>Carbon::parse($request->get('date')),
             'client_id' => $request->get('client_id'),
             'type_id' =>  $request->get('type_id'),
@@ -153,6 +165,10 @@ $this->validate($request, [
     'type_id.required' => 'حقل نوع الفاتورة مطلوب',
 
 ]);
+$testUnique = Invoice::where('invoice_no', '=', $request->get('invoice_no'))->first();
+if ($testUnique != null) {
+    return redirect()->back()->withInput()->with('flash_danger', 'حقل رقم الفاتورة موجود بالفعل');
+}
         DB::beginTransaction();
         try {
             // Disable foreign key checks!
@@ -185,7 +201,49 @@ $this->validate($request, [
      */
     public function show($id)
     {
-        //
+        $data = Invoice::orderBy('id', 'DESC')->paginate(200);
+        $inv=Invoice::where('id','=',$id)->first();
+        $invoiceType = InvoiceType::all();
+
+        $items = Item::all();
+        $exchanges = Unit::all();
+        $tax=Setting::where('key_name','tax_value')->first();
+        $invItems=InvoiceItem::where('invoice_id','=',$id)->get();
+
+
+        $invoice = Invoice::orderBy('id', 'DESC');
+        // if (!empty($request->get("from"))) {
+        //     $invoice->where('date', '>=', Carbon::parse($request->get("from")));
+        // }
+        // if (!empty($request->get("to"))) {
+        //     $invoice->where('date', '<=', Carbon::parse($request->get("to")));
+        // }
+        // if (!empty($request->get("type_id"))) {
+        //     $invoice->where('type_id', '=', $request->get("type_id"));
+        // }
+        $invoices = $invoice->get();
+
+        $data = [
+            'Title' =>'كل الفواتير',
+            'invoices' => $invoices,
+
+            'from_date' => '15/10/2021',
+            'to_date' => '15/10/2021',
+            'Today' => date('Y-m-d'),
+            'Logo'  =>  'logo',
+            'Company' => 'مطابع الأميرية',
+            'User'  =>  Auth::user(),
+            'clients' => 'عميل',
+            'invItems'=>$invItems,
+            'inv'=>$inv,
+            'invoiceType'=>$invoiceType,
+            'tax'=>$tax,
+            'items'=>$items,
+            'exchanges'=>$exchanges,
+
+        ];
+        $pdf = PDF::loadView('admin.invoices.report', $data);
+		return $pdf->stream('document.pdf');
     }
 
     /**
@@ -236,10 +294,17 @@ $this->validate($request, [
             }else{
                 $detail['op_permission_no'] =null;
             }
-            if (!empty($request->get('itemprice' . $i))) {
-                $detail['price'] = $request->get('itemprice' . $i);
-            }else{
-                $detail['price'] =null;
+            if($this->object::findOrFail($id)->type_id ==1 || $this->object::findOrFail($id)->type_id==2){
+                $detail['price'] = $request->get('total' . $i) / $request->get('qty' . $i);
+
+            }
+            else{
+                if (!empty($request->get('itemprice' . $i)) ) {
+                    // if (!empty($request->get('itemprice' . $i))) {
+                        $detail['price'] = $request->get('itemprice' . $i);
+                    }else{
+                        $detail['price'] =0;
+                    }
             }
             if ( $items) {
                 $detail['item_id'] = $items->id;
@@ -267,12 +332,19 @@ $this->validate($request, [
                 'total' => $request->get('uptotal' . $i),
                 'note' => $request->get('detNote'. $i),
             ];
-            if (!empty($request->get('upitemprice' . $i))) {
-                $detail['price'] = $request->get('upitemprice' . $i);
+            if($this->object::findOrFail($id)->type_id ==1 || $this->object::findOrFail($id)->type_id==2){
+                $detailUpdate['price'] = $request->get('uptotal' . $i) / $request->get('upqty' . $i);
+
             }else{
-                $detail['price'] =null;
+                if (!empty($request->get('upitemprice' . $i)) ) {
+                    // if (!empty($request->get('itemprice' . $i))) {
+                        $detailUpdate['price'] = $request->get('upitemprice' . $i);
+                    }else{
+                        $detailUpdate['price'] =0;
+                    }
             }
-            if (!empty($request->get('opPermission' . $i))) {
+
+            if (!empty($request->get('upopPermission' . $i))) {
                 $detailUpdate['op_permission_no'] = $request->get('upopPermission' . $i);
             }else{
                 $detailUpdate['op_permission_no'] =null;
@@ -283,6 +355,7 @@ $this->validate($request, [
 
         $data = [
             'invoice_no' =>  $request->get('invoice_no'),
+            'e_invoice_type'=> $request->get('e_invoice_type'),
             'date' =>Carbon::parse($request->get('date')),
             // 'client_id' => $request->get('client_id'),
 
@@ -291,7 +364,7 @@ $this->validate($request, [
             'subtotal' => $request->get('subtotal'),
             'tax'=>$request->get('tax'),
             'total'=>$request->get('total'),
-
+            'status' => $request->get('status'),
             'notes' => $request->get('notes'),
             'user_type'=>1,
 
@@ -323,6 +396,12 @@ $this->validate($request, [
 
 
 ]);
+if ($request->get('invoice_no') !== $this->object::findOrFail($id)->invoice_no) {
+    $testUnique = Invoice::where('invoice_no', '=', $request->get('invoice_no'))->first();
+    if ($testUnique != null) {
+        return redirect()->back()->withInput()->with('flash_danger', 'حقل رقم الفاتورة موجود بالفعل');
+    }
+}
         DB::beginTransaction();
         try {
 
@@ -364,8 +443,8 @@ $this->validate($request, [
 
 
         try {
-            $row->items()->delete();
-            $row->delete();
+            $row->items()->forceDelete();
+            $row->forceDelete();
             return redirect()->route($this->routeName . 'index')->with('flash_success', 'تم الحذف بنجاح !');
 
         } catch (QueryException $q) {
@@ -407,8 +486,15 @@ $this->validate($request, [
             $out = [];
 
             $items = Item::where('code', $select_value)->first();
+            $result3=0;
+            if($items->exchange->code==12){
+$result3=$items->selling_price/1000;
+            }else{
+                $result3=$items->selling_price;
 
-            echo json_encode(array($items->code, $items->name ?? '',$items->exchange->code ?? ''));
+            }
+
+            echo json_encode(array($items->code, $items->name ?? '',$items->exchange->code ?? '',$result3));
         }
     }
 
@@ -423,7 +509,7 @@ $this->validate($request, [
             $general_value = $req->general_value;
             $help_value = $req->help_value;
             $client = Client::where('general_account', $general_value)->where('help_account', $help_value)->first();
-            echo json_encode(array($client->name, $client->commercial_register ?? '', $client->address,$client->id));
+            echo json_encode(array($client->name, $client->commercial_register ?? '', $client->address,$client->id,$client->tax_registration ?? ''));
         }
     }
     public function DeleteOrderItem(Request $req){

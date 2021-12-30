@@ -10,6 +10,7 @@
             <th>اسم العميل</th>
             <th>إجمالى صافى </th>
             <th>تعديل</th>
+            {{-- <th>تقرير</th> --}}
             <th>حذف</th>
         </tr>
     </thead>
@@ -20,8 +21,9 @@
                 <th>{{ $row->invoice_no }}</th>
                 <th>{{ date('Y-m-d', strtotime($row->date)) }} </th>
                 <th>{{ $row->type->name ?? '' }}</th>
-                <th>@if ($row->status == 1) تم الترحيل @else لم يتم الترحيل @endif</th>
-
+                <td>@if($row->status==1) تم الترحيل @elseif ($row->status==0) لم يتم الترحيل
+                    @elseif ($row->status==2)تم إلغاء الترحيل
+                @endif</td>
                 <th> {{ $row->client->name ?? '' }}</th>
                 <th>{{ $row->total }}</th>
                 <th>
@@ -31,9 +33,16 @@
 
                             @endcan
                 </th>
+                {{-- <th>
+                    @can('invoices-edit')
+                    <a href="{{ route('invoices.show', $row->id) }}" class="btn btn-success"><i
+                            class="fas fa-book"></i></a>
+
+                            @endcan
+                </th> --}}
                 <th>
                     @can('invoices-delete')
-                    <button type="button" class="btn btn-danger" data-toggle="modal"
+                    <button type="button" @if($row->status==1) disabled @endif class="btn btn-danger" data-toggle="modal"
                         data-target="#del{{ $row->id }}"><i class="fas fa-trash-alt"></i></button>
                         @endcan
                 </th>

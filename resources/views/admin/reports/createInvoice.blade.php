@@ -44,7 +44,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group mt-4">
                                         <button id="send_form" name="action" value="search"  class="btn btn-primary">بحث</button>
-                                        <button id="report_form" name="action" type="submit" value="report"  class="btn btn-primary">تقرير</button>
+                                        {{-- <button id="report_form" name="action" type="submit" value="report"  class="btn btn-primary">تقرير</button> --}}
 
                                     </div>
                                 </div>

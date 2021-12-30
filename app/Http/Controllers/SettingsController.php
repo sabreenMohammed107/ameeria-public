@@ -33,8 +33,7 @@ class SettingsController extends Controller
     public function index()
     {
         $data = Setting::orderBy('id','DESC')->get();
-        return view($this->viewName.'index',compact('data'))
-           ;
+        return view($this->viewName.'index',compact('data'));
     }
 
     /**
@@ -90,16 +89,16 @@ class SettingsController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'value' => 'required',
+            'value_name' => 'required',
 
         ],[
-            'value.required' => 'حقل القيمة مطلوب',
+            'value_name.required' => 'حقل القيمة مطلوب',
 
                     ]);
 
         try
         {
-            $this->object::findOrFail($id)->update($request->except('_token'));
+            $this->object::findOrFail($id)->update(['value_name'=>$request->get('value_name')]);
         return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
 
         } catch (\Exception $e){

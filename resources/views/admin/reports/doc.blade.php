@@ -1,239 +1,357 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>الفواتير</title>
+    <title>Document</title>
     <style>
-@page {
-	header: page-header;
-    footer: page-footer;
-    margin-top: 100px;
-}
-html,body,.body{
-    box-sizing: border-box;
-}
-.body-page{
-    padding: 15px 0 0;
-    direction: ltr;
-    /* background: #ddd; */
-    width: 100%;
-}
-.dir-rtl{
-	direction:rtl !important;
-}
-.dir-ltr{
-	direction:ltr !important;
-}
-.float-r{
-	float:right !important;
-}
-.float-l{
-	float:left !important;
-}
-.header{
-    padding: 25px 10px;
-    width: 20%;
-    font-size: 10px;
-    text-align: center;
-    background: #021625;
-    color: #fff;
-    float: left;
-}
-.footer{
-    padding: 5px 10px;
-    width: 20%;
-    font-size: 10px;
-    text-align: center;
-    background: #021625;
-    color: #fff;
-}
-.report-header{
-    float: right;
-    width: 40%;
-    display: inline-block;
-}
-.date{
-    float: right;
-    padding: 10px;
-    width: 40%;
-    font-size: 12px;
-    text-align: center;
-}
-.image{
-    width: 100%;
-    text-align: center;
-    clear: both;
-    padding: 5px 50px 30px 10px;
+        @page {
+           margin-top: 320px;
+            margin-bottom: 100px;
 
-    /* background: #021625; */
-}
-.company{
-    width: 100%;
-    /* background: #255; */
-}
-.name{
-    background-color: #cecece;
-    padding: 10px;
-    margin: 10px;
-    width: 95px;
-    font-size: 12px;
-    float: right;
-}
-.off_name{
-    padding: 10 20px;
-    float: right;
-    width: 180px;
-}
-.rep_name{
-    padding: 10px;
-    display: inline-block;
-    width: 200px;
-    float: left;
-    font-size: 12px;
-    text-align: center;
-    margin: 10px auto;
-    background: #021625;
-    color: #fff;
-    clear: both;
-}
-.right{
-    margin: 250px 0;
-}
-.right, .left{
-    float: right;
-    width:50%;
-}
-h1{
-  font-size: 30px;
-  color: #333;
-  text-transform: uppercase;
-  font-weight: 300;
-  text-align: center;
-  margin-bottom: 15px;
-}
+        }
+
+        .footer {
+            font-size: 12px;
+            padding: 5px 10px;
+
+            width: 70%;
+            margin: auto;
+            text-align: center;
+            margin-top: 40px
+        }
+
+        header {
+            position: fixed;
+
+            top: -320px;
+
+            height: 320px;
+
+        }
+
+        footer {
+            position: fixed;
+            bottom: -80px;
+            left: 0px;
+            right: 0px;
+            height: 100px;
+        }
 
 
-/* Default Table Style */
-tbody tr{
-    background: #fff;
-}
-thead tr th{
-    font-weight: 100;
-    font-size: 12px;
-    padding: 10px;
-}
-tbody tr td{
-    color: #222 !important;
-    font-size: 12px;
-    font-size: 12px;
-    text-align: center;
-}
-section{
-  margin: 80px 0;
-}
+        html,
+        body,
+        .body {
+            box-sizing: border-box;
 
+        }
 
+        .body-page {
+            /* padding: 35px 0 0; */
 
+            width: 100%;
+        }
 
+        .container {
+            width: 90%;
+            margin: auto;
+
+        }
+
+        span {
+            color: grey;
+        }
+
+        .headerr,
+        .hero {
+            /* margin-top: 10px; */
+            width: 100%;
+
+        }
+
+        .headerr {
+            margin-top: 0;
+
+        }
+
+        .headerr .logo,
+        .headerr .logo2 {
+            width: 70%;
+            float: left;
+        }
+
+        .headerr .logo-name {
+            width: 30%;
+            float: left;
+            /* text-align: center; */
+        }
+
+        .logo img {
+            width: 30%;
+        }
+
+        .headerr .logo-date {
+            width: 30%;
+            float: right;
+            /* text-align: center; */
+        }
+
+        .hero .logo2 {
+            width: 70%;
+            float: left;
+        }
+
+        .hero-data {
+            width: 60%;
+            float: left;
+        }
+
+        .hero .logo-date {
+            width: 30%;
+            float: left;
+            /* text-align: center; */
+            /* margin-left: -23px; */
+            /* background: #ccc; */
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        td {
+            text-align: center;
+            color: #333;
+            border-bottom: 1px solid #ccc;
+            border-width: thin;
+            padding: 20px 0;
+
+        }
+
+        #table td {
+            border-bottom: none;
+            padding: 0 !important;
+            margin: 0;
+        }
+
+        td p {
+            padding: 5px !important;
+            margin: 0;
+        }
 
 
     </style>
 </head>
+
 <body>
-    <hr>
-    <div class="body">
-        <span>
-            <div class="body-page">
-                <htmlpageheader name="page-header">
-                    <div class="header">
-                        <span>رقم الصفحة : {PAGENO} / {nbpg}</span>
-                    </div>
-                    <div class="report-header">
 
-                        <span>
-                            <img height="80" dir="ltr" style="text-align: left;" src="{{ public_path('webassets/dist/img/download.jpg')}}" />
-                            <div class="date">
-                                <span>التاريخ : {{$Today}}</span>
-                            </div>
-                            <div class="date">
-                                <span dir="rtl">اسم المستخدم : {{$User->user_name}}</span>
-                            </div>
-                        </span>
+    <header>
+        <div class="container">
 
-                    </div>
-                    <br>
-                    {{-- <div class="image" dir="rtl">
-                        <span><img height="80" style="text-align: right;" src="{{ public_path('webassets/dist/img/download.jpg')}}" /></span>
-                    </div> --}}
-                    <div class="rep_name">
-                        <span>{{$Title}}</span>
-                    </div><br><br>
-                    {{-- <div dir="rtl" class="company">
-                        <span>
-                            <div class="name">
-                                <span> :</span>
-                            </div>
-                            <div class="off_name">
-                                <span>
-                                {{$Company->company_official_name ?? 'مطابع الأميرية'}}
-                                </span>
-                            </div>
-                        </span>
-                    </div> --}}
+            <div class="headerr">
 
-                </htmlpageheader>
-
-                <htmlpagefooter name="page-footer">
-                    <div class="footer">
-                        <span>{{$Title}}</span>
-                    </div>
-                </htmlpagefooter>
+                <div class="logo">
+                    <img src="{{ public_path('webassets/dist/img/download.jpg')}}" alt="">
+                </div>
+                <div class="logo-name">
+                    <h1 style="font-size: 35px;">تقرير الفاتورة</h1>
+                </div>
+                <div style="clear: both;"></div>
             </div>
-        </span>
+            <hr>
+
+            <div class="headerr">
+                <div class="logo2">
+
+                </div>
+                <div class="logo-date">
+                    <?php $dateinvoice = date_create($invoice->date)
+                    ?>
+
+                    <p>Date : <span style="color: #333;">
+                            {{ date_format($dateinvoice,'Y-m-d') ?? '' }}
+                        </span></p>
+                    <p>Statement # : <span style="color: #333;">
+                            {{ $invoice->invoice_no }}
+                        </span></p>
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+
+            <hr>
+            <!-- next section -->
+            <div class="hero">
+                <div class="logo2">
+                    <!-- <div class="hero-data"> -->
+                    <p>To:<span style="color: #333;">{{$invoice->operation->sale->client->client_name ?? '' }}
+                            <br> {{$invoice->operation->sale->client->address ?? '' }}</span></p>
+                    <!-- </div> -->
+                </div>
+                <div class="logo-date">
+                    <p>
+                        @if($invoice->operation->ocean)
+                        Pol:
+                        @elseif($invoice->operation->air)
+                        Aol:
+                        @else
+
+                        @endif
+                        <span>{{$invoice->operation->ocean->ocean->pol->port_name ?? '' }}{{$invoice->operation->air->air->aol->port_name ?? '' }}</span>
+                    </p>
+                    <p> @if($invoice->operation->ocean)
+                        Pod:
+                        @elseif($invoice->operation->air)
+                        Aod:
+                        @else
+
+                        @endif
+                        <span>{{$invoice->operation->ocean->ocean->pod->port_name ?? '' }}{{$invoice->operation->air->air->aod->port_name ?? '' }}</span>
+                    </p>
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+        </div>
+
+    </header>
+    <footer>
+        <div class="container">
+        <div class="footer">
+            <p>Make all transfers and checks payable to <b>OVER SEAS EGYPT </b></p>
+            QNB EGP ACC # 00701-20317446147-53 | QNB USD ACC # 00701-20319927487-07<br>
+            <b> Thank you for your business ! </b></p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="container" >
+    <!-- table -->
+    <div class="hero" >
+        <table width="100%">
+            <thead style="border-bottom: 1px solid #ccc; background:#333;color:#fff">
+                <tr>
+                    <th>Ref#</th>
+                    <th>B/L#</th>
+                    <th>Volume</th>
+                    <th>Loding Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <td>{{$invoice->operation->operation_code}}</td>
+                <td>{{$invoice->operation->pl_no}}</td>
+                <td>{{$invoice->operation->container_counts }} @if($invoice->operation->ocean) <span>X</span> @endif {{$invoice->operation->ocean->ocean->container->container_size ?? ''}} {{ $invoice->operation->ocean->ocean->container->container_type ?? ''}}</td>
+                <td> <?php $dateinvoice = date_create($invoice->operation->loading_date)
+                        ?>
+                    {{ date_format($dateinvoice,'Y-m-d') ?? '' }}
+                </td>
+
+
+            </tbody>
+
+        </table>
     </div>
-    <section>
-        <!--for demo wrap-->
-        <h1></h1>
-        <div class="tbl-header">
-            <table dir="rtl" style="background-color: #021625;color: #fff;width:100%;">
-                <thead style="color: #fff !important">
-                  <tr>
-                    <th>#</th>
-            <th>رقم الفاتورة </th>
-            <th>التاريخ </th>
-            <th>نوع الفاتورة</th>
-            <th>الحالة</th>
+    <div class="hero" style="margin-top:20px">
+        <table width="100%">
+            <thead style=" border-bottom:1px solid #ccc;
+                border-width: thin;background:#333 ;color:#fff ">
+                <tr>
+                    <th>Item</th>
+                    <th>Description</th>
+                    <th>Qty</th>
+                    <th>Rate</th>
+                    <th>Cur </th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody style="">
 
-            <th>اسم العميل</th>
-            <th>إجمالى صافى </th>
-                  </tr>
-                </thead>
-                <tbody >
-                    @foreach ($invoices as $index => $row)
-                    <tr >
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $row->invoice_no }}</td>
-                        <td>{{ date('Y-m-d', strtotime($row->date)) }} </td>
-                        <td>{{ $row->type->name ?? '' }}</td>
-                        <td>@if ($row->status == 1) تم الترحيل @else لم يتم الترحيل @endif</td>
+                @foreach($rows as $index => $row)
+                <tr>
+                    <td>{{$index+1}}</td>
+                    <td>@if($row->automatic == 1) {{$row->provider->expenses_name ?? ''}}  @else {{$row->type->expense_name ?? ''}}  @endif</td>
+                    <td>{{ $row->operation->container_counts}} @if($row->operation->ocean) <span>X</span> @endif {{$row->operation->ocean->ocean->container->container_size ?? ''}} {{ $row->operation->ocean->ocean->container->container_type ?? ''}}</td>
+                    <td>{{$row->sell}}</td>
+                    <td></i>{{$row->currency->currency_name}}</td>
+                    <td></i>
+                        @if($row->automatic==1)
+                        {{$row->sell *$row->operation->container_counts}}
+                        @else
+                        {{$row->sell *1}}
+                        @endif
+                    </td>
+                </tr>
 
-                        <td> {{ $row->client->name ?? '' }}</td>
-                        <td>{{ $row->total }}</td>
-
-                    </tr>
-
-                            </form>
-                        </div>
-                    </div>
                 @endforeach
 
-                </tbody>
-            </tbody>
-          </table>
-        </div>
-    </section>
 
-    </body>
-    </html>
+
+            </tbody>
+        </table>
+    </div>
+    <div class="hero" style="margin-top: 20px;">
+        <div class="hero-data" style="width: 100%">
+
+            <table width="100%" id="table" style="font-size: 14px;border:none" cellspacing="0" cellpadding="0" page-break-inside: auto;>
+                <thead>
+                    <tr>
+                        <th colspan="3"></th>
+                        <th style=" border-bottom:1px solid #ccc;
+                border-width: thin;background:#eee ;color:#333 ;padding:8px 0px" colspan="2">Summary</th>
+
+                    </tr>
+                <tbody>
+                    @foreach($curs as $cur)
+
+
+
+                    <tr style="padding: 0;">
+                        <td style="width: 20%;"></td>
+                        <td style="width: 20%;"></td>
+                        <td style="width: 20%;"></td>
+                        <td style="background-color: #eee; padding:0">
+                            <p style="text-align: left;font-weight:bold">Total - {{$cur}}</p>
+                        </td>
+                        @foreach($totals as $total)
+                        @if($total->cur===$cur)
+                        <td style="background-color: #eee;text-align:right">
+
+                        {{" " . number_format($total->num, 2, '.', ',')  }} <br>
+
+                        </td>
+                        @endif
+                        @endforeach
+                    </tr>
+
+                    <tr>
+                        <td style="width: 20%;"></td>
+                        <td style="width: 20%;"></td>
+                        <td style="width: 20%;"></td>
+
+                        @foreach($totals as $total)
+                        @if($total->cur===$cur)
+                        <td colspan="2" style="background-color: #eee;border-bottom:1px solid #333;text-align:center;font-weight:bold">
+
+
+                        {{$total->total}}
+                        </td>
+                        @endif
+                        @endforeach
+                    </tr>
+
+
+                    @endforeach
+
+                </tbody>
+            </table>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+
+    </div>
+
+<p></p>
+
+</body>
+
+</html>

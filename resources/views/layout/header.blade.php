@@ -103,7 +103,7 @@
                     <a href="{{route('relay.index')}}" class="nav-link ">
                         <i class="nav-icon fas fa-copy"></i>
                         <p>
-                            ترحيل الفواتير
+                             الفواتير المرحلة
                         </p>
                     </a>
 

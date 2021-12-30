@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\InvoiceType;
 use App\Models\Item;
 use App\Models\Setting;
 use App\Models\Unit;
-use App\Models\Client;
-use Illuminate\Http\Request;
 use App\Traits\EInvoicingTrait;
+use Illuminate\Http\Request;
 
 class RelayInvoiceController extends Controller
 {
@@ -22,13 +22,12 @@ class RelayInvoiceController extends Controller
     protected $message;
     protected $errormessage;
 
-
-    function __construct(Invoice $object)
+    public function __construct(Invoice $object)
     {
         $this->middleware('auth');
-        $this->middleware('permission:invoices-list|invoices-create|invoices-edit|invoices-delete', ['only' => ['index','store']]);
-        $this->middleware('permission:invoices-create', ['only' => ['create','store']]);
-        $this->middleware('permission:invoices-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:invoices-list|invoices-create|invoices-edit|invoices-delete', ['only' => ['index', 'store']]);
+        $this->middleware('permission:invoices-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:invoices-edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:invoices-delete', ['only' => ['destroy']]);
         $this->object = $object;
         $this->viewName = 'admin.relay.';
@@ -37,7 +36,6 @@ class RelayInvoiceController extends Controller
         $this->errormessage = 'راجع البيانات هناك خطأ';
     }
 
-
     /**
      * Display a listing of the resource.
      *
@@ -45,9 +43,9 @@ class RelayInvoiceController extends Controller
      */
     public function index()
     {
-        $data = Invoice::where('status','=',0)->orderBy('id', 'DESC')->paginate(200);
-        $relaydata= Invoice::where('status','=',1)->orderBy('id', 'DESC')->paginate(200);
-        return view($this->viewName .'index', compact('data','relaydata'))
+        $data = Invoice::where('status', '!=', 1)->orderBy('id', 'DESC')->paginate(200);
+        $relaydata = Invoice::where('status', '=', 1)->orderBy('id', 'DESC')->paginate(200);
+        return view($this->viewName . 'index', compact('data', 'relaydata'))
         ;
     }
 
@@ -71,25 +69,24 @@ class RelayInvoiceController extends Controller
     {
         $this->validate($request, [
             'invoices' => 'required',
-        ],[
+        ], [
             'required' => 'الرجاء تحديد الفواتير المراد ترحيلها',
         ]);
 
         $invoices_ids = $request->input('invoices');
-        
-        $documents["documents"] = [];
-        foreach ($invoices_ids as $key => $invoice_id)
-        {
-            $invoice = Invoice::find($invoice_id);
-            if($invoice == null || $invoice->items == null)
-                continue;
 
-            if($invoice->client_id != null)
-            {
+        $documents["documents"] = [];
+        foreach ($invoices_ids as $key => $invoice_id) {
+            $invoice = Invoice::find($invoice_id);
+            if ($invoice == null || $invoice->items == null) {
+                continue;
+            }
+
+            if ($invoice->client_id != null) {
                 $client = Client::find($invoice->client_id);
-                if($client == null){
+                if ($client == null) {
                     continue;
-                }else{
+                } else {
                     $receiverType = "B";
                     $receiverId = $client->commercial_register;
                     $receiverName = $client->name;
@@ -99,10 +96,10 @@ class RelayInvoiceController extends Controller
                     $receiverAddressStreet = "580 Clementina Key";
                     $receiverAddressBuild = "Bldg. 0";
                 }
-            }else{
-                if($invoice->person_name == null){
+            } else {
+                if ($invoice->person_name == null) {
                     continue;
-                }else{
+                } else {
                     $receiverType = "P";
                     $receiverId = $invoice->person_nid;
                     $receiverName = $invoice->person_name;
@@ -113,14 +110,12 @@ class RelayInvoiceController extends Controller
                     $receiverAddressBuild = "";
                 }
             }
-            
 
             // Get all Invoice Items..
             $invoiceLines = $totalTaxArray = [];
-            $totalSalesAmount = $totalNetAmount = $totalAmount =  0;
+            $totalSalesAmount = $totalNetAmount = $totalAmount = 0;
 
-            foreach ($invoice->items as $item_key => $rowItem)
-            {
+            foreach ($invoice->items as $item_key => $rowItem) {
                 $discount = 0;
                 $salesTotal = $rowItem->quantity * $rowItem->price;
                 $netTotal = $salesTotal - $discount;
@@ -135,7 +130,7 @@ class RelayInvoiceController extends Controller
                 $invoiceLines[$item_key] = [
                     "description" => $rowItem->item->name,
                     "itemType" => "EGS",
-                    "itemCode" =>  "EG-100304559-".$rowItem->item->code,
+                    "itemCode" => "EG-100304559-" . $rowItem->item->code,
                     "unitType" => $rowItem->item->exchange->standard_code,
                     "quantity" => $rowItem->quantity,
                     "internalCode" => $rowItem->id,
@@ -147,11 +142,11 @@ class RelayInvoiceController extends Controller
                     "itemsDiscount" => 0,
                     "unitValue" => [
                         "currencySold" => "EGP",
-                        "amountEGP" => $rowItem->price
+                        "amountEGP" => $rowItem->price,
                     ],
                     "discount" => [
                         "rate" => 0,
-                        "amount" => 0
+                        "amount" => 0,
                     ],
                 ];
 
@@ -159,14 +154,14 @@ class RelayInvoiceController extends Controller
                     "taxType" => "T1",
                     "amount" => $tax_fees,
                     "subType" => "V009",
-                    "rate" => 14
+                    "rate" => 14,
                 ];
             }
-            
+
             // Make Tax Array.
             $taxTotals[] = [
                 "taxType" => "T1",
-                "amount"  => array_sum($totalTaxArray),
+                "amount" => array_sum($totalTaxArray),
             ];
 
             // Init the request raw..
@@ -198,9 +193,9 @@ class RelayInvoiceController extends Controller
                 ],
                 "documentType" => "I",
                 "documentTypeVersion" => "1.0",
-                "dateTimeIssued" => date('Y-m-d', strtotime($invoice->date)).'T'.date('H:i:s').'Z',
+                "dateTimeIssued" => date('Y-m-d', strtotime($invoice->date)) . 'T' . date('H:i:s') . 'Z',
                 "taxpayerActivityCode" => "1811",
-                "internalID" => 'P'.$invoice->invoice_no,
+                "internalID" => 'P' . $invoice->invoice_no,
                 "invoiceLines" => $invoiceLines,
                 "totalSalesAmount" => $totalSalesAmount,
                 "totalDiscountAmount" => 0,
@@ -213,18 +208,16 @@ class RelayInvoiceController extends Controller
 
             $documents["documents"][$key] = $singleDocument;
         }
-        
+
         $token = $this->getAccessToken();
-        if($token['status'] != 200){
+        if ($token['status'] != 200) {
             return redirect()->route('relay.index')->with('flash_danger', 'حدث خطأ أثناء تنفيذ الاستعلام للحصول على رمز وصول!');
         }
 
         $submission = $this->getFullDocumentSignatures($token['data']['access_token'], $documents);
-        if($submission['status'] != 202){
+        if ($submission['status'] != 202) {
             return redirect()->route('relay.index')->with('flash_danger', 'حدث خطأ .. تعذر الوصول إلى السيرفر الخاص بالفاتورة الإلكترونية!');
-        }
-        elseif ($submission['status'] == 202 && $submission['data']['submissionId'] != null)
-        {
+        } elseif ($submission['status'] == 202 && $submission['data']['submissionId'] != null) {
             // Save Response data.
         }
 
@@ -239,17 +232,16 @@ class RelayInvoiceController extends Controller
      */
     public function show($id)
     {
-        $inv=Invoice::where('id','=',$id)->first();
+        $inv = Invoice::where('id', '=', $id)->first();
         $invoiceType = InvoiceType::all();
 
         $items = Item::all();
         $exchanges = Unit::all();
-        $tax=Setting::where('key_name','tax_value')->first();
-        $invItems=InvoiceItem::where('invoice_id','=',$id)->get();
+        $tax = Setting::where('key_name', 'tax_value')->first();
+        $invItems = InvoiceItem::where('invoice_id', '=', $id)->get();
 
-        return view($this->viewName .'showInvoice', compact('invItems','inv','invoiceType','tax',  'items', 'exchanges'));
+        return view($this->viewName . 'showInvoice', compact('invItems', 'inv', 'invoiceType', 'tax', 'items', 'exchanges'));
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -261,16 +253,17 @@ class RelayInvoiceController extends Controller
     {
         $invoice = Invoice::find($id);
         $documentUUID = $invoice->invoice_document_id;
-    
+
         $token = $this->getAccessToken();
-        if($token['status'] != 200){
+        if ($token['status'] != 200) {
             return redirect()->route('relay.index')->with('flash_danger', 'حدث خطأ أثناء تنفيذ الاستعلام للحصول على رمز وصول!');
         }
 
-        $result =  $this->cancelDocument($token['data']['access_token'], $documentUUID);
-        if($result['status'] != 200){
+        $result = $this->cancelDocument($token['data']['access_token'], $documentUUID);
+        if ($result['status'] != 200) {
             return redirect()->route('relay.index')->with('flash_danger', 'حدث خطأ أثناء تنفيذ الغاء الفاتورة... الرجاء المحاولة مرة أخرى!');
-        }else{
+        } else {
+            $invoice->update(['status' => 2]);
             return redirect()->route('relay.index')->with('flash_success', 'تم الغاء الفاتورة من  نظام الفاتورة الإلكترونية بنجاح');
         }
 

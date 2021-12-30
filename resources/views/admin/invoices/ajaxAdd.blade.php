@@ -23,7 +23,7 @@
 
     <td>
         <div class="input-mark-inner mg-b-22">
-            <input type="number"    id="opPermission{{$rowCount}}" value="{{old('opPermission'.$rowCount) }}"  name="opPermission{{$rowCount}}" oninput="opPermission({{$rowCount}})"  class="form-control oppermission" placeholder="">
+            <input type="text"    id="opPermission{{$rowCount}}" value="{{old('opPermission'.$rowCount) }}"  name="opPermission{{$rowCount}}" oninput="opPermission({{$rowCount}})"  class="form-control oppermission" placeholder="">
         </div>
     </td>
     <td style='width: 150px;'>
@@ -34,14 +34,14 @@
 
     <td style='width: 150px;'>
         <div class="input-mark-inner mg-b-22">
-            <input type="number"  id="itemprice{{$rowCount}}"  name="itemprice{{$rowCount}}" value="{{old('itemprice'.$rowCount) }}" oninput="itemPrice({{$rowCount}})" class="form-control" placeholder="">
+            <input type="number"  id="itemprice{{$rowCount}}" step=".001"  name="itemprice{{$rowCount}}" value="{{old('itemprice'.$rowCount) }}" oninput="itemPrice({{$rowCount}})" class="form-control" placeholder="">
         </div>
     </td>
 
     <td  class="total_item_price" style='width: 180px;'>
 
     <div class="input-mark-inner mg-b-22">
-        <input type="number"  id="total{{$rowCount}}" value="{{old('total'.$rowCount) }}"  name="total{{$rowCount}}" oninput="totaly({{$rowCount}})" class="form-control" placeholder="">
+        <input type="number" step=".001"  id="total{{$rowCount}}" value="{{old('total'.$rowCount) }}"  name="total{{$rowCount}}" oninput="totaly({{$rowCount}})" class="form-control" placeholder="">
     </div>
     </td>
 

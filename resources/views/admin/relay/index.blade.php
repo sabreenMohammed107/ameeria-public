@@ -38,9 +38,9 @@
                                                 <table id="example1" class="table table-bordered table-striped">
                                                     <thead>
                                                         <tr>
-                                                            <th class="active">
+                                                            {{-- <th class="active">
                                                                 <input type="checkbox" class="select-all checkbox" id="selectAll" name="" />
-                                                            </th>
+                                                            </th> --}}
                                                             <th>#</th>
                                                             <th>رقم الفاتورة </th>
                                                             <th>التاريخ </th>
@@ -53,17 +53,19 @@
                                                     </thead>
                                                     <tbody>
                                                         @foreach ($data as $index=>$row)
-                                                        <tr>
+                                                        {{-- <tr>
                                                             <td class="active">
                                                                 <input type="checkbox" class="select-item checkbox" name="invoices[]" value="{{ $row->id }}" />
-                                                            </td>
-                                                            <td>{{ $index + 1 }}</td>
-                                                            <td>{{ $row->invoice_no}}</td>
+                                                            </td> --}}
+                                                            <td>{{ Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($index + 1 )}}</td>
+                                                            <td>{{ Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($row->invoice_no)}}</td>
                                                             <td>{{date('Y-m-d', strtotime($row->date))}} </td>
                                                             <td>{{ $row->type->name ?? ''}}</td>
-                                                            <td>@if($row->status==1) تم الترحيل @else لم يتم الترحيل @endif</td>
+                                                            <td>@if($row->status==1) تم الترحيل @elseif ($row->status==0) لم يتم الترحيل
+                                                                @elseif ($row->status==2)تم إلغاء الترحيل
+                                                            @endif</td>
                                                             <td> {{ $row->client->name ?? ''}}</td>
-                                                            <td>{{ $row->total}}</td>
+                                                            <td>{{ Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($row->total)}}</td>
                                                             <td>
                                                                 <a href="{{route('relay.show',$row->id)}}" title="عرض الفاتورة" class="btn btn-success  btn-sm"><i class="fas fa-eye text-white"></i></a>
                                                             </td>
@@ -83,9 +85,9 @@
 
                                                 <thead>
                                                     <tr>
-                                                        <th class="active">
+                                                        {{-- <th class="active">
                                                             <input type="checkbox" class="select-all checkbox" id="selectAll2" name="select-all2" />
-                                                        </th>
+                                                        </th> --}}
                                                         <th>#</th>
                                                         <th>رقم الفاتورة </th>
                                                         <th>التاريخ </th>
@@ -99,22 +101,25 @@
                                                 <tbody>
                                                     @foreach ($relaydata as $index=>$row)
                                                     <tr>
-                                                        <td class="active">
+                                                        {{-- <td class="active">
                                                             <input type="checkbox" class="select-item checkbox" name="select-item" value="1000" />
-                                                        </td>
-                                                        <th>{{ $index + 1 }}</th>
-                                                        <th>{{ $row->invoice_no}}</th>
+                                                        </td> --}}
+                                                        <th>{{ Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($index + 1 )}}</th>
+                                                        <th>{{ Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($row->invoice_no)}}</th>
                                                         <th>{{date('Y-m-d', strtotime($row->date))}} </th>
                                                         <th>{{ $row->type->name ?? ''}}</th>
-                                                        <th>@if($row->status==1) تم الترحيل @else لم يتم الترحيل @endif</th>
+                                                        <td>@if($row->status==1) تم الترحيل @elseif ($row->status==0) لم يتم الترحيل
+                                                            @elseif ($row->status==2)تم إلغاء الترحيل
+                                                        @endif</td>
                                                         <th> {{ $row->client->name ?? ''}}</th>
-                                                        <th>{{ $row->total}}</th>
+                                                        <th>{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits( $row->total)}}</th>
                                                         <th>
                                                             <a href="{{route('relay.show',$row->id)}}" title="عرض الفاتورة" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
 
                                                             <a href="https://invoicing.eta.gov.eg/documents/{{$row->invoice_document_id}}/share/{{$row->invoice_long_id}}" target="_blank" title="الفاتورة الخارجية" class="btn btn-info btn-sm"><i class="fas fa-share"></i></a>
-                                                            
-                                                            <button type="button" class="btn btn-danger btn-sm" title="الغاء الفاتورة" data-toggle="modal" data-target="#cancelation_{{$row->id}}"><i class="fas fa-times"></i></button>
+
+                                                            <button type="button" @if($row->relay_date && (Carbon\Carbon::now()->subDays(3) > Carbon\Carbon::parse($row->relay_date))) disabled @endif class="btn btn-danger btn-sm" title="الغاء الفاتورة" data-toggle="modal" data-target="#cancelation_{{$row->id}}"><i class="fas fa-times"></i>
+                                                               </button>
                                                         </th>
                                                     </tr>
                                                     <div class="modal fade dir-rtl" id="cancelation_{{$row->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -165,14 +170,14 @@
 @section('scripts')
 <script>
     //button select all or cancel
-    $('#selectAll').click(function(e) {
-        var table = $(e.target).closest('table');
-        $('td input:checkbox', table).prop('checked', this.checked);
-    });
-    $('#selectAll2').click(function(e) {
-        var table = $(e.target).closest('table');
-        $('td input:checkbox', table).prop('checked', this.checked);
-    });
+    // $('#selectAll').click(function(e) {
+    //     var table = $(e.target).closest('table');
+    //     $('td input:checkbox', table).prop('checked', this.checked);
+    // });
+    // $('#selectAll2').click(function(e) {
+    //     var table = $(e.target).closest('table');
+    //     $('td input:checkbox', table).prop('checked', this.checked);
+    // });
 
     $(function() {
         $("#example1").DataTable({
@@ -180,11 +185,17 @@
     paging: false,
     searching: true,
 } );
+  $('body').persianNum({
+  numberType: 'arabic'
+});
         $("#example3").DataTable({
     destroy: true,
     paging: false,
     searching: true,
 } );
+  $('body').persianNum({
+  numberType: 'arabic'
+});
         $('#example2').DataTable({
             "paging": true,
             "lengthChange": false,
@@ -193,6 +204,9 @@
             "info": true,
             "autoWidth": false,
         });
+         $('body').persianNum({
+  numberType: 'arabic'
+});
     });
     $(document).on("keypress", ".TabOnEnter", function(e) {
         //Only do something when the user presses enter
@@ -204,6 +218,9 @@
             else
                 $('[tabindex="1"]').focus();
         }
+          $('body').persianNum({
+  numberType: 'arabic'
+});
     });
 </script>
 @endsection

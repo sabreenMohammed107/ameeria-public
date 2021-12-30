@@ -21,7 +21,7 @@
                                     <select class="custom-select" id="store_id" name="store_id">
                                         <option value="">اختر</option>
                                         @foreach($stores as $data)
-                                        <option {{old('store_id') ==$data->id ? 'selected' : ""}} value="{{$data->id}}">{{$data->name}} </option>
+                                        <option {{old('store_id') ==$data->id ? 'selected' : ""}} value="{{$data->id}}">{{$data->id}} / {{$data->name}} </option>
 
                                         @endforeach
                                     </select>
@@ -63,7 +63,7 @@
                                     <select class="js-example-basic-single" id="storage_unit_id" style="width: 100%"  name="storage_unit_id">
                                         <option value="">اختر</option>
                                         @foreach($storages as $data)
-                                        <option {{old('storage_unit_id') ==$data->id ? 'selected' : ""}} value="{{$data->id}}">{{$data->name}}
+                                        <option {{old('storage_unit_id') ==$data->id ? 'selected' : ""}} value="{{$data->id}}">{{$data->code}} / {{$data->name}}
                                        </option>
 
                                         @endforeach
@@ -76,7 +76,7 @@
                                     <select class="w-100 js-example-basic-single" id="exchange_unit_id" name="exchange_unit_id">
                                         <option value="">اختر</option>
                                         @foreach($exchanges as $data)
-                                        <option {{old('exchange_unit_id') ==$data->id ? 'selected' : ""}} value="{{$data->id}}" >{{$data->name}} </option>
+                                        <option {{old('exchange_unit_id') ==$data->id ? 'selected' : ""}} value="{{$data->id}}" >{{$data->code}} / {{$data->name}} </option>
 
                                         @endforeach
                                     </select>

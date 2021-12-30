@@ -21,6 +21,16 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 shadow mg-b-15">
                                 <div class="card-body">
                                     <div class="row">
+                                     <div class="col-sm-12">
+                                   <div class="form-group">
+     <label >
+                        <input type="radio" id="smt-fld-1-2" name="e_invoice_type" @if($inv->e_invoice_type=='I') checked @endif value="I"  class="mx-2">جديد</label>
+                    <label >
+                        <input type="radio" id="smt-fld-1-3" name="e_invoice_type"  @if($inv->e_invoice_type=='C') checked @endif value="C" class="mx-2">دائن</label>
+                         <label >
+                        <input type="radio" id="smt-fld-1-2" name="e_invoice_type"  @if($inv->e_invoice_type=='D') checked @endif  value="D" class="mx-2">مدين</label>
+  </div>
+                                   </div>
                                         <div class="col-sm-2">
                                             <div class="form-group">
                                                 <label> رقم الفاتورة</label>
@@ -44,7 +54,7 @@
                                                             {{ $type->name }}</option>
                                                     @endforeach
                                                 </select> --}}
-                                                <input type="hidden" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->type->id ?? '')}}" id="invoice_type"  readonly class="form-control">
+                                                <input type="hidden" value="{{$inv->type->id}}" id="invoice_type"  readonly class="form-control">
 
                                                 <input type="text" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->type->name ?? '')}}"  readonly name="invoice_type" readonly class="form-control">
 
@@ -53,7 +63,13 @@
                                         <div class="col-sm-2">
                                             <div class="form-group">
                                                 <label>الحالة</label>
-                                                <input type="text" value="@if($inv->status==1) تم الترحيل @else لم يتم الترحيل @endif" name="status" readonly class="form-control">
+                                                 <select id="status" required="" name="status" class="form-control">
+    <option value="">اختر الحالة</option>
+    <option {{ ($inv->status) == 1 ? 'selected' : '' }}  value="1">تم الترحيل </option>
+    <option {{ ($inv->status) == 0 ? 'selected' : '' }}  value="0">لم يتم الترحيل</option>
+    <option {{ ($inv->status) == 2 ? 'selected' : '' }}  value="2">تم الغاء الترحيل</option>
+  </select>
+                                                {{-- <input type="text" value="@if($inv->status==1) تم الترحيل @else لم يتم الترحيل @endif" name="status" readonly class="form-control"> --}}
                                             </div>
                                         </div>
 
@@ -109,10 +125,17 @@
                                                             class="form-control">
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3 col-sm-6">
+                                                <div class="col-md-2 col-sm-6">
+                                                    <div class="form-group">
+                                                        <label>رقم التسجيل </label>
+                                                        <input readonly value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->client->tax_registration ?? '')}}" name="commericalRegister" id="commericalRegister" type="text"
+                                                            class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 col-sm-6">
                                                     <div class="form-group">
                                                         <label>سجل تجاري </label>
-                                                        <input readonly value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->client->commercial_register ?? '')}}" id="clientcommerical" type="text"
+                                                        <input readonly value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->client->commercial_register ?? '')}}" name="clientcommerical" id="clientcommerical" type="text"
                                                             class="form-control">
                                                     </div>
                                                 </div>
@@ -242,7 +265,7 @@
                             <!-- End -->
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-primary">حفظ</button>
-                                <a href="" class="btn btn-secondary">رجوع</a>
+                                <a href="{{route('invoices.index')}}" class="btn btn-danger">إلغاء</a>
                             </div>
                     </form>
                 </div>
@@ -433,11 +456,19 @@
                             $("#ar_name" + index + "").text(result[0]);
                             $("#desc" + index + "").val(result[1]).css('color','#495057');
                             $("#ex_code" + index + "").val(result[2]);
+                            $("#itemprice" + index + "").val(result[3]);
 
-                            var price = $("#itemprice" + index + "").val();
+                            var select_type = $('#invoice_type').val();
+                        var price=0;
+                        if(select_type ==1 || select_type==2){
+                            price=0;
+                        }else{
+                            price = $("#itemprice" + index + "").val();
+                        }
+
                     var qty = $("#qty" + index + "").val();
                     if ($("#ex_code" + index + "").val() == 12) {
-                        $("#total" + index + "").attr('value', (((price * qty) / 1000).toFixed(2)));
+                        $("#total" + index + "").attr('value', (((price * qty)).toFixed(2)));
 
                     } else {
                         $("#total" + index + "").attr('value', (((price * qty)).toFixed(2)));
@@ -451,6 +482,7 @@
                             $("#desc" + index + "").val('لا يوجد اسم ').css('color','red');
                             $("#ar_name" + index + "").text(' ');
                             $("#ex_code" + index + "").val(' ');
+                            $("#itemprice" + index + "").val(' ');
 
                         }
                     });
@@ -462,10 +494,17 @@
                 }
 
                 function itemPrice(index) {
-                    var price = $("#itemprice" + index + "").val();
+                    var select_type = $('#invoice_type').val();
+                        var price=0;
+                        if(select_type ==1 || select_type==2){
+                            price=0;
+                        }else{
+                            price = $("#itemprice" + index + "").val();
+                        }
+
                     var qty = $("#qty" + index + "").val();
                     if ($("#ex_code" + index + "").val() == 12) {
-                        $("#total" + index + "").attr('value', (((price * qty) / 1000).toFixed(2)));
+                        $("#total" + index + "").attr('value', (((price * qty)).toFixed(2)));
 
                     } else {
                         $("#total" + index + "").attr('value', (((price * qty)).toFixed(2)));
@@ -478,10 +517,18 @@
 
                 function itemQty(index) {
 
-                    var price = $("#itemprice" + index + "").val();
+                    var select_type = $('#invoice_type').val();
+                        var price=0;
+                        if(select_type ==1 || select_type==2){
+                            price=0;
+                        }else{
+                            price = $("#itemprice" + index + "").val();
+                        }
+
                     var qty = $("#qty" + index + "").val();
+
                     if ($("#ex_code" + index + "").val() == 12) {
-                        $("#total" + index + "").attr('value', (((price * qty) / 1000).toFixed(2)));
+                        $("#total" + index + "").attr('value', (((price * qty)).toFixed(2)));
 
                     } else {
                         $("#total" + index + "").attr('value', (((price * qty)).toFixed(2)));
@@ -585,6 +632,7 @@ console.log(row_num)
                             $("#clientName").val(result[0]);
                             $("#clientcommerical").val(result[1]);
                             $("#clientAddress").val(result[2]);
+                            $("#commericalRegister").val(result[4]);
 
 
                         },
@@ -592,6 +640,7 @@ console.log(row_num)
                             $("#clientName").val(' ');
                             $("#clientcommerical").val(' ');
                             $("#clientAddress").val(' ');
+                            $("#commericalRegister").val(' ');
 
                         }
                     });
@@ -622,6 +671,7 @@ console.log(row_num)
                             $("#clientcommerical").val(result[1]);
                             $("#clientAddress").val(result[2]);
                             $("#client_id").val(result[3]);
+                            $("#commericalRegister").val(result[4]);
 
 
                         },
@@ -629,6 +679,7 @@ console.log(row_num)
                             $("#clientName").val(' ');
                             $("#clientcommerical").val(' ');
                             $("#clientAddress").val(' ');
+                            $("#commericalRegister").val(' ');
 
 
                         }
