@@ -1,7 +1,18 @@
+
+ <div class="row">
+    <div class="col-sm-3">
 <div class="form-group">
-    <input type="text" class="form-control" onchange="search()" name="search-name" id="search_name"
+    <input type="text" class="form-control"  name="search-name" id="search_name"
         placeholder="ابحث هنا">
 </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="form-group">
+<input type="button" class="btn btn-primary" onclick="search()" value="بحث">
+        </div>
+    </div>
+ </div>
+
 
 
 <table id="" class="table table-bordered table-striped arabic">
@@ -37,8 +48,7 @@
                         <button type="button" class="btn btn-danger" data-toggle="modal"
                             data-target="#del{{ $row->id }}"><i class="fas fa-trash-alt"></i></button>
                     @endcan
-                </th>
-                <!-- Delete Modal -->
+                     <!-- Delete Modal -->
                 <div class="modal fade dir-rtl" id="del{{ $row->id }}" tabindex="-1" role="dialog"
                     aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -66,6 +76,8 @@
                         </form>
                     </div>
                 </div>
+                </th>
+
 
 
             </tr>

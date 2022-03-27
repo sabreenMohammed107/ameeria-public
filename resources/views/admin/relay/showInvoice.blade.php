@@ -19,6 +19,16 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 shadow mg-b-15">
                                 <div class="card-body">
                                     <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+              <label >
+                                 <input type="radio" id="smt-fld-1-2" disabled name="e_invoice_type" @if($inv->e_invoice_type=='I') checked @endif value="I"  class="mx-2">جديد</label>
+                             <label >
+                                 <input type="radio" id="smt-fld-1-3" disabled name="e_invoice_type"  @if($inv->e_invoice_type=='C') checked @endif value="C" class="mx-2">دائن</label>
+                                  <label >
+                                 <input type="radio" id="smt-fld-1-2" disabled name="e_invoice_type"  @if($inv->e_invoice_type=='D') checked @endif  value="D" class="mx-2">مدين</label>
+           </div>
+                                            </div>
                                         <div class="col-sm-2">
                                             <div class="form-group">
                                                 <label> رقم الفاتورة</label>

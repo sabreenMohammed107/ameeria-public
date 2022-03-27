@@ -26,10 +26,10 @@ class InvoiceController extends Controller
     public function __construct(Invoice $object)
     {
         $this->middleware('auth');
-        $this->middleware('permission:invoices-list|invoices-create|invoices-edit|invoices-delete', ['only' => ['index','store']]);
-        $this->middleware('permission:invoices-create', ['only' => ['create','store']]);
-        $this->middleware('permission:invoices-edit', ['only' => ['edit','update']]);
-        $this->middleware('permission:invoices-delete', ['only' => ['destroy']]);
+        // $this->middleware('permission:invoices-list|invoices-create|invoices-edit|invoices-delete', ['only' => ['index','store']]);
+        // $this->middleware('permission:invoices-create', ['only' => ['create','store']]);
+        // $this->middleware('permission:invoices-edit', ['only' => ['edit','update']]);
+        // $this->middleware('permission:invoices-delete', ['only' => ['destroy']]);
         $this->object = $object;
         $this->viewName = 'admin.invoices.';
         $this->routeName = 'invoices.';
@@ -43,7 +43,7 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        $data = Invoice::orderBy('id', 'DESC')->paginate(200);
+        $data = Invoice::orderBy('date', 'DESC')->paginate(200);
         $invoiceType = InvoiceType::all();
         return view($this->viewName . 'index', compact('data','invoiceType'))
         ;
@@ -527,7 +527,7 @@ $result3=$items->selling_price/1000;
 
             Invoice::where('id', $obo->invoice_id)->update($ss);
 
-            InvoiceItem::where('id', $req->id)->delete();
+            InvoiceItem::where('id', $req->id)->forceDelete();
         }
     }
 
@@ -544,6 +544,10 @@ $result3=$items->selling_price/1000;
         if (!empty($request->get("type"))) {
             $invoice->where('type_id', '=', $request->get("type"));
         }
+        if (!empty($request->get("invoice_no"))) {
+            $invoice->where('invoice_no', '=', $request->get("invoice_no"));
+        }
+
         $data = $invoice->get();
 
         return view($this->viewName . 'preIndex',compact('data'))->render();

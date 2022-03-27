@@ -15,7 +15,7 @@
 
             <!-- /.card-header -->
             <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped arabic">
+                <table id="exampleCity" class="table table-bordered table-striped arabic">
                     <thead class="bg-info">
                         <tr>
                             {{-- <th>#</th> --}}
@@ -26,7 +26,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($data as $index=>$row)
+                        @foreach ($data as $row)
                         <tr>
                             {{-- <th>{{ $index + 1 }}</th> --}}
 
@@ -188,4 +188,11 @@
 </div>
 </div>
 <!--/Add Customer-->
+@endsection
+@section('scripts')
+<script>
+    $('#exampleCity').dataTable( {
+    "order": [[ 0, 'asc' ]]
+} );
+</script>
 @endsection

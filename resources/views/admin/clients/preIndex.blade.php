@@ -1,9 +1,18 @@
 
+
+ <div class="row">
+    <div class="col-sm-3">
 <div class="form-group">
-    <input type="text" class="form-control" onchange="search()" name="search-name" id="search_name"
+    <input type="text" class="form-control"  name="search-name" id="search_name"
         placeholder="ابحث هنا">
 </div>
-
+    </div>
+    <div class="col-sm-3">
+        <div class="form-group">
+<input type="button" class="btn btn-primary" onclick="search()" value="بحث">
+        </div>
+    </div>
+ </div>
 
 
 <table id="" class="table table-bordered table-striped arabic">
@@ -40,36 +49,36 @@
                     @can('clients-delete')
                         <button type="button" class="btn btn-danger" data-toggle="modal"
                             data-target="#del{{ $row->id }}"><i class="fas fa-trash-alt"></i></button>
-                    @endcan
-                </th>
-                <!-- Delete Modal -->
-                <div class="modal fade dir-rtl" id="del{{ $row->id }}" tabindex="-1" role="dialog"
-                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <form action="{{ route('clients.destroy', $row->id) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <div class="modal-content">
-                                <div class="modal-header bg-gradient-danger">
-                                    <h5 class="modal-title" id="exampleModalLabel">تأكيد الحذف</h5>
-                                    <button type="button" class="close m-0 p-0 text-white"
-                                        data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body text-center">
-                                    <h3><i class="fas fa-fire text-danger"></i></h3>
-                                    <h4 class="text-danger">حذف جميع البيانات ؟</h4>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-dismiss="modal">إلغاء</button>
-                                    <button type="submit" class="btn btn-danger">تأكيد</button>
-                                </div>
-                            </div>
-                        </form>
+
+                     <!--Delete-->
+		 <div id="del{{$row->id}}" class="modal modal-edu-general fullwidth-popup-InformationproModal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-gradient-danger">
+                        <h5 class="modal-title" id="exampleModalLabel">تأكيد الحذف</h5>                        <div class="modal-close-area modal-close-df">
+                            <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                        </div>
+                    </div>
+                    <div class="modal-body text-center">
+                        <h3><i class="fas fa-fire text-danger"></i></h3>
+                        <h4 class="text-danger">حذف جميع البيانات ؟</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">إلغاء</button>
+                        		<form id="delete" style="display: inline;" action="{{route('clients.destroy', $row->id)}}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-danger" type="submit">حذف</button>
+                                </form>
                     </div>
                 </div>
+            </div>
+        </div>
+		<!--/Delete-->
+                    @endcan
+                </th>
+
             </tr>
         @endforeach
     </tbody>

@@ -18,10 +18,10 @@ class ItemsController extends Controller
     public function __construct(Item $object)
     {
         $this->middleware('auth');
-        $this->middleware('permission:items-list|items-create|items-edit|items-delete', ['only' => ['index', 'store']]);
-        $this->middleware('permission:items-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:items-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:items-delete', ['only' => ['destroy']]);
+        // $this->middleware('permission:items-list|items-create|items-edit|items-delete', ['only' => ['index', 'store']]);
+        // $this->middleware('permission:items-create', ['only' => ['create', 'store']]);
+        // $this->middleware('permission:items-edit', ['only' => ['edit', 'update']]);
+        // $this->middleware('permission:items-delete', ['only' => ['destroy']]);
         $this->object = $object;
         $this->viewName = 'admin.items.';
         $this->routeName = 'items.';
@@ -88,7 +88,18 @@ class ItemsController extends Controller
         }
         try
         {
-            $this->object::create($request->except('_token'));
+            $item = new Item();
+            $item->name = $request->name;
+            $item->code =  $request->code;
+            $item->help_account =  $request->help_account;
+            $item->general_account =  $request->general_account;
+            $item->exchange_unit_id = $request->exchange_unit_id;
+            $item->selling_price =  $request->selling_price;
+
+
+            $item->save();
+
+            // $this->object::create($request->except('_token'));
             return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
 
         } catch (\Exception $e) {

@@ -28,6 +28,10 @@
 @endsection
 @section('scripts')
     <script>
+
+    // $('.myform').append('{{ csrf_field() }}');
+    // $('.myform').append('{{ method_field('DELETE') }}');
+
         $('#example1').DataTable({
             destroy: true,
             paging: false
@@ -49,8 +53,14 @@
 
                     $('#preIndex').html(data);
                     $("#search_name").val(search);
-                    $('body').persianNum();
-
+                    $('body').persianNum({
+              numberType: 'arabic'
+          });
+        //   $('#example1').DataTable({
+        //     destroy: true,
+        //     paging: false
+        // });
+        $('#example1').DataTable().ajax.reload();
                 },
                 error: function(request, status, error) {
 
@@ -60,7 +70,10 @@
 
                 }
             });
-            $('body').persianNum();
+            $('body').persianNum({
+              numberType: 'arabic'
+          });
+
         }
     </script>
 @endsection

@@ -18,10 +18,10 @@ class ClientController extends Controller
     function __construct(Client $object)
     {
         $this->middleware('auth');
-        $this->middleware('permission:clients-list|clients-create|clients-edit|clients-delete', ['only' => ['index','store']]);
-        $this->middleware('permission:clients-create', ['only' => ['create','store']]);
-        $this->middleware('permission:clients-edit', ['only' => ['edit','update']]);
-        $this->middleware('permission:clients-delete', ['only' => ['destroy']]);
+        // $this->middleware('permission:clients-list|clients-create|clients-edit|clients-delete', ['only' => ['index','store']]);
+        // $this->middleware('permission:clients-create', ['only' => ['create','store']]);
+        // $this->middleware('permission:clients-edit', ['only' => ['edit','update']]);
+        // $this->middleware('permission:clients-delete', ['only' => ['destroy']]);
         $this->object = $object;
         $this->viewName = 'admin.clients.';
         $this->routeName = 'clients.';
@@ -62,15 +62,15 @@ class ClientController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'general_account' => 'required|unique:clients,help_account',
-            'help_account' => 'required|unique:clients,general_account',
+            'general_account' => 'required',
+            'help_account' => 'required',
             'tax_registration' => 'required',
             'name' => 'required',
             'city_id' => 'required',
             'city' => 'required',
             'street' => 'required',
             'build' => 'required',
-            'email' => 'required',
+            // 'email' => 'required',
         ],[
             'name.required' => 'حقل الاسم مطلوب',
             'general_account.required' => 'حقل الحساب العام مطلوب',
@@ -80,7 +80,7 @@ class ClientController extends Controller
             'city.required' => 'حقل المنطقة مطلوب',
             'street.required' => 'حقل اسم الشارع مطلوب',
             'build.required' => 'حقل رقم المبنى مطلوب',
-            'email.required' => 'حقل البريد الالكتروني مطلوب',
+            // 'email.required' => 'حقل البريد الالكتروني مطلوب',
             // 'help_account.unique' => 'حقل الحساب المساعد موجود بالفعل',
             // 'general_account.unique' => 'حقل الحساب العام موجود بالفعل',
         ]);
@@ -137,15 +137,14 @@ if($testUnique!=null){
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'general_account' => 'required|unique:clients,help_account',
-            'help_account' => 'required|unique:clients,general_account',
+            'general_account' => 'required',
+            'help_account' => 'required',
             'tax_registration' => 'required',
             'name' => 'required',
             'city_id' => 'required',
             'city' => 'required',
             'street' => 'required',
             'build' => 'required',
-            'email' => 'required',
         ],[
             'name.required' => 'حقل الاسم مطلوب',
             'general_account.required' => 'حقل الحساب العام مطلوب',
@@ -155,7 +154,7 @@ if($testUnique!=null){
             'city.required' => 'حقل المنطقة مطلوب',
             'street.required' => 'حقل اسم الشارع مطلوب',
             'build.required' => 'حقل رقم المبنى مطلوب',
-            'email.required' => 'حقل البريد الالكتروني مطلوب',
+            // 'email.required' => 'حقل البريد الالكتروني مطلوب',
             // 'help_account.unique' => 'حقل الحساب المساعد موجود بالفعل',
             // 'general_account.unique' => 'حقل الحساب العام موجود بالفعل',
         ]);
@@ -186,6 +185,8 @@ if($testUnique!=null){
      */
     public function destroy($id)
     {
+
+        \Log::info("message");
         $row = Client::where('id', $id)->first();
         // Delete File ..
 

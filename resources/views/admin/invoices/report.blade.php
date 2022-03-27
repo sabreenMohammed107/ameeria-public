@@ -312,7 +312,10 @@
                                     <span style="margin-right:100px;display:inline-block"> فاتورة رقم :
                                         {{ Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->invoice_no) }}</span><br>
                                     تاريخ الفاتورة: {{ date('Y-m-d', strtotime($inv->date)) }} <br>
-                                    نوع الفاتورة: {{ $inv->type->name ?? '' }}
+                                    نوع الفاتورة: {{ $inv->type->name ?? '' }}<br>
+                                     النوع ضريبيا: @if($inv->e_invoice_type=='I') فاتورة جديده
+                                     @elseif ($inv->e_invoice_type=='C') دائن
+                                     @else مدين @endif
                                 </div>
                                 <div style="width: 50%;float:right;padding:0">
                                     <img height="120px" dir="rtl" style="text-align: right;"
@@ -361,8 +364,14 @@
                             <tr style="border: none ;border-bottom:1px solid #eee">
                                 <td scope="row" class="text-right" style="padding:15px">
                                     العنوان: {{ $inv->client->address ?? '' }}</td>
-                                <td class="text-right" style="padding:15px"> العنوان: 0, 0, كورنیش النیل, ا 22
-                                    إمبابة, الجيزة </td>
+                                <td class="text-right" style="padding:15px">
+                                    <?php
+                                    $st='   العنوان: 0, 0, كورنیش النیل, ا 22
+                                    إمبابة, الجيزة' ;
+                                    ?>
+                                    {{ Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($st) }}
+
+                                   </td>
                             </tr>
                         </tbody>
                     </table>
@@ -470,6 +479,7 @@
         </tbody>
         <tfoot>
             <tr>
+                <td scope="row" colspan="3" class="text-right" style="padding:15px;border:0"></td>
 
                 <td scope="row" colspan="2" class="text-right" style="padding:15px">
                     الإجمالى ج.م</td>
@@ -479,7 +489,7 @@
                 </td>
             </tr>
             <tr>
-
+                <td scope="row" colspan="3" class="text-right" style="padding:15px;border:0"></td>
                 <td scope="row" colspan="2" class="text-right" style="padding:15px">
                     اجمالى ضريبة القيمة المضافة ج.م</td>
                 <td class="text-right" colspan="2" style="padding:15px">
@@ -488,7 +498,7 @@
                 </td>
             </tr>
             <tr>
-
+                <td scope="row" colspan="3" class="text-right" style="padding:15px;border:0"></td>
                 <td scope="row" colspan="2" class="text-right" style="padding:15px">
                     إجمالى العام ج.م</td>
                 <td class="text-right" colspan="2" style="padding:15px">

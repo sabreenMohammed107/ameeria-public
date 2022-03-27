@@ -99,7 +99,7 @@
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label for=""> البريد الإلكترونى <span style="color: red">*</span></label>
+                                    <label for=""> البريد الإلكترونى </label>
                                     <input type="text" name="email" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($row->email)}}" class="form-control" id="">
                                 </div>
                             </div>

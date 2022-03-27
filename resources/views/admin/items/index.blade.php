@@ -59,8 +59,9 @@
 
                     $('#preIndex').html(data);
                     $("#search_name").val(search);
-                    $('body').persianNum();
-
+                    $('body').persianNum({
+              numberType: 'arabic'
+          });
                 },
                 error: function(request, status, error) {
 
@@ -70,7 +71,8 @@
 
                 }
             });
-            $('body').persianNum();
-        }
+            $('body').persianNum({
+              numberType: 'arabic'
+          });        }
     </script>
 @endsection

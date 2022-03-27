@@ -19,19 +19,25 @@
                             id="send_data">
                             <input type="hidden" value="{{csrf_token()}}" id="subCatToken"/>
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="form-group ">
                                         <label class=""> التاريخ من</label>
                                         <input name="from" id="from" value="" type="date" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="form-group ">
                                         <label class=""> التاريخ الى</label>
                                         <input name="to" id="to" value="" type="date" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-sm-3">
+                                <div class="col-md-2">
+                                    <div class="form-group ">
+                                        <label class=""> رقم الفاتورة</label>
+                                        <input name="invoice_no" id="invoice_no" value="" type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
                                     <div class="form-group">
                                         <label>نوع الفاتورة</label>
                                         <select class="custom-select"  id="invoice_type"
@@ -82,6 +88,7 @@
         var token = $("#subCatToken").val();
         let from = $('#from').val();
         let to = $('#to').val();
+        let invoice_no=$('#invoice_no').val();
         let type =  $('#invoice_type option:selected').val();
      $.ajax({
                 url:"{{route('invoices.search')}}",
@@ -92,12 +99,21 @@
         from:from,
             to:to,
             type:type,
+            invoice_no:invoice_no,
     },
                 success: function(result) {
                     // $('#example1').DataTable('destroy');
 
                     $('#preIndex').html(result);
-                    $('#example1').DataTable()
+                    // $('#example1').DataTable();
+                    $('#exampleInv').DataTable( {
+    destroy: true,
+    paging: false,
+    order:false,
+} );
+                    $('body').persianNum({
+              numberType: 'arabic'
+          });
 
 
                 }
@@ -109,9 +125,10 @@
 
     });
 
-    $('#example1').DataTable( {
+    $('#exampleInv').DataTable( {
     destroy: true,
-    paging: false
+    paging: false,
+    order:false,
 } );
 function report(){
     form.submit();

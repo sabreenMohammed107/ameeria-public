@@ -1,4 +1,4 @@
-<table id="example1" class="table table-bordered table-striped arabic">
+<table id="exampleInv" class="table table-bordered table-striped arabic">
     <thead>
         <tr>
             <th>#</th>
@@ -19,7 +19,7 @@
             <tr>
                 <th>{{ $index + 1 }}</th>
                 <th>{{ $row->invoice_no }}</th>
-                <th>{{ date('Y-m-d', strtotime($row->date)) }} </th>
+                <th>{{ date('d-m-Y', strtotime($row->date)) }} </th>
                 <th>{{ $row->type->name ?? '' }}</th>
                 <td>@if($row->status==1) تم الترحيل @elseif ($row->status==0) لم يتم الترحيل
                     @elseif ($row->status==2)تم إلغاء الترحيل
@@ -42,7 +42,7 @@
                 </th> --}}
                 <th>
                     @can('invoices-delete')
-                    <button type="button" @if($row->status==1) disabled @endif class="btn btn-danger" data-toggle="modal"
+                    <button type="button"  @if($row->status==1) title="مرحلة"  disabled @endif class="btn btn-danger" data-toggle="modal"
                         data-target="#del{{ $row->id }}"><i class="fas fa-trash-alt"></i></button>
                         @endcan
                 </th>

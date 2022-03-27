@@ -97,9 +97,11 @@ class HomeController extends Controller
         $mysqlPassword = env('DB_PASSWORD');
         $DbName = env('DB_DATABASE');
         $backup_name = "mybackup.sql";
-        $tables = array("activity_log", "cities", "clients", "failed_jobs", "invoice_items", "invoice_types", "invoices", "items", "migrations",
-            "model_has_permissions", "model_has_roles", "password_resets", "permissions", "role_has_permissions", "roles", "settings",
-            "stores", "units", "users"); //here your tables...
+        $tables = array("activity_log", "cities", "clients", "failed_jobs", "stores", "units", "users",
+        "permissions","roles", "settings",
+        "model_has_permissions", "model_has_roles", "password_resets",  "role_has_permissions",
+        "items", "migrations","invoice_types", "invoices",
+        "invoice_items"); //here your tables...
 
         $connect = new \PDO("mysql:host=$mysqlHostName;dbname=$DbName;charset=utf8", "$mysqlUserName", "$mysqlPassword", array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
 

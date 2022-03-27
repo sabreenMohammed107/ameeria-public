@@ -98,7 +98,7 @@
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label for=""> البريد الإلكترونى <span style="color: red">*</span></label>
+                                    <label for=""> البريد الإلكترونى </label>
                                     <input type="text" value="{{old('email') }}" name="email" class="form-control" id="">
                                 </div>
                             </div>
