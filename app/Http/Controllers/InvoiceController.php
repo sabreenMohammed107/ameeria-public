@@ -16,6 +16,9 @@ use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Meneses\LaravelMpdf\Facades\LaravelMpdf as PDF;
 use Auth;
+use DateTime;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
 class InvoiceController extends Controller
 {
     protected $object;
@@ -94,7 +97,15 @@ class InvoiceController extends Controller
             ];
 
             if($request->get('type_id') ==1 || $request->get('type_id')==2){
-                $detail['price'] =$request->get('total' . $i) / $request->get('qty' . $i);
+                // ini_set('precision', 7);
+
+                if( ($request->get('total' . $i) / $request->get('qty' . $i)) > 1){
+                    $detail['price'] =(($request->get('total' . $i) / $request->get('qty' . $i)) );
+                }else{
+                    $detail['price'] =($request->get('total' . $i) / $request->get('qty' . $i)) ;
+                }
+
+                // dd($request->get('total' . $i) / $request->get('qty' . $i));
 
             }
             else{
@@ -121,8 +132,11 @@ class InvoiceController extends Controller
         }
 
         //master
+        $now = new DateTime();
+$curYear = $now->format("Y");
+
         $data = [
-            'invoice_no' =>  $request->get('invoice_no'),
+            'invoice_no' => ($curYear."-".$request->get('invoice_no')),
             'e_invoice_type'=> $request->get('e_invoice_type'),
             'date' =>Carbon::parse($request->get('date')),
             'client_id' => $request->get('client_id'),
@@ -137,6 +151,7 @@ class InvoiceController extends Controller
             'user_type'=>1,
 
         ];
+
         if($request->get('tab') == 'igotnone'){
 
             $data['person_type'] = 1;
@@ -165,7 +180,10 @@ $this->validate($request, [
     'type_id.required' => 'حقل نوع الفاتورة مطلوب',
 
 ]);
-$testUnique = Invoice::where('invoice_no', '=', $request->get('invoice_no'))->first();
+$now = new DateTime();
+$curYear = $now->format("Y");
+
+$testUnique = Invoice::where('invoice_no', '=', ($curYear."-".$request->get('invoice_no')))->first();
 if ($testUnique != null) {
     return redirect()->back()->withInput()->with('flash_danger', 'حقل رقم الفاتورة موجود بالفعل');
 }
@@ -190,6 +208,38 @@ if ($testUnique != null) {
             DB::rollback();
 
             return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ فى ادخال البيانات قم بمراجعتها مرة اخرى');
+        }
+    }
+    public function testValidte(Request $request)
+    {
+        $now = new DateTime();
+        $curYear = $now->format("Y");
+
+        $this->validate($request, [
+
+            'code' => 'required|unique:invoices,invoice_no',
+
+        ], [
+            'code.required' => 'حقل الكود مطلوب',
+
+            'code.unique' => 'حقل الكود  موجود بالفعل',
+
+        ]);
+        $message = '';
+
+        $testUnique = Invoice::where('invoice_no', 'like', ($curYear."-".$request->get('code')))->first();
+\Log::info($testUnique);
+        if ($testUnique != null) {
+            $message = 'حقل الكود موجود بالفعل';
+        }
+
+        try {
+
+            return $message;
+
+        } catch (QueryException $q) {
+
+            return $message;
         }
     }
 
@@ -222,7 +272,7 @@ if ($testUnique != null) {
         //     $invoice->where('type_id', '=', $request->get("type_id"));
         // }
         $invoices = $invoice->get();
-
+        // $qrcode = base64_encode(QrCode::size(200)->errorCorrection('H')->generate('hello'));
         $data = [
             'Title' =>'كل الفواتير',
             'invoices' => $invoices,
@@ -240,6 +290,7 @@ if ($testUnique != null) {
             'tax'=>$tax,
             'items'=>$items,
             'exchanges'=>$exchanges,
+            // 'qrcode' =>$qrcode,
 
         ];
         $pdf = PDF::loadView('admin.invoices.report', $data);
@@ -295,7 +346,14 @@ if ($testUnique != null) {
                 $detail['op_permission_no'] =null;
             }
             if($this->object::findOrFail($id)->type_id ==1 || $this->object::findOrFail($id)->type_id==2){
-                $detail['price'] = $request->get('total' . $i) / $request->get('qty' . $i);
+
+                ini_set('precision', 7);
+
+                if(($request->get('total' . $i) / $request->get('qty' . $i)) > 1){
+                    $detail['price'] =(($request->get('total' . $i) / $request->get('qty' . $i)) + 0.00001);
+                }else{
+                    $detail['price'] =($request->get('total' . $i) / $request->get('qty' . $i)) ;
+                }
 
             }
             else{
@@ -352,9 +410,11 @@ if ($testUnique != null) {
             array_push($detailsUpdate, $detailUpdate);
         }
         // Master
+        $now = new DateTime();
+        $curYear = $now->format("Y");
 
-        $data = [
-            'invoice_no' =>  $request->get('invoice_no'),
+                $data = [
+                    'invoice_no' => ($curYear."-".$request->get('invoice_no')),
             'e_invoice_type'=> $request->get('e_invoice_type'),
             'date' =>Carbon::parse($request->get('date')),
             // 'client_id' => $request->get('client_id'),
@@ -396,8 +456,10 @@ $this->validate($request, [
 
 
 ]);
-if ($request->get('invoice_no') !== $this->object::findOrFail($id)->invoice_no) {
-    $testUnique = Invoice::where('invoice_no', '=', $request->get('invoice_no'))->first();
+$now = new DateTime();
+        $curYear = $now->format("Y");
+if (($curYear."-".$request->get('invoice_no')) !== $this->object::findOrFail($id)->invoice_no) {
+    $testUnique = Invoice::where('invoice_no', '=', ($curYear."-".$request->get('invoice_no')))->first();
     if ($testUnique != null) {
         return redirect()->back()->withInput()->with('flash_danger', 'حقل رقم الفاتورة موجود بالفعل');
     }
@@ -545,6 +607,7 @@ $result3=$items->selling_price/1000;
             $invoice->where('type_id', '=', $request->get("type"));
         }
         if (!empty($request->get("invoice_no"))) {
+
             $invoice->where('invoice_no', '=', $request->get("invoice_no"));
         }
 

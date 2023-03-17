@@ -36,7 +36,7 @@ class ItemsController extends Controller
     public function index()
     {
         // $data = Item::orderBy('id', 'DESC')->paginate(200);
-        $data = Item::orderByRaw('CONVERT(code, SIGNED) asc')->paginate(200);
+        $data = Item::orderByRaw('CONVERT(code, SIGNED) asc')->paginate(20);
         // orderByRaw('CONVERT(code, SIGNED) desc')->get();
         return view($this->viewName . 'index', compact('data'))
         ;
@@ -237,20 +237,15 @@ class ItemsController extends Controller
 
     public function search(Request $request){
 
- if(!empty($request->get('search_name'))) {
+
         $search = $request->get('search_name');
-        $data=Item::where('name','LIKE',"%$search%")->orWhere('code','LIKE',"%$search%")
+        $data = Item::where('name','LIKE',"%$search%")->orWhere('code','LIKE',"%$search%")
         ->orwhereHas('exchange', function ($query) use ($search){
             $query->where('name','LIKE',"%$search%");
-        })->paginate(200);
+        })->orderByRaw('CONVERT(code, SIGNED) asc')->paginate(20);
 
 
-
-    }else{
-        $data = Item::orderBy('id', 'DESC')->paginate(200);
-    }
-
-        return view($this->viewName . 'preIndex',compact('data'))->render();
+        return view($this->viewName . 'index', compact('data', 'search'));
     }
 
 }

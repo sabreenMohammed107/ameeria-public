@@ -176,6 +176,7 @@
                     <p>Statement # : <span style="color: #333;">
                             {{ $invoice->invoice_no }}
                         </span></p>
+
                 </div>
                 <div style="clear: both;"></div>
             </div>

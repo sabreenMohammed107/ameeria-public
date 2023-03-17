@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\City;
 use App\Models\Client;
-use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
@@ -15,7 +15,7 @@ class ClientController extends Controller
     protected $routeName;
     protected $message;
     protected $errormessage;
-    function __construct(Client $object)
+    public function __construct(Client $object)
     {
         $this->middleware('auth');
         // $this->middleware('permission:clients-list|clients-create|clients-edit|clients-delete', ['only' => ['index','store']]);
@@ -37,8 +37,8 @@ class ClientController extends Controller
     {
         // $data = Client::orderBy('id','DESC')->paginate(200);
         $data = Client::orderByRaw('CONVERT(general_account, SIGNED) asc')->paginate(200);
-        return view($this->viewName.'index',compact('data'))
-           ;
+        return view($this->viewName . 'index', compact('data'))
+        ;
     }
 
     /**
@@ -48,9 +48,9 @@ class ClientController extends Controller
      */
     public function create()
     {
-        $cities = City::orderBy('code','asc')->get();
+        $cities = City::orderBy('code', 'asc')->get();
 
-        return view($this->viewName.'add',compact('cities'));
+        return view($this->viewName . 'add', compact('cities'));
     }
 
     /**
@@ -71,7 +71,7 @@ class ClientController extends Controller
             'street' => 'required',
             'build' => 'required',
             // 'email' => 'required',
-        ],[
+        ], [
             'name.required' => 'حقل الاسم مطلوب',
             'general_account.required' => 'حقل الحساب العام مطلوب',
             'help_account.required' => 'حقل الحساب المساعد مطلوب',
@@ -85,16 +85,16 @@ class ClientController extends Controller
             // 'general_account.unique' => 'حقل الحساب العام موجود بالفعل',
         ]);
 
-$testUnique=Client::where([['general_account','=',$request->get('general_account')],['help_account','=',$request->get('help_account')]])->first();
-if($testUnique!=null){
-    return redirect()->back()->withInput()->with('flash_danger', 'حقل الحساب العام والمساعد موجود بالفعل');
-}
+        $testUnique = Client::where([['general_account', '=', $request->get('general_account')], ['help_account', '=', $request->get('help_account')]])->first();
+        if ($testUnique != null) {
+            return redirect()->back()->withInput()->with('flash_danger', 'حقل الحساب العام والمساعد موجود بالفعل');
+        }
         try
         {
             $this->object::create($request->except('_token'));
-        return redirect()->route($this->routeName.'index')->with('flash_success', $this->message);
+            return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
 
-        } catch (\Exception $e){
+        } catch (\Exception$e) {
             // return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ الرجاء معاودة المحاولة في وقت لاحق');
 
             return redirect()->back()->withInput()->with('flash_danger', $e->getMessage());
@@ -121,10 +121,10 @@ if($testUnique!=null){
      */
     public function edit($id)
     {
-        $row=Client::where('id',$id)->first();
-        $cities = City::orderBy('code','asc')->get();
+        $row = Client::where('id', $id)->first();
+        $cities = City::orderBy('code', 'asc')->get();
 
-        return view($this->viewName.'edit',compact('cities','row'));
+        return view($this->viewName . 'edit', compact('cities', 'row'));
     }
 
     /**
@@ -145,7 +145,7 @@ if($testUnique!=null){
             'city' => 'required',
             'street' => 'required',
             'build' => 'required',
-        ],[
+        ], [
             'name.required' => 'حقل الاسم مطلوب',
             'general_account.required' => 'حقل الحساب العام مطلوب',
             'help_account.required' => 'حقل الحساب المساعد مطلوب',
@@ -159,9 +159,9 @@ if($testUnique!=null){
             // 'general_account.unique' => 'حقل الحساب العام موجود بالفعل',
         ]);
 
-        if($request->get('general_account')!== $this->object::findOrFail($id)->general_account && $request->get('help_account')!== $this->object::findOrFail($id)->help_account){
-            $testUnique=Client::where([['general_account','=',$request->get('general_account')],['help_account','=',$request->get('help_account')]])->first();
-            if($testUnique!=null){
+        if ($request->get('general_account') !== $this->object::findOrFail($id)->general_account && $request->get('help_account') !== $this->object::findOrFail($id)->help_account) {
+            $testUnique = Client::where([['general_account', '=', $request->get('general_account')], ['help_account', '=', $request->get('help_account')]])->first();
+            if ($testUnique != null) {
                 return redirect()->back()->withInput()->with('flash_danger', 'حقل الحساب العام والمساعد موجود بالفعل');
             }
         }
@@ -171,7 +171,7 @@ if($testUnique!=null){
             $this->object::findOrFail($id)->update($request->except('_token'));
             return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
 
-        } catch (\Exception $e){
+        } catch (\Exception$e) {
             return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ الرجاء معاودة المحاولة في وقت لاحق');
         }
 
@@ -190,7 +190,6 @@ if($testUnique!=null){
         $row = Client::where('id', $id)->first();
         // Delete File ..
 
-
         try {
 
             $row->delete();
@@ -202,25 +201,22 @@ if($testUnique!=null){
         }
     }
 
-    public function search(Request $request){
+    public function search(Request $request)
+    {
 
-        if(!empty($request->get('search_name'))) {
-               $search = $request->get('search_name');
-               $data=Client::where('name','LIKE',"%$search%")
-               ->orWhere('general_account','LIKE',"%$search%")
-              ->orWhere('help_account','LIKE',"%$search%")
-              ->orWhere('commercial_register','LIKE',"%$search%")
-              ->orWhere('tax_card_id','LIKE',"%$search%")
-              ->orWhere('phone','LIKE',"%$search%")
-              ->paginate(200);
+        $search = $request->get('search_name');
+        $data = Client::where('name', 'LIKE', "%$search%")
+            ->orWhere('general_account', 'LIKE', "%$search%")
+            ->orWhere('help_account', 'LIKE', "%$search%")
+            ->orWhere('commercial_register', 'LIKE', "%$search%")
+            ->orWhere('tax_card_id', 'LIKE', "%$search%")
+            ->orWhere('phone', 'LIKE', "%$search%")
+            ->orderByRaw('CONVERT(general_account, SIGNED) asc')->paginate(200);
 
+        $search = $request->get('search_name');
 
+        return view($this->viewName . 'index', compact('data', 'search'));
 
-           }else{
-               $data = Client::orderBy('id', 'DESC')->paginate(200);
-           }
-
-               return view($this->viewName . 'preIndex',compact('data'))->render();
-           }
+    }
 
 }

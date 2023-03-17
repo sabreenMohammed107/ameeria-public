@@ -76,7 +76,7 @@
               }
 
           });
-          bsCustomFileInput.init();
+        //   bsCustomFileInput.init();
 
           // });
 

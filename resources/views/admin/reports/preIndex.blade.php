@@ -37,7 +37,7 @@
                     <button type="button" class="btn btn-danger" data-toggle="modal"
                         data-target="#del{{ $row->id }}"><i class="fas fa-trash-alt"></i></button>
                         @endcan --}}
-
+                        {{-- {!! QrCode::encoding('UTF-8')->size(100)->generate('https://techvblogs.com/blog/generate-qr-code-laravel-8') !!} --}}
                         @can('invoices-list')
                         <a href="{{ route('invoices.show', $row->id) }}" target="_blank" class="btn btn-secondary"><i class="fas fa-book" aria-hidden="true"></i></a>
 

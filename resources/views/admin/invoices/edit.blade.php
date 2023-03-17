@@ -34,7 +34,8 @@
                                         <div class="col-sm-2">
                                             <div class="form-group">
                                                 <label> رقم الفاتورة</label>
-                                                <input type="text" name="invoice_no" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->invoice_no)}}" class="form-control">
+                                                <input type="text" id="invoice_no" name="invoice_no" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->invoice_no)}}" class="form-control">
+                                                <div style="color: red" id="dataMsg"></div>
                                             </div>
                                         </div>
                                         <div class="col-sm-2">
@@ -291,7 +292,7 @@
                         if (this.checked) {
 
 
-                            $('#total_tax').val(tax.toFixed(2));
+                            $('#total_tax').val(tax);
                             $('#total_all').val(parseFloat($('#total_items_price').val()) + parseFloat(tax));
                         } else {
                             $('#total_tax').val(0.00);
@@ -468,10 +469,10 @@
 
                     var qty = $("#qty" + index + "").val();
                     if ($("#ex_code" + index + "").val() == 12) {
-                        $("#total" + index + "").attr('value', (((price * qty)).toFixed(2)));
+                        $("#total" + index + "").attr('value', (((price * qty))));
 
                     } else {
-                        $("#total" + index + "").attr('value', (((price * qty)).toFixed(2)));
+                        $("#total" + index + "").attr('value', (((price * qty))));
 
                     }
                     headCalculations(index);
@@ -504,10 +505,10 @@
 
                     var qty = $("#qty" + index + "").val();
                     if ($("#ex_code" + index + "").val() == 12) {
-                        $("#total" + index + "").attr('value', (((price * qty)).toFixed(2)));
+                        $("#total" + index + "").attr('value', (((price * qty))));
 
                     } else {
-                        $("#total" + index + "").attr('value', (((price * qty)).toFixed(2)));
+                        $("#total" + index + "").attr('value', (((price * qty))));
 
                     }
 
@@ -528,10 +529,10 @@
                     var qty = $("#qty" + index + "").val();
 
                     if ($("#ex_code" + index + "").val() == 12) {
-                        $("#total" + index + "").attr('value', (((price * qty)).toFixed(2)));
+                        $("#total" + index + "").attr('value', (((price * qty))));
 
                     } else {
-                        $("#total" + index + "").attr('value', (((price * qty)).toFixed(2)));
+                        $("#total" + index + "").attr('value', (((price * qty))));
 
                     }
 
@@ -586,11 +587,11 @@ console.log(row_num)
                     })
 
 
-                    $('#total_items_price').val(total.toFixed(2));
+                    $('#total_items_price').val(total);
                     console.log(total);
                     if ($('input[type=checkbox][name=taxable]').is(':checked')) {
                         console.log("checked");
-                        $('#total_tax').val(tax.toFixed(2));
+                        $('#total_tax').val(tax);
                         $('#total_all').val(parseFloat(total) + parseFloat(tax));
                     } else {
                         console.log("unchecked");
@@ -759,6 +760,34 @@ console.log(row_num)
         });
         // headCalculations();
     }
+
+
+      //validate invoice code
+      $('#invoice_no').on('change', function() {
+
+var code = $('#invoice_no').val();
+
+
+$.ajax({
+    type: 'GET',
+    data: {
+
+        code: code,
+
+
+    },
+    url: "{{ route('validateCode.fetch') }}",
+
+    success: function(data) {
+        $('#dataMsg').html(data);
+    },
+    error: function(response) {
+        $('#dataMsg').html("حدث خطأ !");
+    }
+});
+
+
+});
             </script>
         @endsection
 

@@ -40,6 +40,8 @@ Route::get('/edit-user-profile/{id}', 'UserController@editProfile');
 Route::post('/udate-profile', 'UserController@updateProfile')->name('udate-profile');
 Route::post('/invoices/search', 'InvoiceController@search')->name('invoices.search');
 
+Route::get('/validateCode/fetch', 'InvoiceController@testValidte')->name('validateCode.fetch');
+
 Route::post('/invoice-report', 'ReportsController@invoice')->name('invoice-report');
 Route::get('/show-invoice-report', 'ReportsController@showinvoice')->name('show-invoice-report');
 Route::get('/invoicesReport/search', 'ReportsController@search')->name('invoicesReport.search');

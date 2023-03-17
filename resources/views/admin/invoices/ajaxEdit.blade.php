@@ -31,7 +31,7 @@ $counterrrr = 1;
 
     <td>
         <div class="input-mark-inner mg-b-22">
-            <input type="text"    id="opPermission{{$counter}}" value="{{$itemo->op_permission_no}}" name="upopPermission{{$counter}}" oninput="opPermission({{$counter}})"  class="form-control oppermission" placeholder="">
+            <input type="text"  maxlength="8"   id="opPermission{{$counter}}" value="{{$itemo->op_permission_no}}" name="upopPermission{{$counter}}" oninput="opPermission({{$counter}})"  class="form-control oppermission" placeholder="">
         </div>
     </td>
     <td style='width: 150px;'>
@@ -42,14 +42,14 @@ $counterrrr = 1;
 
     <td style='width: 150px;'>
         <div class="input-mark-inner mg-b-22">
-            <input type="number"  step=".001" id="itemprice{{$counter}}" value="{{$itemo->price}}" name="upitemprice{{$counter}}" oninput="itemPrice({{$counter}})" class="form-control" placeholder="">
+            <input type="number"  step=".0001" id="itemprice{{$counter}}" value="{{$itemo->price}}" name="upitemprice{{$counter}}" oninput="itemPrice({{$counter}})" class="form-control" placeholder="">
         </div>
     </td>
 
     <td  class="total_item_price" style='width: 180px;'>
 
     <div class="input-mark-inner mg-b-22">
-        <input type="number" step=".001" id="total{{$counter}}" value="{{$itemo->total}}"  name="uptotal{{$counter}}" oninput="totaly({{$counter}})" class="form-control" placeholder="">
+        <input type="number" step=".0001" id="total{{$counter}}" value="{{$itemo->total}}"  name="uptotal{{$counter}}" oninput="totaly({{$counter}})" class="form-control" placeholder="">
     </div>
     </td>
 

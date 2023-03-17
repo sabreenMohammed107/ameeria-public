@@ -1,20 +1,23 @@
 
-
+ <form  action="{{ route('searchClient.fetch') }}" method="GET">
  <div class="row">
     <div class="col-sm-3">
 <div class="form-group">
-    <input type="text" class="form-control"  name="search-name" id="search_name"
+    <input type="text" class="form-control" value="{{request()->get('search_name','')}}" name="search_name"  id="search_name"
         placeholder="ابحث هنا">
 </div>
     </div>
     <div class="col-sm-3">
         <div class="form-group">
-<input type="button" class="btn btn-primary" onclick="search()" value="بحث">
+
+
+<input type="submit"  class="btn btn-primary"  value="بحث">
+
         </div>
     </div>
  </div>
 
-
+</form>
 <table id="" class="table table-bordered table-striped arabic">
     <thead class="bg-info">
         <tr>
@@ -24,7 +27,7 @@
 
             <th>حساب مساعد </th>
             <th>سجل تجارى</th>
-            <th>بطاقة ضريبية</th>
+            <th> التسجيل الضريبي</th>
             <th>موبايل</th>
 
             <th>خيارات</th>
@@ -39,7 +42,7 @@
                 <th>{{ $row->help_account }}</th>
 
                 <th>{{ $row->commercial_register }}</th>
-                <th>{{ $row->tax_card_id }}</th>
+                <th>{{ $row->tax_registration }}</th>
                 <th>{{ $row->phone }}</th>
                 <th>
                     @can('clients-edit')
@@ -83,4 +86,9 @@
         @endforeach
     </tbody>
 </table>
-{{ $data->render() }}
+{{-- {{ $data->render() }} --}}
+<div id="categoryAll" class="pagination justify-content-center"  >
+
+    {{ $data->appends(request()->input())->links()}}
+    </div>
+

@@ -1,6 +1,7 @@
 <html>
 
 <head>
+
     <style>
         @page {
             header: page-header;
@@ -292,7 +293,6 @@
             margin-bottom: 10px;
 
         }
-
     </style>
 
 </head>
@@ -307,15 +307,38 @@
                 <div class="panel-heading" style="background-color:white;border:none;">
                     <div class="row" style="margin-left: 15px;margin-right:15px;">
                         <div class="col-md-12">
+
                             <div class="row dir-rtl">
+                                <div style="width: 10%;float:left;padding-top:45px;">
+                                    {{-- <img src="data:image/png;base64, {!! QrCode::size(100)->generate('https://techvblogs.com/blog/generate-qr-code-laravel-8') !!}"> --}}
+                                    {{-- {{ QrCode::encoding('UTF-8')->size(100)->generate('https://techvblogs.com/blog/generate-qr-code-laravel-8') }} --}}
+
+                                    {{-- {!! QrCode::format('png')->encoding('UTF-8')->size(100)->generate('https://techvblogs.com/blog/generate-qr-code-laravel-8') !!} --}}
+                                   {{-- 'https://invoicing.eta.gov.eg/documents/'.$inv->invoice_document_id.'/share/'.$inv->invoice_submission_id --}}
+                                    <img src="data:image/png;base64, {!! base64_encode(
+                                        QrCode::format('png')->encoding('UTF-8')->size(100)->generate('https://invoicing.eta.gov.eg/documents/'.$inv->invoice_document_id.'/share/'.$inv->invoice_submission_id),
+                                    ) !!}"
+                                        style="margin-bottom: 10px;">
+                                    {{-- <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(100)->generate('invoice_number=101'),
+                                    ) !!}" > --}}
+                                    {{-- <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(100)->generate('$inv->invoice_no')) !!} "> --}}
+                                    {{-- {!!QrCode::format('png')->generate('Welcome to Makitweb')!!} --}}
+
+
+                                </div>
                                 <div style="width: 30%;float:left;padding-top:45px;">
                                     <span style="margin-right:100px;display:inline-block"> فاتورة رقم :
                                         {{ Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->invoice_no) }}</span><br>
                                     تاريخ الفاتورة: {{ date('Y-m-d', strtotime($inv->date)) }} <br>
                                     نوع الفاتورة: {{ $inv->type->name ?? '' }}<br>
-                                     النوع ضريبيا: @if($inv->e_invoice_type=='I') فاتورة جديده
-                                     @elseif ($inv->e_invoice_type=='C') دائن
-                                     @else مدين @endif
+                                    النوع ضريبيا: @if ($inv->e_invoice_type == 'I')
+                                        فاتورة جديده
+                                    @elseif ($inv->e_invoice_type == 'C')
+                                        دائن
+                                    @else
+                                        مدين
+                                    @endif
+
                                 </div>
                                 <div style="width: 50%;float:right;padding:0">
                                     <img height="120px" dir="rtl" style="text-align: right;"
@@ -366,12 +389,12 @@
                                     العنوان: {{ $inv->client->address ?? '' }}</td>
                                 <td class="text-right" style="padding:15px">
                                     <?php
-                                    $st='   العنوان: 0, 0, كورنیش النیل, ا 22
-                                    إمبابة, الجيزة' ;
+                                    $st = '   العنوان: 0, 0, كورنیش النیل, ا 22
+                                                                        إمبابة, الجيزة';
                                     ?>
                                     {{ Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($st) }}
 
-                                   </td>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -380,7 +403,7 @@
         </htmlpageheader>
         {{-- end header --}}
         <htmlpagefooter name="page-footer">
-            <div class="footer" >
+            <div class="footer">
                 <div class="row" style="margin-left: 15px;margin-right:15px;">
                     <div class="col-md-12">
                         <div class="row" style="margin-left: 15px;margin-right:15px;">
@@ -439,7 +462,8 @@
                         </div>
                     </td>
 
-                    <td id="desc" style='width: 200px;padding:10px'>{{ Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($itemo->item->name ?? '') }}</td>
+                    <td id="desc" style='width: 200px;padding:10px'>
+                        {{ Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($itemo->item->name ?? '') }}</td>
 
                     <td style='width: 200px;padding:10px'>
                         <div class="input-mark-inner mg-b-22">
@@ -454,14 +478,15 @@
 
                     <td style='width: 120px;padding:10px'>
                         <div class="input-mark-inner mg-b-22">
-                            {{ Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($itemo->price) }}
+                            {{ Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits(number_format((float)$itemo->price, 5, '.', '')) }}
                         </div>
                     </td>
 
                     <td class="total_item_price" style='width: 120px;padding:10px'>
 
                         <div class="input-mark-inner mg-b-22">
-                            {{ Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($itemo->total) }}
+
+                            {{ Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits(number_format((float)$itemo->total, 5, '.', ''))}}
                         </div>
                     </td>
 
@@ -485,7 +510,8 @@
                     الإجمالى ج.م</td>
                 <td class="text-right" colspan="2" style="padding:15px">
                     {{ Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->subtotal) }}
-                    <br> {{ Alkoumi\LaravelArabicNumbers\Numbers::TafqeetMoney($inv->subtotal, 'EGP') }}
+
+                    <br> {{ Alkoumi\LaravelArabicNumbers\Numbers::TafqeetMoney(number_format((float)$inv->subtotal, 5, '.', ''), 'EGP') }}
                 </td>
             </tr>
             <tr>
@@ -494,7 +520,7 @@
                     اجمالى ضريبة القيمة المضافة ج.م</td>
                 <td class="text-right" colspan="2" style="padding:15px">
                     {{ Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->tax) }}
-                    <br> {{ Alkoumi\LaravelArabicNumbers\Numbers::TafqeetMoney($inv->tax, 'EGP') }}
+                    <br> {{ Alkoumi\LaravelArabicNumbers\Numbers::TafqeetMoney(number_format((float)$inv->tax, 5, '.', ''), 'EGP') }}
                 </td>
             </tr>
             <tr>
@@ -503,7 +529,7 @@
                     إجمالى العام ج.م</td>
                 <td class="text-right" colspan="2" style="padding:15px">
                     {{ Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->total) }}
-                    <br> {{ Alkoumi\LaravelArabicNumbers\Numbers::TafqeetMoney($inv->total, 'EGP') }}
+                    <br> {{ Alkoumi\LaravelArabicNumbers\Numbers::TafqeetMoney(number_format((float)$inv->total, 5, '.', ''), 'EGP') }}
                 </td>
             </tr>
         </tfoot>

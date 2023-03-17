@@ -73,7 +73,7 @@
                 </li>
                 @endhasrole
                 <li class="nav-item has-treeview menu-open">
-                    <a href="{{ route('items.index') }}" class="nav-link ">
+                    <a href="{{ route('searchItem.fetch') }}" class="nav-link ">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             تكويد الأصناف
@@ -82,7 +82,7 @@
 
                 </li>
                 <li class="nav-item has-treeview menu-open">
-                    <a href="{{ route('clients.index') }}" class="nav-link ">
+                    <a href="{{ route('searchClient.fetch') }}" class="nav-link ">
                         <i class="nav-icon fas fa-cogs"></i>
                         <p>
                             تكويد العملاء
