@@ -9,15 +9,13 @@ use App\Models\InvoiceType;
 use App\Models\Item;
 use App\Models\Setting;
 use App\Models\Unit;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
-use Log;
-use Carbon\Carbon;
-use Illuminate\Database\QueryException;
-use Meneses\LaravelMpdf\Facades\LaravelMpdf as PDF;
 use Auth;
+use Carbon\Carbon;
 use DateTime;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Meneses\LaravelMpdf\Facades\LaravelMpdf as PDF;
 
 class InvoiceController extends Controller
 {
@@ -48,7 +46,7 @@ class InvoiceController extends Controller
     {
         $data = Invoice::orderBy('date', 'DESC')->paginate(200);
         $invoiceType = InvoiceType::all();
-        return view($this->viewName . 'index', compact('data','invoiceType'))
+        return view($this->viewName . 'index', compact('data', 'invoiceType'))
         ;
     }
 
@@ -63,8 +61,8 @@ class InvoiceController extends Controller
         $rowCount = 1;
         $items = Item::all();
         $exchanges = Unit::all();
-        $tax=Setting::where('key_name','tax_value')->first();
-        return view($this->viewName . 'add', compact('invoiceType','tax', 'rowCount', 'items', 'exchanges'));
+        $tax = Setting::where('key_name', 'tax_value')->first();
+        return view($this->viewName . 'add', compact('invoiceType', 'tax', 'rowCount', 'items', 'exchanges'));
     }
 
     /**
@@ -91,39 +89,37 @@ class InvoiceController extends Controller
                 'note' => $request->get('detNote' . $i),
                 // 'op_permission_no'=>$request->get('opPermission' . $i),
                 'total' => $request->get('total' . $i),
-                'note' => $request->get('notes'. $i),
-
+                'note' => $request->get('notes' . $i),
 
             ];
 
-            if($request->get('type_id') ==1 || $request->get('type_id')==2){
+            if ($request->get('type_id') == 1 || $request->get('type_id') == 2) {
                 // ini_set('precision', 7);
 
-                if( ($request->get('total' . $i) / $request->get('qty' . $i)) > 1){
-                    $detail['price'] =(($request->get('total' . $i) / $request->get('qty' . $i)) );
-                }else{
-                    $detail['price'] =($request->get('total' . $i) / $request->get('qty' . $i)) ;
+                if (($request->get('total' . $i) / $request->get('qty' . $i)) > 1) {
+                    $detail['price'] = (($request->get('total' . $i) / $request->get('qty' . $i)));
+                } else {
+                    $detail['price'] = ($request->get('total' . $i) / $request->get('qty' . $i));
                 }
 
                 // dd($request->get('total' . $i) / $request->get('qty' . $i));
 
-            }
-            else{
-                if (!empty($request->get('itemprice' . $i)) ) {
+            } else {
+                if (!empty($request->get('itemprice' . $i))) {
                     // if (!empty($request->get('itemprice' . $i))) {
-                        $detail['price'] = $request->get('itemprice' . $i);
+                    $detail['price'] = $request->get('itemprice' . $i);
 
-                    }else{
-                        $detail['price'] =0;
+                } else {
+                    $detail['price'] = 0;
 
-                    }
+                }
             }
             if (!empty($request->get('opPermission' . $i))) {
                 $detail['op_permission_no'] = $request->get('opPermission' . $i);
-            }else{
-                $detail['op_permission_no'] =null;
+            } else {
+                $detail['op_permission_no'] = null;
             }
-            if ( $items) {
+            if ($items) {
                 $detail['item_id'] = $items->id;
             }
             if ($request->get('qty' . $i)) {
@@ -132,61 +128,77 @@ class InvoiceController extends Controller
         }
 
         //master
-        $now = new DateTime();
-$curYear = $now->format("Y");
+//         $now = new DateTime();
+// $curYear = $now->format("Y");
 
         $data = [
-            'invoice_no' => ($curYear."-".$request->get('invoice_no')),
-            'e_invoice_type'=> $request->get('e_invoice_type'),
-            'date' =>Carbon::parse($request->get('date')),
-            'client_id' => $request->get('client_id'),
-            'type_id' =>  $request->get('type_id'),
-            'person_nid' =>  $request->get('person_nid'),
-            'person_name' =>  $request->get('person_name'),
+            // 'invoice_no' => ($curYear."-".$request->get('invoice_no')),
+            'invoice_no' => $request->get('invoice_no'),
+            'e_invoice_type' => $request->get('e_invoice_type'),
+            'date' => Carbon::parse($request->get('date')),
+
+            'type_id' => $request->get('type_id'),
+
             'subtotal' => $request->get('subtotal'),
-            'tax'=>$request->get('tax'),
-            'total'=>$request->get('total'),
+            'tax' => $request->get('tax'),
+            'total' => $request->get('total'),
             'status' => 0,
             'notes' => $request->get('notes'),
-            'user_type'=>1,
+            'user_type' => 1,
+            'created_at'=> Carbon::parse($request->get('date')),
 
         ];
 
-        if($request->get('tab') == 'igotnone'){
+        if ($request->get('tab') == 'igotnone') {
 
             $data['person_type'] = 1;
+            $data['client_id'] = $request->get('client_id');
 
-
-        }
-        else{
+        } else {
 
             $data['person_type'] = 0;
 
+            $data['person_nid'] = $request->get('person_nid');
+            $data['person_name'] = $request->get('person_name');
         }
-if($request->has('taxable')){
-    $data['taxable'] = 1;
-}
+        if ($request->has('taxable')) {
+            $data['taxable'] = 1;
+        }
 
-$this->validate($request, [
+        $this->validate($request, [
 
-    'invoice_no' => 'required',
-    'date' => 'required',
-    'type_id' => 'required',
+            'invoice_no' => 'required',
+            'date' => 'required',
+            'type_id' => 'required',
 
+        ], [
+            'invoice_no.required' => 'حقل رقم الفاتورة مطلوب',
+            'date.required' => 'حقل تاريخ الفاتورة مطلوب',
+            'type_id.required' => 'حقل نوع الفاتورة مطلوب',
 
-],[
-    'invoice_no.required' => 'حقل رقم الفاتورة مطلوب',
-    'date.required' => 'حقل تاريخ الفاتورة مطلوب',
-    'type_id.required' => 'حقل نوع الفاتورة مطلوب',
+        ]);
+        $now = new DateTime();
+        $curYear = $now->format("Y");
+        // $date = Carbon::createFromFormat('m/d/Y',$request->get('date'))->format('Y');
+       if(Carbon::parse($request->get('date'))->format('m') >= '07'){
+        $currentYear = Carbon::parse($request->get('date'))->format('Y');
+        $nextYear = $currentYear + 1;
+       } else{
+        $nextYear =  Carbon::parse($request->get('date'))->format('Y');
+        $currentYear =$nextYear - 1;
+       }
 
-]);
-$now = new DateTime();
-$curYear = $now->format("Y");
+        $startDate = Carbon::createFromFormat('d/m/Y', '01/07/' . $currentYear);
 
-$testUnique = Invoice::where('invoice_no', '=', ($curYear."-".$request->get('invoice_no')))->first();
-if ($testUnique != null) {
-    return redirect()->back()->withInput()->with('flash_danger', 'حقل رقم الفاتورة موجود بالفعل');
-}
+        $endDate = Carbon::createFromFormat('d/m/Y', '30/06/' . $nextYear);
+// // $exist = Post::whereBetween('created_at', [$startDate, $endDate])->get();
+        $exist = Invoice::where('invoice_no', '=', $request->get('invoice_no'))
+            ->whereBetween('created_at' , [Carbon::parse($startDate), Carbon::parse($endDate)])->first();
+//$testUnique = Invoice::where('invoice_no', '=', ($curYear."-".$request->get('invoice_no')))->first();
+        // dd($exist);
+if ($exist != null) {
+            return redirect()->back()->withInput()->with('flash_danger', 'حقل رقم الفاتورة موجود بالفعل');
+        }
         DB::beginTransaction();
         try {
             // Disable foreign key checks!
@@ -206,31 +218,35 @@ if ($testUnique != null) {
         } catch (\Throwable $e) {
             // throw $th;
             DB::rollback();
+            return redirect()->back()->withInput()->with('flash_danger', $e->getMessage());
 
-            return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ فى ادخال البيانات قم بمراجعتها مرة اخرى');
+            // return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ فى ادخال البيانات قم بمراجعتها مرة اخرى');
         }
     }
     public function testValidte(Request $request)
     {
-        $now = new DateTime();
-        $curYear = $now->format("Y");
-
+        \Log::info(['validate msg...']);
         $this->validate($request, [
 
-            'code' => 'required|unique:invoices,invoice_no',
+            'code' => 'required',
 
         ], [
-            'code.required' => 'حقل الكود مطلوب',
-
-            'code.unique' => 'حقل الكود  موجود بالفعل',
+            'code.required' => 'حقل رقم الفاتورة مطلوب',
 
         ]);
         $message = '';
+        // $currentYear = date('Y');
+        $currentYear = Carbon::parse($request->get('date'))->format('Y');
+        $nextYear = $currentYear + 1;
 
-        $testUnique = Invoice::where('invoice_no', 'like', ($curYear."-".$request->get('code')))->first();
-\Log::info($testUnique);
-        if ($testUnique != null) {
-            $message = 'حقل الكود موجود بالفعل';
+        $startDate = Carbon::createFromFormat('d/m/Y', '01/07/' . $currentYear);
+
+        $endDate = Carbon::createFromFormat('d/m/Y', '30/06/' . $nextYear);
+
+        $exist = Invoice::where('invoice_no', '=', $request->get('code'))
+            ->whereBetween('created_at', [Carbon::parse($startDate), Carbon::parse($endDate)])->first();
+        if ($exist != null) {
+            $message = 'حقل رقم الفاتورة موجود بالفعل';
         }
 
         try {
@@ -252,14 +268,13 @@ if ($testUnique != null) {
     public function show($id)
     {
         $data = Invoice::orderBy('id', 'DESC')->paginate(200);
-        $inv=Invoice::where('id','=',$id)->first();
+        $inv = Invoice::where('id', '=', $id)->first();
         $invoiceType = InvoiceType::all();
 
         $items = Item::all();
         $exchanges = Unit::all();
-        $tax=Setting::where('key_name','tax_value')->first();
-        $invItems=InvoiceItem::where('invoice_id','=',$id)->get();
-
+        $tax = Setting::where('key_name', 'tax_value')->first();
+        $invItems = InvoiceItem::where('invoice_id', '=', $id)->get();
 
         $invoice = Invoice::orderBy('id', 'DESC');
         // if (!empty($request->get("from"))) {
@@ -274,27 +289,27 @@ if ($testUnique != null) {
         $invoices = $invoice->get();
         // $qrcode = base64_encode(QrCode::size(200)->errorCorrection('H')->generate('hello'));
         $data = [
-            'Title' =>'كل الفواتير',
+            'Title' => 'كل الفواتير',
             'invoices' => $invoices,
 
             'from_date' => '15/10/2021',
             'to_date' => '15/10/2021',
             'Today' => date('Y-m-d'),
-            'Logo'  =>  'logo',
+            'Logo' => 'logo',
             'Company' => 'مطابع الأميرية',
-            'User'  =>  Auth::user(),
+            'User' => Auth::user(),
             'clients' => 'عميل',
-            'invItems'=>$invItems,
-            'inv'=>$inv,
-            'invoiceType'=>$invoiceType,
-            'tax'=>$tax,
-            'items'=>$items,
-            'exchanges'=>$exchanges,
+            'invItems' => $invItems,
+            'inv' => $inv,
+            'invoiceType' => $invoiceType,
+            'tax' => $tax,
+            'items' => $items,
+            'exchanges' => $exchanges,
             // 'qrcode' =>$qrcode,
 
         ];
         $pdf = PDF::loadView('admin.invoices.report', $data);
-		return $pdf->stream('document.pdf');
+        return $pdf->stream('document.pdf');
     }
 
     /**
@@ -305,14 +320,14 @@ if ($testUnique != null) {
      */
     public function edit($id)
     {
-       $inv=Invoice::where('id','=',$id)->first();
-       $invoiceType = InvoiceType::all();
+        $inv = Invoice::where('id', '=', $id)->first();
+        $invoiceType = InvoiceType::all();
 
-       $items = Item::all();
-       $exchanges = Unit::all();
-       $tax=Setting::where('key_name','tax_value')->first();
-       $invItems=InvoiceItem::where('invoice_id','=',$id)->get();
-       return view($this->viewName . 'edit', compact('invItems','inv','invoiceType','tax',  'items', 'exchanges'));
+        $items = Item::all();
+        $exchanges = Unit::all();
+        $tax = Setting::where('key_name', 'tax_value')->first();
+        $invItems = InvoiceItem::where('invoice_id', '=', $id)->get();
+        return view($this->viewName . 'edit', compact('invItems', 'inv', 'invoiceType', 'tax', 'items', 'exchanges'));
     }
 
     /**
@@ -337,41 +352,39 @@ if ($testUnique != null) {
                 'note' => $request->get('detNote' . $i),
                 // 'op_permission_no'=>$request->get('opPermission' . $i),
                 'total' => $request->get('total' . $i),
-                'note' => $request->get('notes'. $i),
+                'note' => $request->get('notes' . $i),
 
             ];
             if (!empty($request->get('opPermission' . $i))) {
                 $detail['op_permission_no'] = $request->get('opPermission' . $i);
-            }else{
-                $detail['op_permission_no'] =null;
+            } else {
+                $detail['op_permission_no'] = null;
             }
-            if($this->object::findOrFail($id)->type_id ==1 || $this->object::findOrFail($id)->type_id==2){
+            if ($this->object::findOrFail($id)->type_id == 1 || $this->object::findOrFail($id)->type_id == 2) {
 
                 ini_set('precision', 7);
 
-                if(($request->get('total' . $i) / $request->get('qty' . $i)) > 1){
-                    $detail['price'] =(($request->get('total' . $i) / $request->get('qty' . $i)) + 0.00001);
-                }else{
-                    $detail['price'] =($request->get('total' . $i) / $request->get('qty' . $i)) ;
+                if (($request->get('total' . $i) / $request->get('qty' . $i)) > 1) {
+                    $detail['price'] = (($request->get('total' . $i) / $request->get('qty' . $i)) + 0.00001);
+                } else {
+                    $detail['price'] = ($request->get('total' . $i) / $request->get('qty' . $i));
                 }
 
-            }
-            else{
-                if (!empty($request->get('itemprice' . $i)) ) {
+            } else {
+                if (!empty($request->get('itemprice' . $i))) {
                     // if (!empty($request->get('itemprice' . $i))) {
-                        $detail['price'] = $request->get('itemprice' . $i);
-                    }else{
-                        $detail['price'] =0;
-                    }
+                    $detail['price'] = $request->get('itemprice' . $i);
+                } else {
+                    $detail['price'] = 0;
+                }
             }
-            if ( $items) {
+            if ($items) {
                 $detail['item_id'] = $items->id;
             }
             if ($request->get('qty' . $i)) {
                 array_push($details, $detail);
             }
         }
-
 
         //update Details
         $counterrrr = $request->get('qqq');
@@ -380,7 +393,6 @@ if ($testUnique != null) {
 
         for ($i = 1; $i <= $counterrrr; $i++) {
 
-
             $detailUpdate = [
                 'id' => $request->get('item_invoice_id' . $i),
                 'quantity' => $request->get('upqty' . $i),
@@ -388,24 +400,24 @@ if ($testUnique != null) {
                 'note' => $request->get('updetNote' . $i),
                 // 'op_permission_no'=>$request->get('upopPermission' . $i),
                 'total' => $request->get('uptotal' . $i),
-                'note' => $request->get('detNote'. $i),
+                'note' => $request->get('detNote' . $i),
             ];
-            if($this->object::findOrFail($id)->type_id ==1 || $this->object::findOrFail($id)->type_id==2){
+            if ($this->object::findOrFail($id)->type_id == 1 || $this->object::findOrFail($id)->type_id == 2) {
                 $detailUpdate['price'] = $request->get('uptotal' . $i) / $request->get('upqty' . $i);
 
-            }else{
-                if (!empty($request->get('upitemprice' . $i)) ) {
+            } else {
+                if (!empty($request->get('upitemprice' . $i))) {
                     // if (!empty($request->get('itemprice' . $i))) {
-                        $detailUpdate['price'] = $request->get('upitemprice' . $i);
-                    }else{
-                        $detailUpdate['price'] =0;
-                    }
+                    $detailUpdate['price'] = $request->get('upitemprice' . $i);
+                } else {
+                    $detailUpdate['price'] = 0;
+                }
             }
 
             if (!empty($request->get('upopPermission' . $i))) {
                 $detailUpdate['op_permission_no'] = $request->get('upopPermission' . $i);
-            }else{
-                $detailUpdate['op_permission_no'] =null;
+            } else {
+                $detailUpdate['op_permission_no'] = null;
             }
             array_push($detailsUpdate, $detailUpdate);
         }
@@ -413,26 +425,25 @@ if ($testUnique != null) {
         $now = new DateTime();
         $curYear = $now->format("Y");
 
-                $data = [
-                    'invoice_no' => ($curYear."-".$request->get('invoice_no')),
-            'e_invoice_type'=> $request->get('e_invoice_type'),
-            'date' =>Carbon::parse($request->get('date')),
+        $data = [
+            'invoice_no' => $request->get('invoice_no'),
+            'e_invoice_type' => $request->get('e_invoice_type'),
+            'date' => Carbon::parse($request->get('date')),
             // 'client_id' => $request->get('client_id'),
 
             // 'person_nid' =>  $request->get('person_nid'),
             // 'person_name' =>  $request->get('person_name'),
             'subtotal' => $request->get('subtotal'),
-            'tax'=>$request->get('tax'),
-            'total'=>$request->get('total'),
+            'tax' => $request->get('tax'),
+            'total' => $request->get('total'),
             'status' => $request->get('status'),
             'notes' => $request->get('notes'),
-            'user_type'=>1,
+            'user_type' => 1,
 
         ];
         // if($request->get('tab') == 'igotnone'){
 
         //     $data['person_type'] = 1;
-
 
         // }
         // else{
@@ -440,30 +451,42 @@ if ($testUnique != null) {
         //     $data['person_type'] = 0;
 
         // }
-if($request->has('taxable')){
-    $data['taxable'] = 1;
-}
-$this->validate($request, [
+        if ($request->has('taxable')) {
+            $data['taxable'] = 1;
+        }
+        $this->validate($request, [
 
-    'invoice_no' => 'required',
-    'date' => 'required',
+            'invoice_no' => 'required',
+            'date' => 'required',
 
+        ], [
+            'invoice_no.required' => 'حقل رقم الفاتورة مطلوب',
+            'date.required' => 'حقل تاريخ الفاتورة مطلوب',
 
+        ]);
+// $now = new DateTime();
+//         $curYear = $now->format("Y");
+// if (($curYear."-".$request->get('invoice_no')) !== $this->object::findOrFail($id)->invoice_no) {
+//     $testUnique = Invoice::where('invoice_no', '=', ($curYear."-".$request->get('invoice_no')))->first();
+//     if ($testUnique != null) {
+//         return redirect()->back()->withInput()->with('flash_danger', 'حقل رقم الفاتورة موجود بالفعل');
+//     }
+// }
+        // $currentYear = date('Y');
+        $currentYear = Carbon::parse($request->get('date'))->format('Y');
+        $nextYear = $currentYear + 1;
+        $startDate = Carbon::createFromFormat('d/m/Y', '01/07/' . $currentYear);
 
-],[
-    'invoice_no.required' => 'حقل رقم الفاتورة مطلوب',
-    'date.required' => 'حقل تاريخ الفاتورة مطلوب',
-
-
-]);
-$now = new DateTime();
-        $curYear = $now->format("Y");
-if (($curYear."-".$request->get('invoice_no')) !== $this->object::findOrFail($id)->invoice_no) {
-    $testUnique = Invoice::where('invoice_no', '=', ($curYear."-".$request->get('invoice_no')))->first();
-    if ($testUnique != null) {
-        return redirect()->back()->withInput()->with('flash_danger', 'حقل رقم الفاتورة موجود بالفعل');
-    }
-}
+        $endDate = Carbon::createFromFormat('d/m/Y', '30/06/' . $nextYear);
+// // $exist = Post::whereBetween('created_at', [$startDate, $endDate])->get();
+        if ($request->get('invoice_no') !== $this->object::findOrFail($id)->invoice_no) {
+            $exist = Invoice::where('invoice_no', '=', $request->get('invoice_no'))
+                ->whereBetween('date', [Carbon::parse($startDate), Carbon::parse($endDate)])->first();
+//$testUnique = Invoice::where('invoice_no', '=', ($curYear."-".$request->get('invoice_no')))->first();
+            if ($exist != null) {
+                return redirect()->back()->withInput()->with('flash_danger', 'حقل رقم الفاتورة موجود بالفعل');
+            }
+        }
         DB::beginTransaction();
         try {
 
@@ -477,7 +500,6 @@ if (($curYear."-".$request->get('invoice_no')) !== $this->object::findOrFail($id
             }
             foreach ($detailsUpdate as $updates) {
 
-
                 InvoiceItem::where('id', $updates['id'])->update($updates);
             }
             DB::commit();
@@ -488,7 +510,7 @@ if (($curYear."-".$request->get('invoice_no')) !== $this->object::findOrFail($id
             // throw $th;
             DB::rollback();
 
-            return redirect()->back()->withInput()->with('flash_danger','حدث خطأ فى ادخال البيانات قم بمراجعتها مرة اخرى');
+            return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ فى ادخال البيانات قم بمراجعتها مرة اخرى');
         }
     }
 
@@ -502,7 +524,6 @@ if (($curYear."-".$request->get('invoice_no')) !== $this->object::findOrFail($id
     {
         $row = Invoice::where('id', $id)->first();
         // Delete File ..
-
 
         try {
             $row->items()->forceDelete();
@@ -528,7 +549,7 @@ if (($curYear."-".$request->get('invoice_no')) !== $this->object::findOrFail($id
             $ajaxComponent = view($this->viewName . 'ajaxAdd', [
                 'rowCount' => $rowCount,
                 'items' => $items,
-                'exchanges' =>$exchanges
+                'exchanges' => $exchanges,
 
             ]);
 
@@ -548,15 +569,15 @@ if (($curYear."-".$request->get('invoice_no')) !== $this->object::findOrFail($id
             $out = [];
 
             $items = Item::where('code', $select_value)->first();
-            $result3=0;
-            if($items->exchange->code==12){
-$result3=$items->selling_price/1000;
-            }else{
-                $result3=$items->selling_price;
+            $result3 = 0;
+            if ($items->exchange->code == 12) {
+                $result3 = $items->selling_price / 1000;
+            } else {
+                $result3 = $items->selling_price;
 
             }
 
-            echo json_encode(array($items->code, $items->name ?? '',$items->exchange->code ?? '',$result3));
+            echo json_encode(array($items->code, $items->name ?? '', $items->exchange->code ?? '', $result3));
         }
     }
 
@@ -571,20 +592,21 @@ $result3=$items->selling_price/1000;
             $general_value = $req->general_value;
             $help_value = $req->help_value;
             $client = Client::where('general_account', $general_value)->where('help_account', $help_value)->first();
-            echo json_encode(array($client->name, $client->commercial_register ?? '', $client->address,$client->id,$client->tax_registration ?? ''));
+            echo json_encode(array($client->name, $client->commercial_register ?? '', $client->address, $client->id, $client->tax_registration ?? ''));
         }
     }
-    public function DeleteOrderItem(Request $req){
+    public function DeleteOrderItem(Request $req)
+    {
         if ($req->ajax()) {
 
             $obo = InvoiceItem::where('id', $req->id)->first();
 
             $invoiceData = Invoice::where('id', $obo->invoice_id)->first();
-            $tax=Setting::where('key_name','tax_value')->first();
+            $tax = Setting::where('key_name', 'tax_value')->first();
             $ss = [
                 'subtotal' => $invoiceData->subtotal - $obo->total,
-                'tax' =>($invoiceData->subtotal - $obo->total) * $tax->value,
-                'total' =>  ($invoiceData->subtotal - $obo->total)+(($invoiceData->subtotal - $obo->total) * $tax->value),
+                'tax' => ($invoiceData->subtotal - $obo->total) * $tax->value,
+                'total' => ($invoiceData->subtotal - $obo->total) + (($invoiceData->subtotal - $obo->total) * $tax->value),
             ];
 
             Invoice::where('id', $obo->invoice_id)->update($ss);
@@ -593,8 +615,8 @@ $result3=$items->selling_price/1000;
         }
     }
 
-    public function search(Request $request){
-
+    public function search(Request $request)
+    {
 
         $invoice = Invoice::orderBy('id', 'DESC');
         if (!empty($request->get("from"))) {
@@ -613,7 +635,315 @@ $result3=$items->selling_price/1000;
 
         $data = $invoice->get();
 
-        return view($this->viewName . 'preIndex',compact('data'))->render();
+        return view($this->viewName . 'preIndex', compact('data'))->render();
     }
 
+    public function depitInvoices($id)
+    {
+        $row = Invoice::where('id', '=', $id)->first();
+        $invoiceType = InvoiceType::all();
+        $rowCount = 1;
+        $items = Item::all();
+        $exchanges = Unit::all();
+        $tax = Setting::where('key_name', 'tax_value')->first();
+        return view($this->viewName . 'depitInvoices', compact('row', 'invoiceType', 'tax', 'rowCount', 'items', 'exchanges'));
+    }
+    public function storeDepitInvoices(Request $request)
+    {
+          //invoice items
+        $count = $request->rowCount;
+
+        $details = [];
+        $price = 1;
+        $qunty = 1;
+        $disc = 0;
+        for ($i = 1; $i <= $count; $i++) {
+            $items = Item::where('code', $request->get('select' . $i))->first();
+            $detail = [
+                // 'exchange_unit_id' => $request->get('exchange_unit_id' . $i),
+                'quantity' => $request->get('qty' . $i),
+                // 'price' => $request->get('itemprice' . $i),
+                'note' => $request->get('detNote' . $i),
+                // 'op_permission_no'=>$request->get('opPermission' . $i),
+                'total' => $request->get('total' . $i),
+                'note' => $request->get('notes' . $i),
+
+            ];
+
+            if ($request->get('type_id') == 1 || $request->get('type_id') == 2) {
+                // ini_set('precision', 7);
+
+                if (($request->get('total' . $i) / $request->get('qty' . $i)) > 1) {
+                    $detail['price'] = (($request->get('total' . $i) / $request->get('qty' . $i)));
+                } else {
+                    $detail['price'] = ($request->get('total' . $i) / $request->get('qty' . $i));
+                }
+
+                // dd($request->get('total' . $i) / $request->get('qty' . $i));
+
+            } else {
+                if (!empty($request->get('itemprice' . $i))) {
+                    // if (!empty($request->get('itemprice' . $i))) {
+                    $detail['price'] = $request->get('itemprice' . $i);
+
+                } else {
+                    $detail['price'] = 0;
+
+                }
+            }
+            if (!empty($request->get('opPermission' . $i))) {
+                $detail['op_permission_no'] = $request->get('opPermission' . $i);
+            } else {
+                $detail['op_permission_no'] = null;
+            }
+            if ($items) {
+                $detail['item_id'] = $items->id;
+            }
+            if ($request->get('qty' . $i)) {
+                array_push($details, $detail);
+            }
+        }
+
+//master
+//         $now = new DateTime();
+// $curYear = $now->format("Y");
+
+        $data = [
+            // 'invoice_no' => ($curYear."-".$request->get('invoice_no')),
+            'invoice_no' => $request->get('invoice_no'),
+            'e_invoice_type' => 'D',
+            'date' => Carbon::parse($request->get('date')),
+            'client_id' => $request->get('client_id'),
+            'type_id' => $request->get('type_id'),
+            'person_nid' => $request->get('person_nid'),
+            'person_name' => $request->get('person_name'),
+            'subtotal' => $request->get('subtotal'),
+            'tax' => $request->get('tax'),
+            'total' => $request->get('total'),
+            'status' => 0,
+            'notes' => $request->get('notes'),
+            'user_type' => 1,
+            'inv_id' => $request->get('inv_id'),
+
+        ];
+
+        if ($request->get('tab') == 'igotnone') {
+
+            $data['person_type'] = 1;
+
+        } else {
+
+            $data['person_type'] = 0;
+
+        }
+        if ($request->has('taxable')) {
+            $data['taxable'] = 1;
+        }
+
+        $this->validate($request, [
+
+            'invoice_no' => 'required',
+            'date' => 'required',
+            'type_id' => 'required',
+
+        ], [
+            'invoice_no.required' => 'حقل رقم الفاتورة مطلوب',
+            'date.required' => 'حقل تاريخ الفاتورة مطلوب',
+            'type_id.required' => 'حقل نوع الفاتورة مطلوب',
+
+        ]);
+        $now = new DateTime();
+        $curYear = $now->format("Y");
+        // $currentYear = date('Y');
+        $currentYear = Carbon::parse($request->get('date'))->format('Y');
+        $nextYear = $currentYear + 1;
+        $startDate = Carbon::createFromFormat('d/m/Y', '01/07/' . $currentYear);
+
+        $endDate = Carbon::createFromFormat('d/m/Y', '30/06/' . $nextYear);
+// // $exist = Post::whereBetween('created_at', [$startDate, $endDate])->get();
+        $exist = Invoice::where('invoice_no', '=', $request->get('invoice_no'))
+            ->whereBetween('created_at', [Carbon::parse($startDate), Carbon::parse($endDate)])->first();
+//$testUnique = Invoice::where('invoice_no', '=', ($curYear."-".$request->get('invoice_no')))->first();
+        if ($exist != null) {
+            return redirect()->back()->withInput()->with('flash_danger', 'حقل رقم الفاتورة موجود بالفعل');
+        }
+        DB::beginTransaction();
+        try {
+            // Disable foreign key checks!
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+            $invoice = Invoice::create($data);
+            foreach ($details as $Item) {
+
+                $Item['invoice_id'] = $invoice->id;
+                $Invoice_Item = InvoiceItem::create($Item);
+            }
+
+            DB::commit();
+            // Enable foreign key checks!
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
+        } catch (\Throwable $e) {
+            // throw $th;
+            DB::rollback();
+
+            return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ فى ادخال البيانات قم بمراجعتها مرة اخرى');
+        }
+    }
+
+
+
+
+    public function creditInvoices($id)
+    {
+        $row = Invoice::where('id', '=', $id)->first();
+        $invoiceType = InvoiceType::all();
+        $rowCount = 1;
+        $items = Item::all();
+        $exchanges = Unit::all();
+        $tax = Setting::where('key_name', 'tax_value')->first();
+        return view($this->viewName . 'creditInvoices', compact('row', 'invoiceType', 'tax', 'rowCount', 'items', 'exchanges'));
+    }
+    public function storeCreditInvoices(Request $request)
+    {
+          //invoice items
+        $count = $request->rowCount;
+
+        $details = [];
+        $price = 1;
+        $qunty = 1;
+        $disc = 0;
+        for ($i = 1; $i <= $count; $i++) {
+            $items = Item::where('code', $request->get('select' . $i))->first();
+            $detail = [
+                // 'exchange_unit_id' => $request->get('exchange_unit_id' . $i),
+                'quantity' => $request->get('qty' . $i),
+                // 'price' => $request->get('itemprice' . $i),
+                'note' => $request->get('detNote' . $i),
+                // 'op_permission_no'=>$request->get('opPermission' . $i),
+                'total' => $request->get('total' . $i),
+                'note' => $request->get('notes' . $i),
+
+            ];
+
+            if ($request->get('type_id') == 1 || $request->get('type_id') == 2) {
+                // ini_set('precision', 7);
+
+                if (($request->get('total' . $i) / $request->get('qty' . $i)) > 1) {
+                    $detail['price'] = (($request->get('total' . $i) / $request->get('qty' . $i)));
+                } else {
+                    $detail['price'] = ($request->get('total' . $i) / $request->get('qty' . $i));
+                }
+
+                // dd($request->get('total' . $i) / $request->get('qty' . $i));
+
+            } else {
+                if (!empty($request->get('itemprice' . $i))) {
+                    // if (!empty($request->get('itemprice' . $i))) {
+                    $detail['price'] = $request->get('itemprice' . $i);
+
+                } else {
+                    $detail['price'] = 0;
+
+                }
+            }
+            if (!empty($request->get('opPermission' . $i))) {
+                $detail['op_permission_no'] = $request->get('opPermission' . $i);
+            } else {
+                $detail['op_permission_no'] = null;
+            }
+            if ($items) {
+                $detail['item_id'] = $items->id;
+            }
+            if ($request->get('qty' . $i)) {
+                array_push($details, $detail);
+            }
+        }
+
+//master
+//         $now = new DateTime();
+// $curYear = $now->format("Y");
+
+        $data = [
+            // 'invoice_no' => ($curYear."-".$request->get('invoice_no')),
+            'invoice_no' => $request->get('invoice_no'),
+            'e_invoice_type' => 'C',
+            'date' => Carbon::parse($request->get('date')),
+            'client_id' => $request->get('client_id'),
+            'type_id' => $request->get('type_id'),
+            'person_nid' => $request->get('person_nid'),
+            'person_name' => $request->get('person_name'),
+            'subtotal' => $request->get('subtotal'),
+            'tax' => $request->get('tax'),
+            'total' => $request->get('total'),
+            'status' => 0,
+            'notes' => $request->get('notes'),
+            'user_type' => 1,
+            'inv_id' => $request->get('inv_id'),
+
+        ];
+
+        if ($request->get('tab') == 'igotnone') {
+
+            $data['person_type'] = 1;
+
+        } else {
+
+            $data['person_type'] = 0;
+
+        }
+        if ($request->has('taxable')) {
+            $data['taxable'] = 1;
+        }
+
+        $this->validate($request, [
+
+            'invoice_no' => 'required',
+            'date' => 'required',
+            'type_id' => 'required',
+
+        ], [
+            'invoice_no.required' => 'حقل رقم الفاتورة مطلوب',
+            'date.required' => 'حقل تاريخ الفاتورة مطلوب',
+            'type_id.required' => 'حقل نوع الفاتورة مطلوب',
+
+        ]);
+        $now = new DateTime();
+        $curYear = $now->format("Y");
+        // $currentYear = date('Y');
+        $currentYear = Carbon::parse($request->get('date'))->format('Y');
+        $nextYear = $currentYear + 1;
+        $startDate = Carbon::createFromFormat('d/m/Y', '01/07/' . $currentYear);
+
+        $endDate = Carbon::createFromFormat('d/m/Y', '30/06/' . $nextYear);
+// // $exist = Post::whereBetween('created_at', [$startDate, $endDate])->get();
+        $exist = Invoice::where('invoice_no', '=', $request->get('invoice_no'))
+            ->whereBetween('created_at', [Carbon::parse($startDate), Carbon::parse($endDate)])->first();
+//$testUnique = Invoice::where('invoice_no', '=', ($curYear."-".$request->get('invoice_no')))->first();
+        if ($exist != null) {
+            return redirect()->back()->withInput()->with('flash_danger', 'حقل رقم الفاتورة موجود بالفعل');
+        }
+        DB::beginTransaction();
+        try {
+            // Disable foreign key checks!
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+            $invoice = Invoice::create($data);
+            foreach ($details as $Item) {
+
+                $Item['invoice_id'] = $invoice->id;
+                $Invoice_Item = InvoiceItem::create($Item);
+            }
+
+            DB::commit();
+            // Enable foreign key checks!
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            return redirect()->route($this->routeName . 'index')->with('flash_success', $this->message);
+        } catch (\Throwable $e) {
+            // throw $th;
+            DB::rollback();
+
+            return redirect()->back()->withInput()->with('flash_danger', 'حدث خطأ فى ادخال البيانات قم بمراجعتها مرة اخرى');
+        }
+    }
 }

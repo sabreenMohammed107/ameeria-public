@@ -24,11 +24,11 @@
                                      <div class="col-sm-12">
                                    <div class="form-group">
      <label >
-                        <input type="radio" id="smt-fld-1-2" name="e_invoice_type" @if($inv->e_invoice_type=='I') checked @endif value="I"  class="mx-2">جديد</label>
+                        <input type="radio" disabled id="smt-fld-1-2" name="e_invoice_type" @if($inv->e_invoice_type=='I') checked @endif value="I"  class="mx-2">جديد</label>
                     <label >
-                        <input type="radio" id="smt-fld-1-3" name="e_invoice_type"  @if($inv->e_invoice_type=='C') checked @endif value="C" class="mx-2">دائن</label>
+                        <input type="radio" disabled id="smt-fld-1-3" name="e_invoice_type"  @if($inv->e_invoice_type=='C') checked @endif value="C" class="mx-2">دائن</label>
                          <label >
-                        <input type="radio" id="smt-fld-1-2" name="e_invoice_type"  @if($inv->e_invoice_type=='D') checked @endif  value="D" class="mx-2">مدين</label>
+                        <input type="radio" disabled id="smt-fld-1-2" name="e_invoice_type"  @if($inv->e_invoice_type=='D') checked @endif  value="D" class="mx-2">مدين</label>
   </div>
                                    </div>
                                         <div class="col-sm-2">
@@ -41,7 +41,7 @@
                                         <div class="col-sm-2">
                                             <div class="form-group">
                                                 <label>تاريخ الفاتورة</label>
-                                                <input type="date" name="date" value="{{date('Y-m-d', strtotime($inv->date))}}" class="form-control">
+                                                <input  id="invoice_date" type="date" name="date" value="{{date('Y-m-d', strtotime($inv->date))}}" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-sm-2">
@@ -166,7 +166,7 @@
                                                 <div class="col-md-5 col-sm-6">
                                             <div class="form-group">
                                                 <label>الرقم القومى </label>
-                                                <input type="text" readonly name="person_nid" {{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->person_nid)}} class="form-control">
+                                                <input type="text" readonly name="person_nid" value="{{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($inv->person_nid)}}" class="form-control">
                                             </div>
                                             </div>
                                             </div>
@@ -766,12 +766,12 @@ console.log(row_num)
       $('#invoice_no').on('change', function() {
 
 var code = $('#invoice_no').val();
-
+var date = $('#invoice_date').val();
 
 $.ajax({
     type: 'GET',
     data: {
-
+date:date,
         code: code,
 
 

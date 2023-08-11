@@ -211,6 +211,9 @@ class ClientController extends Controller
             ->orWhere('commercial_register', 'LIKE', "%$search%")
             ->orWhere('tax_card_id', 'LIKE', "%$search%")
             ->orWhere('phone', 'LIKE', "%$search%")
+            ->orWhere('tax_registration', 'LIKE', "%$search%")
+
+
             ->orderByRaw('CONVERT(general_account, SIGNED) asc')->paginate(200);
 
         $search = $request->get('search_name');

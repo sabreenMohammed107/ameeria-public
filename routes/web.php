@@ -47,6 +47,13 @@ Route::get('/show-invoice-report', 'ReportsController@showinvoice')->name('show-
 Route::get('/invoicesReport/search', 'ReportsController@search')->name('invoicesReport.search');
 Route::get('check/code', 'ItemsController@testValidte')->name('check.code');
 
-
+//depitInvoices
+Route::get('/depitInvoices/{id}', 'InvoiceController@depitInvoices')->name('depitInvoices');
+//storeDepitInvoices
+Route::post('/storeDepitInvoices', 'InvoiceController@storeDepitInvoices')->name('storeDepitInvoices');
+//creditInvoices
+Route::get('/creditInvoices/{id}', 'InvoiceController@creditInvoices')->name('creditInvoices');
+//storeCreditInvoices
+Route::post('/storeCreditInvoices', 'InvoiceController@storeCreditInvoices')->name('storeCreditInvoices');
 
 Route::get('/our_backup_database', 'HomeController@our_backup_database')->name('our_backup_database');

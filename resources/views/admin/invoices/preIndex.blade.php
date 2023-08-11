@@ -9,7 +9,7 @@
 
             <th>اسم العميل</th>
             <th>إجمالى صافى </th>
-            <th>تعديل</th>
+            <th >تعديل</th>
             {{-- <th>تقرير</th> --}}
             <th>حذف</th>
         </tr>
@@ -26,12 +26,24 @@
                 @endif</td>
                 <th> {{ $row->client->name ?? '' }}</th>
                 <th>{{ $row->total }}</th>
-                <th>
+                <th style="width: 170px !important">
                     @can('invoices-edit')
                     <a href="{{ route('invoices.edit', $row->id) }}" class="btn btn-success"><i
                             class="fas fa-edit text-white"></i></a>
 
                             @endcan
+                            @if($row->status==1 && $row->e_invoice_type=='I')
+                            @can('invoices-edit')
+                            <a href="{{ route('depitInvoices', $row->id) }}" class="btn text-success">مدين</a>
+
+                                    @endcan
+
+                                    @can('invoices-edit')
+                                    <a href="{{ route('creditInvoices', $row->id) }}" class="btn text-success">دائن</a>
+
+                                            @endcan
+
+                                            @endif
                 </th>
                 {{-- <th>
                     @can('invoices-edit')

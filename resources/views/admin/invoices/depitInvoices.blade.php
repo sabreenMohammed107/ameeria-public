@@ -7,21 +7,26 @@
             <div class="card card-primary card-outline">
                 <div class="card-header">
                     <h3 class="card-title">
-                        <i class="fas fa-edit"></i> إضافه فاتورة
+                        <i class="fas fa-edit"></i>   فاتورة مدين
                     </h3>
+
+                    <h2 class="card-title mx-1">
+                      رقم  :   {{Alkoumi\LaravelArabicNumbers\Numbers::ShowInArabicDigits($row->invoice_no) }}
+                    </h2>
                 </div>
                 <div class="card card-primary">
 
-                    <form class="form-group" action="{{ route('invoices.store') }}" id="form-id" method="post">
+                    <form class="form-group" action="{{ route('storeDepitInvoices') }}" id="form-id" method="post">
                         @csrf
+                        <input type="hidden" name="inv_id" value="{{ $row->id }}" >
                         <div class="row ">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 shadow mg-b-15">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <div class="form-group">
+                                            <div class="form-group" style="display: none">
                                                 <label>
-                                                    <input type="radio" id="smt-fld-1-2" name="e_invoice_type" checked
+                                                    <input type="radio" id="smt-fld-1-2" name="e_invoice_type"
                                                         value="I" class="mx-2">جديد</label>
                                                 <label>
                                                     <input type="radio" id="smt-fld-1-3" name="e_invoice_type"
@@ -46,7 +51,7 @@
                                             <div class="form-group">
                                                 <label>تاريخ الفاتورة</label>
                                                 <input type="date" value="{{ old('date', date('Y-m-d')) }}"
-                                                  id="invoice_date"  name="date" class="form-control">
+                                                    name="date" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-sm-2">
@@ -220,7 +225,7 @@
                                 <tbody id="rows">
 
                                     @if (count($errors) > 0 || Session::has('flash_danger'))
-                                        @include('admin.invoices.ajaxAdd')
+                                        @include('admin.invoices.ajaxdepitInvoices')
                                     @endif
                                 </tbody>
                             </table>
@@ -743,14 +748,14 @@
             $('#invoice_no').on('change', function() {
 
                 var code = $('#invoice_no').val();
-                var date = $('#invoice_date').val();
+
 
                 $.ajax({
                     type: 'GET',
                     data: {
 
                         code: code,
-                        date:date,
+
 
                     },
                     url: "{{ route('validateCode.fetch') }}",
